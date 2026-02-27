@@ -1,0 +1,117 @@
+name: Redis
+description: Redis is an open source, in-memory data structure store used as a database, cache, message broker, and streaming engine
+image: https://redis.io/images/redis-logo.png
+tags:
+- Database
+- Cache
+- In-Memory
+- Key-Value Store
+- NoSQL
+created: '2024-01-01'
+modified: '2024-01-01'
+specificationVersion: '0.18'
+apis:
+- name: Redis Core API
+  description: Core Redis commands and operations for data manipulation
+  image: https://redis.io/images/redis-logo.png
+  humanURL: https://redis.io/docs/
+  baseURL: redis://localhost:6379
+  tags:
+  - Database
+  - Cache
+  - Key-Value
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/commands/
+  - type: OpenAPI
+    url: https://redis.io/docs/api/
+  - type: Getting Started
+    url: https://redis.io/docs/getting-started/
+  - type: GitHub
+    url: https://github.com/redis/redis
+  contact:
+  - type: Support
+    url: https://redis.io/support/
+  - type: Community
+    url: https://redis.io/community/
+- name: Redis REST API
+  description: REST API interface for Redis operations via HTTP
+  humanURL: https://redis.io/docs/stack/rest/
+  baseURL: https://api.redis.com
+  tags:
+  - REST
+  - HTTP
+  - API
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/stack/rest/
+  - type: Swagger
+    url: https://redis.io/docs/stack/rest/swagger/
+- name: Redis Enterprise API
+  description: Management API for Redis Enterprise clusters
+  humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  baseURL: https://localhost:9443/v1
+  tags:
+  - Enterprise
+  - Management
+  - Cluster
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  - type: API Reference
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
+- name: Redis Cloud API
+  description: API for managing Redis Cloud resources and subscriptions
+  humanURL: https://redis.io/docs/latest/operate/rc/api/
+  baseURL: https://api.redislabs.com/v1
+  tags:
+  - Cloud
+  - Management
+  - Subscriptions
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rc/api/
+  - type: Authentication
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/
+  - type: Examples
+    url: https://redis.io/docs/latest/operate/rc/api/examples/
+- name: Redis Insight API
+  description: API for Redis Insight visualization and management tool
+  humanURL: https://redis.io/docs/latest/develop/tools/insight/
+  baseURL: http://localhost:5540/api
+  tags:
+  - Tools
+  - Visualization
+  - Management
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/develop/tools/insight/
+  - type: Download
+    url: https://redis.io/insight/
+common:
+- type: Website
+  url: https://redis.io/
+- type: Documentation
+  url: https://redis.io/docs/
+- type: GitHub Organization
+  url: https://github.com/redis
+- type: Blog
+  url: https://redis.io/blog/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/redis/
+- type: Twitter
+  url: https://twitter.com/redisinc
+- type: YouTube
+  url: https://www.youtube.com/c/Redisinc
+- type: Status
+  url: https://status.redis.com/
+- type: Support
+  url: https://redis.io/support/
+- type: Terms of Service
+  url: https://redis.io/legal/terms/
+- type: Privacy Policy
+  url: https://redis.io/legal/privacy/
+maintainers:
+- name: Redis Inc.
+  email: support@redis.io
+  url: https://redis.io/
