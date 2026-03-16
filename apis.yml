@@ -1,15 +1,18 @@
+aid: redis
 name: Redis
-description: Redis is an open source, in-memory data structure store used as a database, cache, message broker, and streaming engine
+description: Redis is an open source, in-memory data structure store used as a database, cache, message broker, and streaming engine.
+type: Index
 image: https://redis.io/images/redis-logo.png
+url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
 tags:
-- Database
-- Cache
-- In-Memory
-- Key-Value Store
-- NoSQL
+  - Database
+  - Cache
+  - In-Memory
+  - Key-Value Store
+  - NoSQL
 created: '2024-01-01'
-modified: '2024-01-01'
-specificationVersion: '0.18'
+modified: '2026-03-16'
+specificationVersion: '0.19'
 apis:
 - name: Redis Core API
   description: Core Redis commands and operations for data manipulation
@@ -112,6 +115,5 @@ common:
 - type: Privacy Policy
   url: https://redis.io/legal/privacy/
 maintainers:
-- name: Redis Inc.
-  email: support@redis.io
-  url: https://redis.io/
+  - FN: Kin Lane
+    email: kin@apievangelist.com
