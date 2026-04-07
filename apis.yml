@@ -1,14 +1,12 @@
 aid: redis
 name: Redis
-description: Redis is an open source, in-memory data structure store used as a 
-  database, cache, message broker, and streaming engine.
+description: Redis is an open source, in-memory data structure store used as a database, cache, message broker, and streaming engine.
 type: Index
 image: https://redis.io/images/redis-logo.png
-url: 
-  https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
 tags:
-  - Database
   - Cache
+  - Database
   - In-Memory
   - Key-Value Store
   - NoSQL
@@ -23,8 +21,8 @@ apis:
     humanURL: https://redis.io/docs/
     baseURL: redis://localhost:6379
     tags:
-      - Database
       - Cache
+      - Database
       - Key-Value
     properties:
       - type: Documentation
@@ -46,9 +44,8 @@ apis:
     humanURL: https://redis.io/docs/stack/rest/
     baseURL: https://api.redis.com
     tags:
-      - REST
       - HTTP
-      - API
+      - REST
     properties:
       - type: Documentation
         url: https://redis.io/docs/stack/rest/
@@ -60,15 +57,14 @@ apis:
     humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
     baseURL: https://localhost:9443/v1
     tags:
+      - Cluster
       - Enterprise
       - Management
-      - Cluster
     properties:
       - type: Documentation
         url: https://redis.io/docs/latest/operate/rs/references/rest-api/
       - type: API Reference
-        url: 
-          https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
+        url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
   - name: Redis Cloud API
     description: >-
       API for managing Redis Cloud resources and subscriptions.
@@ -91,9 +87,9 @@ apis:
     humanURL: https://redis.io/docs/latest/develop/tools/insight/
     baseURL: http://localhost:5540/api
     tags:
+      - Management
       - Tools
       - Visualization
-      - Management
     properties:
       - type: Documentation
         url: https://redis.io/docs/latest/develop/tools/insight/
