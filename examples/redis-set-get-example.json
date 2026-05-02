@@ -1,0 +1,34 @@
+{
+  "description": "Basic Redis SET and GET operations",
+  "examples": [
+    {
+      "operation": "SET",
+      "description": "Store a string value with optional expiry",
+      "command": "SET user:1234:name 'Alice' EX 3600",
+      "explanation": "Sets key 'user:1234:name' to 'Alice' with a 1-hour TTL.",
+      "response": "OK"
+    },
+    {
+      "operation": "GET",
+      "description": "Retrieve a string value",
+      "command": "GET user:1234:name",
+      "explanation": "Returns the string value for the key.",
+      "response": "Alice"
+    },
+    {
+      "operation": "MSET/MGET",
+      "description": "Set and get multiple keys at once",
+      "set_command": "MSET user:1:name Alice user:2:name Bob user:3:name Carol",
+      "get_command": "MGET user:1:name user:2:name user:3:name",
+      "set_response": "OK",
+      "get_response": ["Alice", "Bob", "Carol"]
+    },
+    {
+      "operation": "INCR",
+      "description": "Atomic increment counter",
+      "command": "INCR page:views:homepage",
+      "explanation": "Atomically increments the integer stored at the key. Creates key if absent.",
+      "response": 1
+    }
+  ]
+}

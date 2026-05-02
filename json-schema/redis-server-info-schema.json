@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redis.io/schemas/server-info.json",
+  "title": "Redis Server Info",
+  "description": "Key metrics from the Redis INFO command, covering server, clients, memory, persistence, replication, and stats sections.",
+  "type": "object",
+  "properties": {
+    "redis_version": {
+      "type": "string",
+      "description": "Redis server version string (e.g., 7.2.0)."
+    },
+    "redis_mode": {
+      "type": "string",
+      "enum": ["standalone", "sentinel", "cluster"],
+      "description": "Redis operational mode."
+    },
+    "uptime_in_seconds": {
+      "type": "integer",
+      "description": "Number of seconds since server start."
+    },
+    "connected_clients": {
+      "type": "integer",
+      "description": "Number of client connections (excluding replica connections)."
+    },
+    "used_memory": {
+      "type": "integer",
+      "description": "Total bytes allocated by Redis using its allocator."
+    },
+    "used_memory_human": {
+      "type": "string",
+      "description": "Human-readable used memory (e.g., 1.23M)."
+    },
+    "maxmemory": {
+      "type": "integer",
+      "description": "Maximum memory configured. 0 means no limit."
+    },
+    "maxmemory_policy": {
+      "type": "string",
+      "enum": ["noeviction", "allkeys-lru", "volatile-lru", "allkeys-random", "volatile-random", "volatile-ttl", "allkeys-lfu", "volatile-lfu"],
+      "description": "Eviction policy when maxmemory is reached."
+    },
+    "rdb_last_save_time": {
+      "type": "integer",
+      "description": "Unix timestamp of last successful RDB save."
+    },
+    "aof_enabled": {
+      "type": "integer",
+      "enum": [0, 1],
+      "description": "Whether AOF persistence is enabled (1) or disabled (0)."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["master", "replica", "slave"],
+      "description": "Replication role of this instance."
+    },
+    "connected_slaves": {
+      "type": "integer",
+      "description": "Number of connected replicas."
+    },
+    "total_commands_processed": {
+      "type": "integer",
+      "description": "Total number of commands processed since server start."
+    },
+    "total_connections_received": {
+      "type": "integer",
+      "description": "Total connections accepted since server start."
+    },
+    "keyspace_hits": {
+      "type": "integer",
+      "description": "Number of successful key lookups."
+    },
+    "keyspace_misses": {
+      "type": "integer",
+      "description": "Number of failed key lookups."
+    },
+    "expired_keys": {
+      "type": "integer",
+      "description": "Total number of key expiration events."
+    },
+    "evicted_keys": {
+      "type": "integer",
+      "description": "Number of keys evicted due to maxmemory policy."
+    },
+    "db": {
+      "type": "object",
+      "description": "Per-database key statistics.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "keys": { "type": "integer" },
+          "expires": { "type": "integer" },
+          "avg_ttl": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

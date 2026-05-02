@@ -1,0 +1,12 @@
+{
+  "title": "Redis Key-Value Structure",
+  "description": "JSON structure for a Redis key and its value, supporting all core data types.",
+  "type": "object",
+  "fields": [
+    { "name": "key", "type": "string", "required": true, "description": "The Redis key name." },
+    { "name": "type", "type": "string", "required": false, "description": "Redis data type.", "enum": ["string", "list", "set", "zset", "hash", "stream", "json", "none"] },
+    { "name": "value", "type": "any", "required": false, "description": "The stored value. Shape depends on type." },
+    { "name": "ttl", "type": "integer", "required": false, "description": "Time-to-live in seconds. -1 means no expiry." },
+    { "name": "encoding", "type": "string", "required": false, "description": "Internal Redis encoding (embstr, raw, ziplist, etc.)." }
+  ]
+}

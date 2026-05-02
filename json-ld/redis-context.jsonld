@@ -1,0 +1,78 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "redis": "https://redis.io/ns/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "KeyValueEntry": {
+      "@id": "redis:KeyValueEntry",
+      "@context": {
+        "key": "redis:key",
+        "type": "redis:dataType",
+        "value": "redis:value",
+        "ttl": {
+          "@id": "redis:ttl",
+          "@type": "xsd:integer"
+        },
+        "encoding": "redis:encoding"
+      }
+    },
+
+    "ServerInfo": {
+      "@id": "redis:ServerInfo",
+      "@context": {
+        "redis_version": "redis:version",
+        "redis_mode": "redis:mode",
+        "uptime_in_seconds": {
+          "@id": "redis:uptimeSeconds",
+          "@type": "xsd:integer"
+        },
+        "connected_clients": {
+          "@id": "redis:connectedClients",
+          "@type": "xsd:integer"
+        },
+        "used_memory": {
+          "@id": "redis:usedMemoryBytes",
+          "@type": "xsd:integer"
+        },
+        "maxmemory": {
+          "@id": "redis:maxMemoryBytes",
+          "@type": "xsd:integer"
+        },
+        "maxmemory_policy": "redis:maxMemoryPolicy",
+        "role": "redis:replicationRole",
+        "connected_slaves": {
+          "@id": "redis:connectedReplicas",
+          "@type": "xsd:integer"
+        },
+        "keyspace_hits": {
+          "@id": "redis:keyspaceHits",
+          "@type": "xsd:integer"
+        },
+        "keyspace_misses": {
+          "@id": "redis:keyspaceMisses",
+          "@type": "xsd:integer"
+        }
+      }
+    },
+
+    "Command": {
+      "@id": "redis:Command",
+      "@context": {
+        "name": "schema:name",
+        "arity": "redis:arity",
+        "flags": {
+          "@id": "redis:flags",
+          "@container": "@set"
+        },
+        "complexity": "redis:complexity",
+        "acl_categories": {
+          "@id": "redis:aclCategories",
+          "@container": "@set"
+        }
+      }
+    }
+  }
+}

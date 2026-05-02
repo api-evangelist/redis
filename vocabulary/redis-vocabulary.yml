@@ -1,0 +1,226 @@
+vocabulary:
+  name: Redis Vocabulary
+  description: >-
+    Domain vocabulary for Redis, the open-source in-memory data structure store
+    used as a database, cache, message broker, and streaming engine. Covers
+    core data types, commands, persistence, replication, clustering, and
+    operational concepts.
+  version: "1.0.0"
+  created: "2026-05-02"
+  tags:
+    - Redis
+    - Cache
+    - Database
+    - In-Memory
+    - Key-Value Store
+    - NoSQL
+
+terms:
+  - term: String
+    label: Redis String
+    definition: >-
+      The most basic Redis data type. A key mapping to a binary-safe string
+      value up to 512MB. Also used to store integers and floating-point
+      numbers for atomic increment operations.
+    commands:
+      - GET
+      - SET
+      - MGET
+      - MSET
+      - INCR
+      - DECR
+      - APPEND
+
+  - term: Hash
+    label: Redis Hash
+    definition: >-
+      A mapping between string fields and string values. Ideal for storing
+      objects with multiple attributes. Internally uses listpack (formerly ziplist)
+      for small hashes and hashtable for large ones.
+    commands:
+      - HSET
+      - HGET
+      - HGETALL
+      - HMSET
+      - HMGET
+      - HDEL
+      - HINCRBY
+
+  - term: List
+    label: Redis List
+    definition: >-
+      A linked list of string values. Supports push and pop from both ends
+      (head and tail), range queries, and blocking reads. Useful for queues,
+      stacks, and activity timelines.
+    commands:
+      - LPUSH
+      - RPUSH
+      - LPOP
+      - RPOP
+      - LRANGE
+      - LLEN
+      - BLPOP
+
+  - term: Set
+    label: Redis Set
+    definition: >-
+      An unordered collection of unique string values. Supports set operations
+      (union, intersection, difference) and is O(1) for membership checks.
+    commands:
+      - SADD
+      - SMEMBERS
+      - SISMEMBER
+      - SINTERSTORE
+      - SUNIONSTORE
+      - SDIFFSTORE
+      - SRANDMEMBER
+
+  - term: Sorted Set
+    label: Redis Sorted Set (ZSET)
+    definition: >-
+      A set where each member has an associated floating-point score used for
+      ordering. Members are unique but scores can repeat. Enables range
+      queries by score or rank. Internally uses skiplist + hashtable.
+    abbreviation: ZSET
+    commands:
+      - ZADD
+      - ZRANGE
+      - ZRANK
+      - ZSCORE
+      - ZINCRBY
+      - ZRANGEBYSCORE
+      - ZREVRANK
+
+  - term: TTL
+    label: Time To Live
+    definition: >-
+      The remaining lifetime of a key in seconds. Keys with a TTL are
+      automatically deleted by Redis when the TTL expires. Use EXPIRE to set
+      a TTL, TTL to check it, and PERSIST to remove it. Returns -1 if
+      the key has no expiry, -2 if the key does not exist.
+    abbreviation: TTL
+    commands:
+      - EXPIRE
+      - TTL
+      - PTTL
+      - PEXPIRE
+      - PERSIST
+
+  - term: Pub/Sub
+    label: Redis Publish/Subscribe
+    definition: >-
+      A messaging pattern where publishers send messages to channels and
+      subscribers receive them. Messages are not persisted — if no subscriber
+      is listening, the message is lost. Use Redis Streams for persistent
+      message delivery.
+    abbreviation: Pub/Sub
+    commands:
+      - PUBLISH
+      - SUBSCRIBE
+      - UNSUBSCRIBE
+      - PSUBSCRIBE
+
+  - term: Pipeline
+    label: Redis Pipeline
+    definition: >-
+      A client-side mechanism that batches multiple commands and sends them
+      to Redis in a single network round-trip. Reduces latency for bulk
+      operations. Not atomic (use MULTI/EXEC for transactions).
+
+  - term: Transaction
+    label: Redis Transaction
+    definition: >-
+      A sequence of commands grouped between MULTI and EXEC that are executed
+      atomically. All commands in the transaction are queued and then executed
+      together. Use WATCH for optimistic locking.
+    commands:
+      - MULTI
+      - EXEC
+      - DISCARD
+      - WATCH
+
+  - term: RDB
+    label: Redis Database Snapshot (RDB)
+    definition: >-
+      A point-in-time snapshot of the Redis dataset saved to disk as a
+      compact binary file (dump.rdb). Configured with SAVE directives
+      specifying snapshot frequency thresholds.
+    abbreviation: RDB
+
+  - term: AOF
+    label: Append-Only File (AOF)
+    definition: >-
+      A persistence mechanism that logs every write command to a file.
+      On restart, Redis replays the AOF to reconstruct the dataset. More
+      durable than RDB but requires more disk space and slower restart.
+    abbreviation: AOF
+
+  - term: Eviction Policy
+    label: Memory Eviction Policy
+    definition: >-
+      The strategy Redis uses to select which keys to remove when maxmemory
+      is reached. Options include noeviction (return errors), allkeys-lru
+      (evict least-recently-used from all keys), volatile-lru (evict LRU from
+      keys with TTL), and others.
+
+  - term: Cluster
+    label: Redis Cluster
+    definition: >-
+      A distributed Redis deployment that automatically shards data across
+      multiple nodes using hash slots (0-16383). Provides horizontal
+      scalability and automatic failover. Requires a minimum of 3 primary nodes.
+
+  - term: Replication
+    label: Redis Replication
+    definition: >-
+      Asynchronous primary-replica replication where replicas are read-only
+      copies of the primary. Replicas can serve read traffic and be promoted
+      to primary on failover.
+
+  - term: Sentinel
+    label: Redis Sentinel
+    definition: >-
+      A high-availability solution that monitors Redis primary/replica
+      instances and performs automatic failover by promoting a replica to
+      primary when the primary is unavailable.
+
+  - term: Lua Scripting
+    label: Redis Lua Scripting
+    definition: >-
+      Redis supports executing Lua scripts atomically using EVAL or via
+      cached scripts loaded with SCRIPT LOAD and called with EVALSHA.
+      Lua scripts run atomically without interference from other commands.
+    commands:
+      - EVAL
+      - EVALSHA
+      - SCRIPT LOAD
+
+  - term: Key Namespace
+    label: Redis Key Namespace Convention
+    definition: >-
+      Redis keys are strings with no enforced structure. The convention of
+      using colons as separators (e.g., user:1234:email) creates logical
+      namespaces. Redis Cluster hashes are based on the key name unless
+      hash tags {} are used to co-locate keys on the same slot.
+
+  - term: Redis Stack
+    label: Redis Stack
+    definition: >-
+      A distribution of Redis that bundles core Redis with additional
+      modules: RedisJSON (JSON documents), RediSearch (full-text search),
+      RedisTimeSeries (time-series data), RedisBloom (probabilistic data
+      structures), and RedisGraph (graph data).
+
+  - term: Redis Cloud
+    label: Redis Cloud
+    definition: >-
+      The fully managed Redis service offered by Redis Inc. Available on
+      AWS, GCP, and Azure. Provides a REST API at api.redislabs.com/v1 for
+      managing subscriptions, databases, and credentials.
+
+  - term: Redis Enterprise
+    label: Redis Enterprise
+    definition: >-
+      The enterprise on-premises and cloud distribution of Redis providing
+      Active-Active geo-distribution, Redis-on-Flash, and enhanced security.
+      Managed via a REST API at localhost:9443/v1.

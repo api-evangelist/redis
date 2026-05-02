@@ -1,0 +1,35 @@
+{
+  "description": "Redis Hash operations for storing structured objects",
+  "examples": [
+    {
+      "operation": "HSET",
+      "description": "Store multiple fields in a hash",
+      "command": "HSET user:1234 name Alice email alice@example.com age 30 role admin",
+      "explanation": "Creates or updates hash 'user:1234' with four fields.",
+      "response": 4
+    },
+    {
+      "operation": "HGET",
+      "description": "Get a single field from a hash",
+      "command": "HGET user:1234 email",
+      "response": "alice@example.com"
+    },
+    {
+      "operation": "HGETALL",
+      "description": "Get all fields and values from a hash",
+      "command": "HGETALL user:1234",
+      "response": {
+        "name": "Alice",
+        "email": "alice@example.com",
+        "age": "30",
+        "role": "admin"
+      }
+    },
+    {
+      "operation": "HINCRBY",
+      "description": "Increment a numeric field in a hash",
+      "command": "HINCRBY user:1234:stats logins 1",
+      "response": 42
+    }
+  ]
+}

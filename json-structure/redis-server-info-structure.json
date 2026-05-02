@@ -1,0 +1,22 @@
+{
+  "title": "Redis Server Info Structure",
+  "description": "JSON structure for Redis INFO command output covering server, memory, clients, replication, and keyspace sections.",
+  "type": "object",
+  "fields": [
+    { "name": "redis_version", "type": "string", "required": false, "description": "Redis server version." },
+    { "name": "redis_mode", "type": "string", "required": false, "description": "Operational mode (standalone, sentinel, cluster).", "enum": ["standalone", "sentinel", "cluster"] },
+    { "name": "uptime_in_seconds", "type": "integer", "required": false, "description": "Seconds since server start." },
+    { "name": "connected_clients", "type": "integer", "required": false, "description": "Active client connections." },
+    { "name": "used_memory", "type": "integer", "required": false, "description": "Bytes allocated by Redis." },
+    { "name": "maxmemory", "type": "integer", "required": false, "description": "Memory limit in bytes." },
+    { "name": "maxmemory_policy", "type": "string", "required": false, "description": "Eviction policy.", "enum": ["noeviction", "allkeys-lru", "volatile-lru", "allkeys-random", "volatile-random", "volatile-ttl", "allkeys-lfu", "volatile-lfu"] },
+    { "name": "role", "type": "string", "required": false, "description": "Replication role (master, replica).", "enum": ["master", "replica"] },
+    { "name": "connected_slaves", "type": "integer", "required": false, "description": "Number of connected replicas." },
+    { "name": "total_commands_processed", "type": "integer", "required": false, "description": "Total commands processed." },
+    { "name": "keyspace_hits", "type": "integer", "required": false, "description": "Successful key lookups." },
+    { "name": "keyspace_misses", "type": "integer", "required": false, "description": "Failed key lookups." },
+    { "name": "expired_keys", "type": "integer", "required": false, "description": "Keys expired." },
+    { "name": "evicted_keys", "type": "integer", "required": false, "description": "Keys evicted by policy." },
+    { "name": "db", "type": "object", "required": false, "description": "Per-database key statistics keyed by db number (e.g., db0, db1)." }
+  ]
+}

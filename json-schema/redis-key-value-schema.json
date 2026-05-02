@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redis.io/schemas/key-value.json",
+  "title": "Redis Key-Value Entry",
+  "description": "A Redis key and its associated value, type, and metadata.",
+  "type": "object",
+  "required": ["key"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "The Redis key. Keys are arbitrary binary-safe strings, conventionally namespaced with colons (e.g., user:1234:profile)."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["string", "list", "set", "zset", "hash", "stream", "json", "none"],
+      "description": "The Redis data type for this key."
+    },
+    "value": {
+      "description": "The value stored at this key. Type depends on the Redis data type.",
+      "oneOf": [
+        { "type": "string", "description": "String value." },
+        { "type": "array", "description": "List or set value.", "items": { "type": "string" } },
+        { "type": "object", "description": "Hash or JSON value." }
+      ]
+    },
+    "ttl": {
+      "type": "integer",
+      "description": "Time-to-live in seconds. -1 means no expiry. -2 means the key does not exist.",
+      "minimum": -2
+    },
+    "encoding": {
+      "type": "string",
+      "description": "Internal Redis encoding for the value (e.g., embstr, raw, ziplist, listpack, skiplist, quicklist, hashtable)."
+    }
+  }
+}

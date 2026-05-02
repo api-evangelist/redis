@@ -1,0 +1,31 @@
+{
+  "description": "Redis Sorted Set (ZSET) operations for leaderboards and ranking",
+  "examples": [
+    {
+      "operation": "ZADD",
+      "description": "Add members with scores to a sorted set",
+      "command": "ZADD leaderboard 1500 alice 1200 bob 1800 carol 900 dave",
+      "explanation": "Adds four players with scores to the leaderboard sorted set.",
+      "response": 4
+    },
+    {
+      "operation": "ZRANGE with WITHSCORES",
+      "description": "Get top N members by score",
+      "command": "ZRANGE leaderboard 0 -1 BYSCORE REV WITHSCORES LIMIT 0 3",
+      "explanation": "Get top 3 members in descending score order.",
+      "response": ["carol", "1800", "alice", "1500", "bob", "1200"]
+    },
+    {
+      "operation": "ZRANK",
+      "description": "Get the rank of a member (0-indexed, ascending)",
+      "command": "ZRANK leaderboard alice",
+      "response": 2
+    },
+    {
+      "operation": "ZINCRBY",
+      "description": "Increment a member's score",
+      "command": "ZINCRBY leaderboard 100 bob",
+      "response": "1300"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://redis.io/schemas/command.json",
+  "title": "Redis Command",
+  "description": "Schema for a Redis command descriptor as returned by the COMMAND INFO command.",
+  "type": "object",
+  "required": ["name", "arity"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Command name in lowercase (e.g., get, set, hset)."
+    },
+    "arity": {
+      "type": "integer",
+      "description": "Command arity: number of required arguments. Negative arity means minimum argument count (e.g., -2 means at least 1 arg after command name)."
+    },
+    "flags": {
+      "type": "array",
+      "description": "Command flags indicating behavior (e.g., write, readonly, denyoom, admin).",
+      "items": {
+        "type": "string",
+        "enum": ["write", "readonly", "denyoom", "admin", "pubsub", "noscript", "random", "sort_for_script", "loading", "stale", "skip_monitor", "asking", "fast", "no_auth", "may_replicate", "sentinel", "only_sentinel", "allow_busy", "module_getkeys"]
+      }
+    },
+    "first_key": {
+      "type": "integer",
+      "description": "Index of first key in argument list."
+    },
+    "last_key": {
+      "type": "integer",
+      "description": "Index of last key in argument list. -1 means last argument."
+    },
+    "step": {
+      "type": "integer",
+      "description": "Step between keys in argument list."
+    },
+    "acl_categories": {
+      "type": "array",
+      "description": "ACL categories the command belongs to.",
+      "items": { "type": "string" }
+    },
+    "complexity": {
+      "type": "string",
+      "description": "Time complexity annotation (e.g., O(1), O(N), O(log N))."
+    }
+  }
+}
