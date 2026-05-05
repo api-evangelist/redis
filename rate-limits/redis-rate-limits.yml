@@ -1,0 +1,36 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Redis Cloud
+providerId: redis
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Rate Limiting
+  - Database
+description: Redis Cloud throughput scales with shard count and plan.
+sources:
+  - https://redis.io/pricing/
+  - https://redis.io/docs/latest/operate/rc/api/get-started/
+headers: {}
+responseCodes:
+  throttled: 429
+limits:
+  - name: Cloud API
+    scope: account
+    metric: requests_per_minute
+    limit: 60
+    timeFrame: minute
+  - name: Database throughput (Free)
+    scope: database
+    metric: ops_per_second
+    limit: 30
+  - name: Database throughput (Essentials)
+    scope: database
+    metric: ops_per_second
+    limit: varies (100-25K)
+  - name: Database throughput (Pro)
+    scope: database
+    metric: ops_per_second
+    limit: scales with shards

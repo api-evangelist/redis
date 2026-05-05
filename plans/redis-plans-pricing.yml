@@ -1,0 +1,122 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Redis Cloud
+providerId: redis
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Database
+  - Cache
+  - Vector
+description: 'Redis Cloud tiers: Free / Essentials / Pro. Hourly billing with monthly minimums.'
+sources:
+  - https://redis.io/pricing/
+plans:
+  - id: redis-free
+    name: Free
+    type: freemium
+    description: Up to 30 MB shared cloud DB.
+    entries:
+      - label: Storage
+        name: storage
+        type: quota
+        metric: MB
+        limit: 30
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Shared cloud
+      - name: Single DB
+      - name: Best-effort SLA
+      - name: Community support
+  - id: redis-essentials
+    name: Essentials
+    type: paid
+    description: From $0.007/hour, $5/month minimum. 250 MB-100 GB single DB.
+    entries:
+      - label: Per hour
+        name: hourly
+        type: metered
+        metric: hour
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.007'
+        userMultiplied: false
+      - label: Monthly minimum
+        name: monthly_min
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '5.00'
+        userMultiplied: false
+    elements:
+      - name: Shared deployment
+      - name: 250 MB-100 GB single DB
+      - name: SAML SSO + RBAC
+      - name: Encryption in transit + at rest
+      - name: Up to 99.99% uptime
+      - name: Redis Flex (10% RAM cost)
+  - id: redis-pro
+    name: Pro
+    type: paid
+    description: From $0.014/hour, $200/month minimum (first $200 free).
+    entries:
+      - label: Per hour
+        name: hourly
+        type: metered
+        metric: hour
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.014'
+        userMultiplied: false
+      - label: Monthly minimum
+        name: monthly_min
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '200.00'
+        userMultiplied: false
+    elements:
+      - name: Dedicated cloud
+      - name: Unlimited RAM, multiple DBs
+      - name: Active-active multi-region
+      - name: Auto-tiering
+      - name: Private connectivity
+      - name: Up to 99.999% uptime
+      - name: Redis Flex for TBs of data
+  - id: redis-enterprise
+    name: Enterprise (Self-Managed / Private)
+    type: enterprise
+    description: Multi-cloud, hybrid, on-prem with annual plan.
+    entries:
+      - label: Annual (custom)
+        name: annual
+        type: subscription
+        metric: year
+        limit: -1
+        timeFrame: year
+        geo: global
+        unit: 1
+        price: custom
+        userMultiplied: false
+    elements:
+      - name: Self-managed Redis Enterprise Software
+      - name: Hybrid cloud
+      - name: On-prem
+      - name: Active-active geo-distributed
+      - name: Premium support

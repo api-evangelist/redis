@@ -1,12 +1,10 @@
 aid: redis
 name: Redis
-description: >-
-  Redis is an open source, in-memory data structure store used as a database,
-  cache, message broker, and streaming engine. It supports strings, hashes,
-  lists, sets, sorted sets, streams, JSON, and more. Redis is used by millions
-  of developers for caching, session management, leaderboards, pub/sub
-  messaging, real-time analytics, and event streaming. The Redis project is
-  governed by the Redis Community and maintained by Redis Inc.
+description: Redis is an open source, in-memory data structure store used as a database, cache, message
+  broker, and streaming engine. It supports strings, hashes, lists, sets, sorted sets, streams, JSON,
+  and more. Redis is used by millions of developers for caching, session management, leaderboards, pub/sub
+  messaging, real-time analytics, and event streaming. The Redis project is governed by the Redis Community
+  and maintained by Redis Inc.
 type: Index
 image: https://redis.io/images/redis-logo.png
 url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
@@ -19,16 +17,14 @@ tags:
   - Open Source
   - Streaming
 created: '2024-01-01'
-modified: '2026-05-02'
+modified: '2026-05-04'
 specificationVersion: '0.19'
 apis:
   - aid: redis:redis-core
     name: Redis Core
-    description: >-
-      Core Redis commands and data structure operations. Redis supports strings,
-      hashes, lists, sets, sorted sets, streams, and more. The primary interface
-      is the Redis Serialization Protocol (RESP) over TCP, with client libraries
-      for all major programming languages.
+    description: Core Redis commands and data structure operations. Redis supports strings, hashes, lists,
+      sets, sorted sets, streams, and more. The primary interface is the Redis Serialization Protocol
+      (RESP) over TCP, with client libraries for all major programming languages.
     humanURL: https://redis.io/docs/latest/commands/
     tags:
       - Cache
@@ -57,13 +53,10 @@ apis:
         url: json-ld/redis-context.jsonld
       - type: Vocabulary
         url: vocabulary/redis-vocabulary.yml
-
   - aid: redis:redis-cloud-api
     name: Redis Cloud API
-    description: >-
-      The Redis Cloud REST API for managing subscriptions, databases, cloud
-      accounts, access control, and logs on the Redis Cloud platform.
-      Available at api.redislabs.com/v1 with API key authentication.
+    description: The Redis Cloud REST API for managing subscriptions, databases, cloud accounts, access
+      control, and logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
     humanURL: https://redis.io/docs/latest/operate/rc/api/
     tags:
       - Cloud
@@ -77,13 +70,11 @@ apis:
         url: https://redis.io/docs/latest/operate/rc/api/get-started/
       - type: Examples
         url: https://redis.io/docs/latest/operate/rc/api/examples/
-
   - aid: redis:redis-enterprise-api
     name: Redis Enterprise API
-    description: >-
-      REST API for managing Redis Enterprise Software clusters. Provides
-      endpoints for cluster configuration, database creation and management,
-      user access control, and monitoring. Available at the cluster's port 9443.
+    description: REST API for managing Redis Enterprise Software clusters. Provides endpoints for cluster
+      configuration, database creation and management, user access control, and monitoring. Available
+      at the cluster's port 9443.
     humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
     tags:
       - Cluster
@@ -95,13 +86,11 @@ apis:
         url: https://redis.io/docs/latest/operate/rs/references/rest-api/
       - type: APIReference
         url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
-
   - aid: redis:redis-insight
     name: Redis Insight
-    description: >-
-      Redis Insight is a free GUI management tool for Redis. Provides database
-      browsing, query execution, memory analysis, slow log inspection, and
-      Redis Streams visualization. Available as a desktop app and Docker image.
+    description: Redis Insight is a free GUI management tool for Redis. Provides database browsing, query
+      execution, memory analysis, slow log inspection, and Redis Streams visualization. Available as a
+      desktop app and Docker image.
     humanURL: https://redis.io/docs/latest/develop/tools/insight/
     tags:
       - Developer Tools
@@ -114,7 +103,6 @@ apis:
         url: https://redis.io/insight/
       - type: Docker
         url: https://hub.docker.com/r/redis/redisinsight
-
 common:
   - name: Redis Website
     url: https://redis.io/
@@ -164,7 +152,27 @@ common:
   - name: Redis PyPI Package
     url: https://pypi.org/project/redis/
     type: PyPI
-
+  - type: Features
+    data:
+      - 'Free: 30 MB shared cloud DB'
+      - 'Essentials from $0.007/hr ($5/mo min): 250 MB-100 GB DB, SSO/RBAC'
+      - 'Pro from $0.014/hr ($200/mo min): dedicated, multi-region active-active'
+      - 'Enterprise: self-managed Redis Enterprise Software, hybrid, on-prem'
+      - 'Multi-cloud: AWS, GCP, Azure'
+      - Cloud API for cluster management at 60 req/min
+      - 'Redis Stack modules: RediSearch, RedisJSON, RedisGraph, RedisTimeSeries, RedisBloom'
+      - Vector similarity search (RediSearch)
+      - Redis Flex (RAM:Flash ratio for cost reduction)
+      - Auto-tiering for hot/cold data
+      - Active-active geo-distribution (Pro)
+      - Up to 99.999% uptime (Pro)
+      - Encryption in transit and at rest (Essentials+)
+      - Private connectivity (Pro)
+      - OAuth + API keys
+      - Open-source self-managed Redis OSS alternative
+    sources:
+      - https://redis.io/pricing/
+    updated: '2026-05-04'
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
