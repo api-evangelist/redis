@@ -1,0 +1,13 @@
+{
+  "repo": "redis",
+  "feeds": [
+    {
+      "source": "https://redis.io/blog/",
+      "feed_url": "https://redis.io/blog/feed/",
+      "saved": 10,
+      "title": "Redis Blog"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:34:39Z"
+}
