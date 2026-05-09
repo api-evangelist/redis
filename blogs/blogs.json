@@ -4,10 +4,10 @@
     {
       "source": "https://redis.io/blog/",
       "feed_url": "https://redis.io/blog/feed/",
-      "saved": 10,
-      "title": "Redis Blog"
+      "title": "Redis Blog",
+      "saved": 7
     }
   ],
-  "post_count": 10,
-  "fetched": "2026-05-03T23:34:39Z"
+  "post_count": 17,
+  "fetched": "2026-05-09T20:17:51Z"
 }
