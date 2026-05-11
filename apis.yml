@@ -173,6 +173,38 @@ common:
     sources:
       - https://redis.io/pricing/
     updated: '2026-05-04'
+  - type: Integrations
+    url: https://redis.io/partners/
+integrations:
+  - name: Redis Cloud
+  - name: Redis Software 64px
+  - name: Redis Open Source
+  - name: Redis for AI
+  - name: Image
+  - name: Ecosystem
+  - name: Integrated modules
+  - name: Redis Partner Network - Base
+  - name: Redis Partner Network - Builder
+  - name: Redis Partner Network - Hyper
+  - name: AWS
+  - name: Google Cloud
+  - name: Microsoft Azure
+  - name: Carahsoft
+  - name: Prodevans
+  - name: Shi
+  - name: Software one
+  - name: dataX
+  - name: virtus
+  - name: Softchoice
+  - name: Nttdata
+  - name: matrix
+  - name: logo
+  - name: Insight Partners
+  - name: Securemax
+  - name: Crayon
+  - name: Mfec
+  - name: Upstra
+  - name: Wysetek
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
