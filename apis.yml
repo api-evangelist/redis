@@ -49,7 +49,7 @@ apis:
         url: json-structure/redis-key-value-structure.json
       - type: JSONStructure
         url: json-structure/redis-server-info-structure.json
-      - type: JSONLd
+      - type: JSONLD
         url: json-ld/redis-context.jsonld
       - type: Vocabulary
         url: vocabulary/redis-vocabulary.yml
@@ -130,7 +130,7 @@ common:
     type: YouTube
   - name: Redis Status
     url: https://status.redis.com/
-    type: Status
+    type: StatusPage
   - name: Redis Support
     url: https://redis.io/support/
     type: Support
