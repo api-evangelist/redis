@@ -175,6 +175,8 @@ common:
     updated: '2026-05-04'
   - type: Integrations
     url: https://redis.io/partners/
+  - type: LLMsTxt
+    url: https://redis.io/llms.txt
 integrations:
   - name: Redis Cloud
   - name: Redis Software 64px
