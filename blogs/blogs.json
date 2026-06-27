@@ -5,7 +5,7 @@
       "source": "https://redis.io/blog/feed/",
       "feed_url": "https://redis.io/blog/feed/",
       "title": "",
-      "saved": 7,
+      "saved": 4,
       "method": "feed"
     },
     {
@@ -16,6 +16,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 72,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 81,
+  "fetched": "2026-06-27T12:03:07Z"
 }
