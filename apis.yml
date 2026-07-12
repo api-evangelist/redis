@@ -104,6 +104,12 @@ apis:
       - type: Docker
         url: https://hub.docker.com/r/redis/redisinsight
 common:
+  - type: TrustCenter
+    url: security/redis-trust-center.yml
+  - type: VulnerabilityDisclosure
+    url: security/redis-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/redis-domain-security.yml
   - name: Redis Website
     url: https://redis.io/
     type: Website
