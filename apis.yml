@@ -6,6 +6,18 @@ description: Redis is an open source, in-memory data structure store used as a d
   messaging, real-time analytics, and event streaming. The Redis project is governed by the Redis Community
   and maintained by Redis Inc.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
 image: https://redis.io/images/redis-logo.png
 url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
 tags:
