@@ -30,7 +30,7 @@ tags:
   - Streaming
 created: '2024-01-01'
 modified: '2026-05-04'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
   - aid: redis:redis-core
     name: Redis Core
