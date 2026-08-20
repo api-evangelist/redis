@@ -26,6 +26,14 @@ tags:
   - In-Memory
   - Key-Value Store
   - NoSQL
+  - Open-Source
+  - Streaming
+tags_raw:
+  - Cache
+  - Database
+  - In-Memory
+  - Key-Value Store
+  - NoSQL
   - Open Source
   - Streaming
 created: '2024-01-01'
@@ -71,6 +79,11 @@ apis:
       control, and logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
     humanURL: https://redis.io/docs/latest/operate/rc/api/
     tags:
+      - Cloud
+      - Management
+      - REST
+      - Subscription
+    tags_raw:
       - Cloud
       - Management
       - REST
