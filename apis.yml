@@ -6,6 +6,17 @@ description: Redis is an open source, in-memory data structure store used as a d
   messaging, real-time analytics, and event streaming. The Redis project is governed by the Redis Community
   and maintained by Redis Inc.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
