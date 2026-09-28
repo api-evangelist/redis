@@ -17,10 +17,18 @@ deployment:
 tools_count: 3
 tools:
 - name: search
-  description: ''
+  description: Search the Redis documentation by free-text query. Returns up to 8 matching pages, each
+    with a text snippet and that page's stable `id`.  This is the default tool for a Redis question. Search
+    first, then `fetch` any `id` whose full text you
 - name: fetch
-  description: ''
+  description: 'Return the full text and metadata for one Redis documentation page: title, canonical URL,
+    body text, and topic/version/section metadata.  Takes an `id` from a `search` result or from an `ask`
+    result''s `sources`. Use it when a snippet is not'
 - name: ask
-  description: ''
+  description: Ask a natural-language question about Redis. Returns a prose answer plus the source documents
+    behind it — any `sources[].id` can be passed to `fetch`. If the documentation does not cover the question,
+    the answer says so.  Reserve `ask` for
 tools_source: live tools/list via initialize handshake, 2026-09-11 (signals/audit_mcp_authorship.py --probe)
 authorship: provider
+descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
+  --descriptions, 2026-09-28
