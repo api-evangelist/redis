@@ -150,6 +150,69 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    CreateEndpointsRedirectionRequest:
+      required:
+      - endpointTargetType
+      - migrationProtection
+      - sourceDatabaseId
+      - targetDatabaseId
+      type: object
+      properties:
+        sourceDatabaseId:
+          type: integer
+          description: ID of the source database to redirect the endpoint from.
+          format: int32
+          example: 51404231
+        targetDatabaseId:
+          type: integer
+          description: ID of the target database to redirect the endpoint to.
+          format: int32
+          example: 51404232
+        endpointTargetType:
+          type: string
+          description: Type of endpoint to redirect.
+          example: public
+          enum:
+          - public
+          - private
+        duplicateACLs:
+          type: boolean
+          description: Whether to duplicate the source database ACLs to the target database.
+          example: true
+        migrationProtection:
+          type: boolean
+          description: Must be explicitly set to true to start the migration. This is a protective measure to avoid accidental migrations.
+          example: true
+      description: Dynamic endpoint redirection request
+    EndpointRedirectionDTO:
+      type: object
+      properties:
+        sourceEndpointName:
+          type: string
+          description: Name of the source endpoint.
+          example: redis-12345
+        targetEndpointName:
+          type: string
+          description: Name of the target endpoint.
+          example: redis-12346
+        sourceEndpointType:
+          type: string
+          description: Type of the source endpoint.
+          example: public
+          enum:
+          - public
+          - private
+        targetEndpointType:
+          type: string
+          description: Type of the target endpoint.
+          example: public
+          enum:
+          - public
+          - private
+        errorMessage:
+          type: string
+          description: Error message describing why this endpoint redirection failed, if applicable.
+      description: Details of a single endpoint redirection.
     EndpointsRedirectionResponse:
       type: object
       properties:
@@ -210,69 +273,6 @@ components:
           items:
             $ref: '#/components/schemas/EndpointRedirectionDTO'
       description: Dynamic endpoint redirection status response message
-    EndpointRedirectionDTO:
-      type: object
-      properties:
-        sourceEndpointName:
-          type: string
-          description: Name of the source endpoint.
-          example: redis-12345
-        targetEndpointName:
-          type: string
-          description: Name of the target endpoint.
-          example: redis-12346
-        sourceEndpointType:
-          type: string
-          description: Type of the source endpoint.
-          example: public
-          enum:
-          - public
-          - private
-        targetEndpointType:
-          type: string
-          description: Type of the target endpoint.
-          example: public
-          enum:
-          - public
-          - private
-        errorMessage:
-          type: string
-          description: Error message describing why this endpoint redirection failed, if applicable.
-      description: Details of a single endpoint redirection.
-    CreateEndpointsRedirectionRequest:
-      required:
-      - endpointTargetType
-      - migrationProtection
-      - sourceDatabaseId
-      - targetDatabaseId
-      type: object
-      properties:
-        sourceDatabaseId:
-          type: integer
-          description: ID of the source database to redirect the endpoint from.
-          format: int32
-          example: 51404231
-        targetDatabaseId:
-          type: integer
-          description: ID of the target database to redirect the endpoint to.
-          format: int32
-          example: 51404232
-        endpointTargetType:
-          type: string
-          description: Type of endpoint to redirect.
-          example: public
-          enum:
-          - public
-          - private
-        duplicateACLs:
-          type: boolean
-          description: Whether to duplicate the source database ACLs to the target database.
-          example: true
-        migrationProtection:
-          type: boolean
-          description: Must be explicitly set to true to start the migration. This is a protective measure to avoid accidental migrations.
-          example: true
-      description: Dynamic endpoint redirection request
   securitySchemes:
     x-api-key:
       type: apiKey

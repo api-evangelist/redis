@@ -92,6 +92,21 @@ paths:
         collapsed_from: 2 example path(s) differing only at dedupId
 components:
   schemas:
+    GetApiDedupStatsResponse:
+      type: object
+      properties:
+        scope:
+          type: string
+        exactCount:
+          type: integer
+        bitsSet:
+          type: integer
+        bitSize:
+          type: integer
+        hashCount:
+          type: integer
+        estimatedFalsePositiveRate:
+          type: number
     PostApiDedupDedupidRequest:
       type: object
       properties:
@@ -108,21 +123,6 @@ components:
               type: number
         ttlSeconds:
           type: integer
-    GetApiDedupStatsResponse:
-      type: object
-      properties:
-        scope:
-          type: string
-        exactCount:
-          type: integer
-        bitsSet:
-          type: integer
-        bitSize:
-          type: integer
-        hashCount:
-          type: integer
-        estimatedFalsePositiveRate:
-          type: number
     PostApiDedupDedupidResponse:
       type: object
       properties:

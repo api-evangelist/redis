@@ -422,19 +422,6 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
-    AccountSessionLogEntries:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountSessionLogEntry'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
     ProcessorResponse:
       type: object
       properties:
@@ -1080,137 +1067,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    Module:
-      type: object
-      properties:
-        name:
-          type: string
-        capabilityName:
-          type: string
-        description:
-          type: string
-      description: RedisLabs database module information
-    AccountSystemLogEntries:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountSystemLogEntry'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        entries:
-        - id: 2900349
-          time: '2022-10-12T10:54:31Z'
-          originator: example-value
-          type: Account
-          description: example-value (example.value@redis.com)'s user name was changed to Example Value
-        - id: 2900348
-          time: '2022-10-12T10:54:11Z'
-          originator: invalid-name
-          type: Account
-          description: Invited invalid-name (cab@fufu.com) to join team
-    Tag:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          type: string
-          description: Tag key
-          example: environment
-        value:
-          type: string
-          description: Tag value
-          example: production
-      description: Tag filter for cost report
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    SearchScalingFactorsData:
-      type: object
-      properties:
-        queryPerformanceFactors:
-          type: array
-          items:
-            type: string
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    DataPersistenceOptions:
-      type: object
-      properties:
-        dataPersistence:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataPersistenceEntry'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        dataPersistence:
-        - name: none
-          description: None
-        - name: aof-every-1-second
-          description: Append only file (AOF) - fsync every 1 second
-        - name: aof-every-write
-          description: Append only file (AOF) - fsync every write
-        - name: snapshot-every-1-hour
-          description: Snapshot every 1 hour
-        - name: snapshot-every-6-hours
-          description: Snapshot every 6 hour
-        - name: snapshot-every-12-hours
-          description: Snapshot every 12 hour
-        links:
-        - rel: self
-          href: https://api-cloudapi.qa.redislabs.com/v1/data-persistence
-          type: GET
-    DataPersistenceEntry:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-      description: RedisLabs data persistence information
     PaymentMethods:
       type: object
       properties:
@@ -1234,42 +1090,6 @@ components:
           expirationMonth: 2
           expirationYear: 2026
           links: []
-    ModulesData:
-      type: object
-      properties:
-        modules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Module'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        modules:
-        - name: RedisBloom
-          capabilityName: Probabilistic
-          description: A set of probabilistic data structures to Redis, including Bloom filter, Cuckoo filter, Count-min sketch, Top-K, and t-digest
-          parameters: []
-        - name: RedisJSON
-          capabilityName: JSON
-          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
-          parameters: []
-        - name: RediSearch
-          capabilityName: Search and query
-          description: A comprehensive, expressive, flexible, fast and developer-friendly search and query engine for the diversity of data types in Redis with state-of-the-art scoring algorithms
-          parameters:
-          - name: number-of-documents
-            description: Expected number of documents the database module will be indexing
-            type: integer
-            defaultValue: 1000000
-            required: false
-        - name: RedisTimeSeries
-          capabilityName: Time series
-          description: Time-Series data structure for redis
-          parameters: []
     Regions:
       type: object
       properties:
@@ -1456,20 +1276,6 @@ components:
         - id: 143
           name: africa-south1
           provider: GCP
-    Region:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        provider:
-          type: string
-          enum:
-          - AWS
-          - GCP
-      description: RedisLabs region information
     AccountSystemLogEntry:
       type: object
       properties:
@@ -1493,6 +1299,108 @@ components:
         description:
           type: string
       description: Account system log entry
+    ModulesData:
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Module'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        modules:
+        - name: RedisBloom
+          capabilityName: Probabilistic
+          description: A set of probabilistic data structures to Redis, including Bloom filter, Cuckoo filter, Count-min sketch, Top-K, and t-digest
+          parameters: []
+        - name: RedisJSON
+          capabilityName: JSON
+          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
+          parameters: []
+        - name: RediSearch
+          capabilityName: Search and query
+          description: A comprehensive, expressive, flexible, fast and developer-friendly search and query engine for the diversity of data types in Redis with state-of-the-art scoring algorithms
+          parameters:
+          - name: number-of-documents
+            description: Expected number of documents the database module will be indexing
+            type: integer
+            defaultValue: 1000000
+            required: false
+        - name: RedisTimeSeries
+          capabilityName: Time series
+          description: Time-Series data structure for redis
+          parameters: []
+    Module:
+      type: object
+      properties:
+        name:
+          type: string
+        capabilityName:
+          type: string
+        description:
+          type: string
+      description: RedisLabs database module information
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    AccountSessionLogEntries:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountSessionLogEntry'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    Region:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        provider:
+          type: string
+          enum:
+          - AWS
+          - GCP
+      description: RedisLabs region information
     RootAccount:
       type: object
       properties:
@@ -1522,6 +1430,44 @@ components:
               email: capi.user@redis.com
             userAccountId: 1
             httpSourceIp: 79.0.0.173
+    AccountSystemLogEntries:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountSystemLogEntry'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        entries:
+        - id: 2900349
+          time: '2022-10-12T10:54:31Z'
+          originator: example-value
+          type: Account
+          description: example-value (example.value@redis.com)'s user name was changed to Example Value
+        - id: 2900348
+          time: '2022-10-12T10:54:11Z'
+          originator: invalid-name
+          type: Account
+          description: Invited invalid-name (cab@fufu.com) to join team
+    SearchScalingFactorsData:
+      type: object
+      properties:
+        queryPerformanceFactors:
+          type: array
+          items:
+            type: string
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
     CostReportCreateRequest:
       required:
       - endDate
@@ -1592,6 +1538,21 @@ components:
           type: string
           readOnly: true
       description: Cost report generation request
+    Tag:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          type: string
+          description: Tag key
+          example: environment
+        value:
+          type: string
+          description: Tag value
+          example: production
+      description: Tag filter for cost report
     AccountSessionLogEntry:
       type: object
       properties:
@@ -1613,6 +1574,45 @@ components:
         action:
           type: string
       description: Account session log entry
+    DataPersistenceEntry:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      description: RedisLabs data persistence information
+    DataPersistenceOptions:
+      type: object
+      properties:
+        dataPersistence:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataPersistenceEntry'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        dataPersistence:
+        - name: none
+          description: None
+        - name: aof-every-1-second
+          description: Append only file (AOF) - fsync every 1 second
+        - name: aof-every-write
+          description: Append only file (AOF) - fsync every write
+        - name: snapshot-every-1-hour
+          description: Snapshot every 1 hour
+        - name: snapshot-every-6-hours
+          description: Snapshot every 6 hour
+        - name: snapshot-every-12-hours
+          description: Snapshot every 12 hour
+        links:
+        - rel: self
+          href: https://api-cloudapi.qa.redislabs.com/v1/data-persistence
+          type: GET
   securitySchemes:
     x-api-key:
       type: apiKey

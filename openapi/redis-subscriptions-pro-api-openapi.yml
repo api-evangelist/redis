@@ -673,6 +673,110 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    ActiveActiveRegionToDelete:
+      type: object
+      properties:
+        region:
+          type: string
+          description: Name of the cloud provider region to delete.
+      description: The names of the regions to delete.
+    MaintenanceWindow:
+      type: object
+      properties:
+        days:
+          type: array
+          items:
+            type: string
+        startHour:
+          type: integer
+          format: int32
+        durationInHours:
+          type: integer
+          format: int32
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    SubscriptionRegionNetworkingSpec:
+      type: object
+      properties:
+        deploymentCIDR:
+          type: string
+          description: 'Optional. Deployment CIDR mask. Must be a valid CIDR format with a range of 256 IP addresses. Default for single-region subscriptions: If using Redis internal cloud account, 192.168.0.0/24'
+          example: 10.0.0.0/24
+        vpcId:
+          type: string
+          description: 'Optional. Enter a VPC identifier that exists in the hosted AWS account. Creates a new VPC if not set. VPC Identifier must be in a valid format (for example: ''vpc-0125be68a4625884ad'') and must exist within the hosting account.'
+          example: <vpc-identifier>
+        subnetIds:
+          type: array
+          description: Optional. Enter a list of subnets identifiers that exists in the hosted AWS account. Subnet Identifier must exist within the hosting account.
+          items:
+            type: string
+            description: Optional. Enter a list of subnets identifiers that exists in the hosted AWS account. Subnet Identifier must exist within the hosting account.
+        securityGroupId:
+          type: string
+          description: 'Optional. Enter a security group identifier that exists in the hosted AWS account. Security group Identifier must be in a valid format (for example: ''sg-0125be68a4625884ad'') and must exist within the hosting account.'
+      description: Optional. Cloud networking details, per region. Required if creating an Active-Active subscription.
+    SubscriptionMaintenanceWindows:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+          - manual
+          - automatic
+        timeZone:
+          type: string
+        windows:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaintenanceWindow'
+        skipStatus:
+          $ref: '#/components/schemas/MaintenanceWindowSkipStatus'
+    DatabaseThroughputSpec:
+      required:
+      - by
+      - value
+      type: object
+      properties:
+        by:
+          type: string
+          description: Throughput measurement method. Use 'operations-per-second' for all new databases.
+          enum:
+          - operations-per-second
+          - number-of-shards
+        value:
+          type: integer
+          description: Throughput value in the selected measurement method.
+          format: int64
+          example: 10000
+      description: Optional. Throughput measurement method.
     CidrWhiteListUpdateRequest:
       type: object
       properties:
@@ -696,6 +800,19 @@ components:
           type: string
           readOnly: true
       description: Update Pro subscription
+    CustomerManagedKey:
+      required:
+      - resourceName
+      type: object
+      properties:
+        resourceName:
+          type: string
+          description: The resource name of the customer managed key.
+          example: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY_NAME
+        region:
+          type: string
+          description: (Required for Active-Active subscriptions only) Region for the customer managed key as defined by the cloud provider.
+      description: Object representing a customer managed key (CMK), along with the region it is associated to.
     RedisVersions:
       type: object
       properties:
@@ -703,43 +820,367 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RedisVersion'
-    SubscriptionMaintenanceWindows:
+    SubscriptionCreateRequest:
+      required:
+      - cloudProviders
+      - databases
       type: object
       properties:
-        mode:
+        name:
           type: string
+          description: Optional. New subscription name.
+          example: My new subscription
+        dryRun:
+          type: boolean
+          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, creating any resources required by the plan. When ''true'': creates a read-only deployment plan and does not create any resources. Default: ''false'''
+          example: false
+        deploymentType:
+          type: string
+          description: 'Optional. When ''single-region'' or not set: Creates a single region subscription. When ''active-active'': creates an Active-Active (multi-region) subscription.'
+          example: single-region
           enum:
-          - manual
-          - automatic
-        timeZone:
+          - single-region
+          - active-active
+        paymentMethod:
           type: string
-        windows:
+          description: 'Optional. The payment method for the subscription. If set to ‘credit-card’, ‘paymentMethodId’ must be defined. Default: ''credit-card'''
+          enum:
+          - credit-card
+          - marketplace
+        paymentMethodId:
+          type: integer
+          description: Optional. A valid payment method ID for this account. Use GET /payment-methods to get a list of all payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required for all other account types.
+          format: int32
+        memoryStorage:
+          type: string
+          description: 'Optional. Memory storage preference: either ''ram'' or a combination of ''ram-and-flash'' (also known as Auto Tiering). Default: ''ram'''
+          example: ram
+          enum:
+          - ram
+          - ram-and-flash
+        persistentStorageEncryptionType:
+          type: string
+          description: 'Optional. Persistent storage encryption secures data at rest for database persistence. By default, disk storage is encrypted by keys managed by the cloud provider. Use ''customer-managed-key'' if you want to use self-managed persistent storage encryption keys. Default: ''cloud-provider-managed-key'''
+          example: cloud-provider-managed-key
+          enum:
+          - cloud-provider-managed-key
+          - customer-managed-key
+        persistentStorageEncryptionKeys:
+          $ref: '#/components/schemas/CustomerManagedKeyProperties'
+        cloudProviders:
           type: array
+          description: Cloud provider, region, and networking details.
           items:
-            $ref: '#/components/schemas/MaintenanceWindow'
-        skipStatus:
-          $ref: '#/components/schemas/MaintenanceWindowSkipStatus'
-    SubscriptionPricing:
+            $ref: '#/components/schemas/SubscriptionSpec'
+        databases:
+          type: array
+          description: One or more database specification(s) to create in this subscription.
+          items:
+            $ref: '#/components/schemas/SubscriptionDatabaseSpec'
+        redisVersion:
+          type: string
+          description: Optional. Defines the Redis version of the databases created in this specific request. It doesn't determine future databases associated with this subscription. If not set, databases will use the default Redis version. This field is deprecated and will be removed in a future API version - use the database-level redisVersion property instead.
+          example: '7.2'
+          deprecated: true
+        publicEndpointAccess:
+          type: boolean
+          description: 'Optional. When ''false'', all databases on this subscription will reject any connection attempt to the public endpoint and any connection attempt to the private endpoint that does not come from an IP address in the private address space defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3 ). You must use a [private connectivity method](https://redis.io/docs/latest/operate/rc/security/database-security/block-public-endpoints/#private-connectivity-methods ) to connect to a database with a blocked public endpoint. Default: ''true''.'
+        commandType:
+          type: string
+          readOnly: true
+      description: Subscription create request
+    SubscriptionUpdateCMKRequest:
+      required:
+      - customerManagedKeys
       type: object
       properties:
-        type:
-          type: string
-        typeDetails:
-          type: string
-        quantity:
+        subscriptionId:
           type: integer
           format: int32
-        quantityMeasurement:
+          readOnly: true
+        commandType:
           type: string
-        pricePerUnit:
+          readOnly: true
+        deletionGracePeriod:
+          type: string
+          description: Optional. The grace period for deleting the subscription if Redis cannot access the provided key. Required when applying customer managed keys for a new subscription.
+          example: alerts-only
+          enum:
+          - alerts-only
+          - immediate
+          - 15-minutes
+          - 30-minutes
+          - 1-hour
+          - 4-hours
+          - 8-hours
+          - 12-hours
+          - 24-hours
+        customerManagedKeys:
+          type: array
+          description: The customer managed keys (CMK) to use for this subscription. If is active-active subscription, must set a key for each region.
+          items:
+            $ref: '#/components/schemas/CustomerManagedKey'
+      description: Subscription update request message
+    RedisVersion:
+      type: object
+      properties:
+        version:
+          type: string
+        eolDate:
+          type: string
+          format: date
+        isPreview:
+          type: boolean
+        isDefault:
+          type: boolean
+    AccountSubscriptions:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: RedisLabs list of subscriptions in current account
+      example:
+        accountId: 1001
+        subscriptions:
+        - id: 1206
+          name: subscription name
+          status: active
+          deploymentType: single-region
+          paymentMethodId: 123
+          publicEndpointAccess: true
+          memoryStorage: ram
+          numberOfDatabases: 6
+          paymentMethodType: credit-card
+          storageEncryption: false
+          subscriptionPricing:
+          - type: Shards
+            typeDetails: high-throughput
+            quantity: 7
+            quantityMeasurement: shards
+            pricePerUnit: 0.124
+            priceCurrency: USD
+            pricePeriod: hour
+          cloudDetails:
+          - provider: AWS
+            awsAccountId: '550680565604'
+            cloudAccountId: 1666
+            totalSizeInGb: 0.0272
+            regions:
+            - region: us-east-1
+              networking:
+              - deploymentCIDR: 10.0.0.0/24
+                subnetId: subnet-009ce004ed90da8a6
+              preferredAvailabilityZones:
+              - us-east-1a
+              multipleAvailabilityZones: false
+            links: []
+          links: []
+    BaseSubscriptionUpdateRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        commandType:
+          type: string
+          readOnly: true
+      description: Subscription update request message
+      oneOf:
+      - $ref: '#/components/schemas/SubscriptionUpdateRequest'
+      - $ref: '#/components/schemas/SubscriptionUpdateCMKRequest'
+    MaintenanceWindowSpec:
+      required:
+      - days
+      - durationInHours
+      - startHour
+      type: object
+      properties:
+        startHour:
+          type: integer
+          description: Starting hour of the maintenance window. Can be between '0' (12 AM in the deployment region's local time) and '23' (11 PM in the deployment region's local time).
+          format: int32
+          example: 12
+        durationInHours:
+          type: integer
+          description: The duration of the maintenance window in hours. Can be between 4-24 hours (or 8-24 hours if using 'ram-and-flash').
+          format: int32
+          example: 8
+        days:
+          type: array
+          description: 'Days where this maintenance window applies. Can contain one or more of: "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", or "Sunday".'
+          example:
+          - Monday
+          - Wednesday
+          items:
+            type: string
+            description: 'Days where this maintenance window applies. Can contain one or more of: "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", or "Sunday".'
+            example: '["Monday","Wednesday"]'
+      description: Maintenance window timeframes if mode is set to 'manual'. Up to 7 maintenance windows can be provided.
+    SubscriptionDatabaseSpec:
+      required:
+      - name
+      - protocol
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the database. Database name is limited to 40 characters or less and must include only letters, digits, and hyphens ('-'). It must start with a letter and end with a letter or digit.
+          example: Redis-database-example
+        protocol:
+          type: string
+          description: 'Optional. Database protocol. Only set to ''memcached'' if you have a legacy application. Default: ''redis'''
+          enum:
+          - redis
+          - memcached
+        port:
+          type: integer
+          description: Optional. TCP port on which the database is available (10000-19999). Generated automatically if not set.
+          format: int32
+          example: 10000
+        memoryLimitInGb:
+          minimum: 0.1
           type: number
+          description: Optional. Total memory in GB, including replication and other overhead. You cannot set both datasetSizeInGb and totalMemoryInGb.
           format: double
-        priceCurrency:
+          example: 1
+          deprecated: true
+        datasetSizeInGb:
+          minimum: 0.1
+          type: number
+          description: Optional. The maximum amount of data in the dataset for this database in GB. You cannot set both datasetSizeInGb and totalMemoryInGb. If ‘replication’ is 'true', the database’s total memory will be twice as large as the datasetSizeInGb.If ‘replication’ is false, the database’s total memory will be the datasetSizeInGb value.
+          format: double
+          example: 1
+        supportOSSClusterApi:
+          type: boolean
+          description: 'Optional. Support Redis [OSS Cluster API](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#oss-cluster-api). Default: ''false'''
+          example: false
+        dataPersistence:
           type: string
-        pricePeriod:
+          description: 'Optional. Type and rate of data persistence in persistent storage. Default: ''none'''
+          enum:
+          - none
+          - aof-every-1-second
+          - aof-every-write
+          - snapshot-every-1-hour
+          - snapshot-every-6-hours
+          - snapshot-every-12-hours
+        replication:
+          type: boolean
+          description: 'Optional. Databases replication. Default: ''true'''
+        throughputMeasurement:
+          $ref: '#/components/schemas/DatabaseThroughputSpec'
+        localThroughputMeasurement:
+          type: array
+          description: 'Optional. Expected throughput per region for an Active-Active database. Default: 1000 read and write ops/sec for each region'
+          items:
+            $ref: '#/components/schemas/LocalThroughput'
+        modules:
+          type: array
+          description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
+          items:
+            $ref: '#/components/schemas/DatabaseModuleSpec'
+        quantity:
+          type: integer
+          description: 'Optional. Number of databases that will be created with these settings. Default: 1'
+          format: int32
+          example: 1
+        averageItemSizeInBytes:
+          type: integer
+          description: 'Optional. Relevant only to ram-and-flash (also known as Redis-Flex/Auto-Tiering) subscriptions. Estimated average size in bytes of the items stored in the database. Default: 1000'
+          format: int64
+          deprecated: true
+        ramPercentage:
+          type: integer
+          description: 'Optional. Relevant only to ram-and-flash (also known as Redis-Flex/Auto-Tiering) subscriptions. The percentage of data to be stored in RAM. Must be between 10 and 50 in steps of 10 (10, 20, 30, 40, 50). Default: 20'
+          format: int32
+          example: 20
+        respVersion:
           type: string
-        region:
+          description: Optional. Redis Serialization Protocol version. Must be compatible with Redis version.
+          example: resp3
+          enum:
+          - resp2
+          - resp3
+        redisVersion:
           type: string
+          description: Optional. If specified, redisVersion defines the Redis database version. If omitted, the Redis version will be set to the default version (available in 'GET /subscriptions/redis-versions')
+          example: '7.2'
+        autoMinorVersionUpgrade:
+          type: boolean
+          description: 'Optional. Automatically upgrades the database to newer minor versions within the same major release. Applies to version 8.4 and above. Default: true.'
+        shardingType:
+          type: string
+          description: Optional. Database [Hashing policy](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#manage-the-hashing-policy).
+          enum:
+          - default-regex-rules
+          - custom-regex-rules
+          - redis-oss-hashing
+        queryPerformanceFactor:
+          type: string
+          description: Optional. The query performance factor adds extra compute power specifically for search and query databases. You can increase your queries per second by the selected factor.
+          example: 2x
+      description: One or more database specification(s) to create in this subscription.
+    SubscriptionSpec:
+      required:
+      - regions
+      type: object
+      properties:
+        provider:
+          type: string
+          description: 'Optional. Cloud provider. Default: ''AWS'''
+          example: AWS
+          enum:
+          - AWS
+          - GCP
+        cloudAccountId:
+          type: integer
+          description: 'Optional. Cloud account identifier. Default: Redis internal cloud account (Cloud Account ID = 1). Use GET /cloud-accounts to list all available cloud accounts. Note: A subscription on Google Cloud can be created only with Redis internal cloud account.'
+          format: int32
+          example: 1
+        regions:
+          type: array
+          description: The cloud provider region or list of regions (Active-Active only) and networking details.
+          items:
+            $ref: '#/components/schemas/SubscriptionRegionSpec'
+        resourceTags:
+          type: array
+          description: Optional. A list of resource tags to apply to the subscription. (max. 30 tags).
+          items:
+            $ref: '#/components/schemas/ResourceTag'
+      description: Cloud provider, region, and networking details.
+    CustomerManagedKeyProperties:
+      required:
+      - customerManagedKeys
+      type: object
+      properties:
+        customerManagedKeys:
+          type: array
+          description: The customer managed keys (CMK) to use for this subscription. If is active-active subscription, must set a key for each region.
+          items:
+            $ref: '#/components/schemas/CustomerManagedKey'
+        deletionGracePeriod:
+          type: string
+          description: Optional. The grace period for deleting the subscription if Redis cannot access the provided key. Required when applying customer managed keys for a new subscription.
+          example: alerts-only
+          enum:
+          - alerts-only
+          - immediate
+          - 15-minutes
+          - 30-minutes
+          - 1-hour
+          - 4-hours
+          - 8-hours
+          - 12-hours
+          - 24-hours
+      description: Optional. Contains information about the keys used for each region. Can be used only with external cloud account
     ActiveActiveRegionCreateRequest:
       type: object
       properties:
@@ -805,129 +1246,6 @@ components:
           type: string
           readOnly: true
       description: Active active region creation request message
-    SubscriptionUpdateCMKRequest:
-      required:
-      - customerManagedKeys
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        commandType:
-          type: string
-          readOnly: true
-        deletionGracePeriod:
-          type: string
-          description: Optional. The grace period for deleting the subscription if Redis cannot access the provided key. Required when applying customer managed keys for a new subscription.
-          example: alerts-only
-          enum:
-          - alerts-only
-          - immediate
-          - 15-minutes
-          - 30-minutes
-          - 1-hour
-          - 4-hours
-          - 8-hours
-          - 12-hours
-          - 24-hours
-        customerManagedKeys:
-          type: array
-          description: The customer managed keys (CMK) to use for this subscription. If is active-active subscription, must set a key for each region.
-          items:
-            $ref: '#/components/schemas/CustomerManagedKey'
-      description: Subscription update request message
-    MaintenanceWindowSkipStatus:
-      type: object
-      properties:
-        remainingSkips:
-          type: integer
-          format: int32
-        currentSkipEnd:
-          type: string
-    MaintenanceWindow:
-      type: object
-      properties:
-        days:
-          type: array
-          items:
-            type: string
-        startHour:
-          type: integer
-          format: int32
-        durationInHours:
-          type: integer
-          format: int32
-    SubscriptionRegionNetworkingSpec:
-      type: object
-      properties:
-        deploymentCIDR:
-          type: string
-          description: 'Optional. Deployment CIDR mask. Must be a valid CIDR format with a range of 256 IP addresses. Default for single-region subscriptions: If using Redis internal cloud account, 192.168.0.0/24'
-          example: 10.0.0.0/24
-        vpcId:
-          type: string
-          description: 'Optional. Enter a VPC identifier that exists in the hosted AWS account. Creates a new VPC if not set. VPC Identifier must be in a valid format (for example: ''vpc-0125be68a4625884ad'') and must exist within the hosting account.'
-          example: <vpc-identifier>
-        subnetIds:
-          type: array
-          description: Optional. Enter a list of subnets identifiers that exists in the hosted AWS account. Subnet Identifier must exist within the hosting account.
-          items:
-            type: string
-            description: Optional. Enter a list of subnets identifiers that exists in the hosted AWS account. Subnet Identifier must exist within the hosting account.
-        securityGroupId:
-          type: string
-          description: 'Optional. Enter a security group identifier that exists in the hosted AWS account. Security group Identifier must be in a valid format (for example: ''sg-0125be68a4625884ad'') and must exist within the hosting account.'
-      description: Optional. Cloud networking details, per region. Required if creating an Active-Active subscription.
-    AccountSubscriptions:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: RedisLabs list of subscriptions in current account
-      example:
-        accountId: 1001
-        subscriptions:
-        - id: 1206
-          name: subscription name
-          status: active
-          deploymentType: single-region
-          paymentMethodId: 123
-          publicEndpointAccess: true
-          memoryStorage: ram
-          numberOfDatabases: 6
-          paymentMethodType: credit-card
-          storageEncryption: false
-          subscriptionPricing:
-          - type: Shards
-            typeDetails: high-throughput
-            quantity: 7
-            quantityMeasurement: shards
-            pricePerUnit: 0.124
-            priceCurrency: USD
-            pricePeriod: hour
-          cloudDetails:
-          - provider: AWS
-            awsAccountId: '550680565604'
-            cloudAccountId: 1666
-            totalSizeInGb: 0.0272
-            regions:
-            - region: us-east-1
-              networking:
-              - deploymentCIDR: 10.0.0.0/24
-                subnetId: subnet-009ce004ed90da8a6
-              preferredAvailabilityZones:
-              - us-east-1a
-              multipleAvailabilityZones: false
-            links: []
-          links: []
     SubscriptionRegionSpec:
       required:
       - region
@@ -950,53 +1268,6 @@ components:
         networking:
           $ref: '#/components/schemas/SubscriptionRegionNetworkingSpec'
       description: The cloud provider region or list of regions (Active-Active only) and networking details.
-    SubscriptionResourceTagsUpdateRequest:
-      required:
-      - resourceTags
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        resourceTags:
-          type: array
-          description: List of resource tags to apply to the subscription. This will replace all existing tags.
-          items:
-            $ref: '#/components/schemas/ResourceTag'
-        commandType:
-          type: string
-          readOnly: true
-      description: Resource tags update request
-    ActiveActiveRegionToDelete:
-      type: object
-      properties:
-        region:
-          type: string
-          description: Name of the cloud provider region to delete.
-      description: The names of the regions to delete.
-    CustomerManagedKeyAccessDetails:
-      type: object
-      properties:
-        redisServiceAccount:
-          type: string
-        googlePredefinedRoles:
-          type: array
-          items:
-            type: string
-        googleCustomPermissions:
-          type: array
-          items:
-            type: string
-        redisIamRole:
-          type: string
-        requiredKeyPolicyStatements:
-          type: object
-        deletionGracePeriodOptions:
-          type: array
-          items:
-            type: string
-      description: Configuration regarding customer managed persistent storage encryption
     CrdbRegionSpec:
       type: object
       properties:
@@ -1006,80 +1277,6 @@ components:
         localThroughputMeasurement:
           $ref: '#/components/schemas/LocalThroughput'
       description: 'List of databases in the subscription with local throughput details. Default: 1000 read and write ops/sec for each database'
-    DatabaseThroughputSpec:
-      required:
-      - by
-      - value
-      type: object
-      properties:
-        by:
-          type: string
-          description: Throughput measurement method. Use 'operations-per-second' for all new databases.
-          enum:
-          - operations-per-second
-          - number-of-shards
-        value:
-          type: integer
-          description: Throughput value in the selected measurement method.
-          format: int64
-          example: 10000
-      description: Optional. Throughput measurement method.
-    ActiveActiveSubscriptionRegions:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: List of active-active subscription regions
-      example:
-        subscriptionId: 126
-        regions:
-        - regionId: 1
-          region: us-east-1
-          deploymentCidr: 10.0.0.0/24
-          vpcId: vpc-0bf863584c46321e4
-          databases:
-          - databaseId: 862
-            databaseName: Bdb
-            readOperationsPerSecond: 500
-            writeOperationsPerSecond: 500
-            respVersion: resp3
-            links: []
-          - databaseId: 864
-            databaseName: Bdb2
-            readOperationsPerSecond: 1000
-            writeOperationsPerSecond: 1000
-            respVersion: resp3
-            links: []
-          links: []
-        - regionId: 4
-          region: eu-west-1
-          deploymentCidr: 10.0.1.0/24
-          vpcId: vpc-0108fb753063ecf8b
-          databases:
-          - databaseId: 862
-            databaseName: Bdb
-            readOperationsPerSecond: 500
-            writeOperationsPerSecond: 500
-            respVersion: resp3
-            links: []
-          - databaseId: 864
-            databaseName: Bdb2
-            readOperationsPerSecond: 1000
-            writeOperationsPerSecond: 1000
-            respVersion: resp3
-            links: []
-          links: []
-        links:
-        - rel: self
-          href: https://api-cloudapi.qa.redislabs.com/v1/subscriptions/133876/regions
-          type: GET
     ProcessorResponse:
       type: object
       properties:
@@ -1725,307 +1922,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    SubscriptionDatabaseSpec:
-      required:
-      - name
-      - protocol
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the database. Database name is limited to 40 characters or less and must include only letters, digits, and hyphens ('-'). It must start with a letter and end with a letter or digit.
-          example: Redis-database-example
-        protocol:
-          type: string
-          description: 'Optional. Database protocol. Only set to ''memcached'' if you have a legacy application. Default: ''redis'''
-          enum:
-          - redis
-          - memcached
-        port:
-          type: integer
-          description: Optional. TCP port on which the database is available (10000-19999). Generated automatically if not set.
-          format: int32
-          example: 10000
-        memoryLimitInGb:
-          minimum: 0.1
-          type: number
-          description: Optional. Total memory in GB, including replication and other overhead. You cannot set both datasetSizeInGb and totalMemoryInGb.
-          format: double
-          example: 1
-          deprecated: true
-        datasetSizeInGb:
-          minimum: 0.1
-          type: number
-          description: Optional. The maximum amount of data in the dataset for this database in GB. You cannot set both datasetSizeInGb and totalMemoryInGb. If ‘replication’ is 'true', the database’s total memory will be twice as large as the datasetSizeInGb.If ‘replication’ is false, the database’s total memory will be the datasetSizeInGb value.
-          format: double
-          example: 1
-        supportOSSClusterApi:
-          type: boolean
-          description: 'Optional. Support Redis [OSS Cluster API](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#oss-cluster-api). Default: ''false'''
-          example: false
-        dataPersistence:
-          type: string
-          description: 'Optional. Type and rate of data persistence in persistent storage. Default: ''none'''
-          enum:
-          - none
-          - aof-every-1-second
-          - aof-every-write
-          - snapshot-every-1-hour
-          - snapshot-every-6-hours
-          - snapshot-every-12-hours
-        replication:
-          type: boolean
-          description: 'Optional. Databases replication. Default: ''true'''
-        throughputMeasurement:
-          $ref: '#/components/schemas/DatabaseThroughputSpec'
-        localThroughputMeasurement:
-          type: array
-          description: 'Optional. Expected throughput per region for an Active-Active database. Default: 1000 read and write ops/sec for each region'
-          items:
-            $ref: '#/components/schemas/LocalThroughput'
-        modules:
-          type: array
-          description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
-          items:
-            $ref: '#/components/schemas/DatabaseModuleSpec'
-        quantity:
-          type: integer
-          description: 'Optional. Number of databases that will be created with these settings. Default: 1'
-          format: int32
-          example: 1
-        averageItemSizeInBytes:
-          type: integer
-          description: 'Optional. Relevant only to ram-and-flash (also known as Redis-Flex/Auto-Tiering) subscriptions. Estimated average size in bytes of the items stored in the database. Default: 1000'
-          format: int64
-          deprecated: true
-        ramPercentage:
-          type: integer
-          description: 'Optional. Relevant only to ram-and-flash (also known as Redis-Flex/Auto-Tiering) subscriptions. The percentage of data to be stored in RAM. Must be between 10 and 50 in steps of 10 (10, 20, 30, 40, 50). Default: 20'
-          format: int32
-          example: 20
-        respVersion:
-          type: string
-          description: Optional. Redis Serialization Protocol version. Must be compatible with Redis version.
-          example: resp3
-          enum:
-          - resp2
-          - resp3
-        redisVersion:
-          type: string
-          description: Optional. If specified, redisVersion defines the Redis database version. If omitted, the Redis version will be set to the default version (available in 'GET /subscriptions/redis-versions')
-          example: '7.2'
-        autoMinorVersionUpgrade:
-          type: boolean
-          description: 'Optional. Automatically upgrades the database to newer minor versions within the same major release. Applies to version 8.4 and above. Default: true.'
-        shardingType:
-          type: string
-          description: Optional. Database [Hashing policy](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#manage-the-hashing-policy).
-          enum:
-          - default-regex-rules
-          - custom-regex-rules
-          - redis-oss-hashing
-        queryPerformanceFactor:
-          type: string
-          description: Optional. The query performance factor adds extra compute power specifically for search and query databases. You can increase your queries per second by the selected factor.
-          example: 2x
-      description: One or more database specification(s) to create in this subscription.
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    LocalThroughput:
-      type: object
-      properties:
-        region:
-          type: string
-          description: Specify one of the selected cloud provider regions for the subscription.
-        writeOperationsPerSecond:
-          type: integer
-          description: 'Write operations for this region per second. Default: 1000 ops/sec'
-          format: int64
-          example: 1000
-        readOperationsPerSecond:
-          type: integer
-          description: 'Read operations for this region per second. Default: 1000 ops/sec'
-          format: int64
-          example: 1000
-      description: Optional. Expected read and write throughput for this region.
-    ActiveActiveRegionDeleteRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        regions:
-          type: array
-          description: The names of the regions to delete.
-          items:
-            $ref: '#/components/schemas/ActiveActiveRegionToDelete'
-        dryRun:
-          type: boolean
-          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, deleting any resources required by the plan. When ''true'': creates a read-only deployment plan and does not delete or modify any resources. Default: ''false'''
-          example: false
-        commandType:
-          type: string
-          readOnly: true
-      description: Active active region deletion request message
-    DatabaseModuleSpec:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          description: Redis advanced capability name. Use GET /database-modules for a list of available capabilities.
-        parameters:
-          type: object
-          additionalProperties:
-            type: object
-            description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
-            example: {}
-          description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
-          example: {}
-      description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
-    SubscriptionCreateRequest:
-      required:
-      - cloudProviders
-      - databases
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional. New subscription name.
-          example: My new subscription
-        dryRun:
-          type: boolean
-          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, creating any resources required by the plan. When ''true'': creates a read-only deployment plan and does not create any resources. Default: ''false'''
-          example: false
-        deploymentType:
-          type: string
-          description: 'Optional. When ''single-region'' or not set: Creates a single region subscription. When ''active-active'': creates an Active-Active (multi-region) subscription.'
-          example: single-region
-          enum:
-          - single-region
-          - active-active
-        paymentMethod:
-          type: string
-          description: 'Optional. The payment method for the subscription. If set to ‘credit-card’, ‘paymentMethodId’ must be defined. Default: ''credit-card'''
-          enum:
-          - credit-card
-          - marketplace
-        paymentMethodId:
-          type: integer
-          description: Optional. A valid payment method ID for this account. Use GET /payment-methods to get a list of all payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required for all other account types.
-          format: int32
-        memoryStorage:
-          type: string
-          description: 'Optional. Memory storage preference: either ''ram'' or a combination of ''ram-and-flash'' (also known as Auto Tiering). Default: ''ram'''
-          example: ram
-          enum:
-          - ram
-          - ram-and-flash
-        persistentStorageEncryptionType:
-          type: string
-          description: 'Optional. Persistent storage encryption secures data at rest for database persistence. By default, disk storage is encrypted by keys managed by the cloud provider. Use ''customer-managed-key'' if you want to use self-managed persistent storage encryption keys. Default: ''cloud-provider-managed-key'''
-          example: cloud-provider-managed-key
-          enum:
-          - cloud-provider-managed-key
-          - customer-managed-key
-        persistentStorageEncryptionKeys:
-          $ref: '#/components/schemas/CustomerManagedKeyProperties'
-        cloudProviders:
-          type: array
-          description: Cloud provider, region, and networking details.
-          items:
-            $ref: '#/components/schemas/SubscriptionSpec'
-        databases:
-          type: array
-          description: One or more database specification(s) to create in this subscription.
-          items:
-            $ref: '#/components/schemas/SubscriptionDatabaseSpec'
-        redisVersion:
-          type: string
-          description: Optional. Defines the Redis version of the databases created in this specific request. It doesn't determine future databases associated with this subscription. If not set, databases will use the default Redis version. This field is deprecated and will be removed in a future API version - use the database-level redisVersion property instead.
-          example: '7.2'
-          deprecated: true
-        publicEndpointAccess:
-          type: boolean
-          description: 'Optional. When ''false'', all databases on this subscription will reject any connection attempt to the public endpoint and any connection attempt to the private endpoint that does not come from an IP address in the private address space defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3 ). You must use a [private connectivity method](https://redis.io/docs/latest/operate/rc/security/database-security/block-public-endpoints/#private-connectivity-methods ) to connect to a database with a blocked public endpoint. Default: ''true''.'
-        commandType:
-          type: string
-          readOnly: true
-      description: Subscription create request
-    SubscriptionUpdateRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          description: Optional. Updated subscription name.
-          example: My new subscription name
-        paymentMethodId:
-          type: integer
-          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get all payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
-          format: int32
-        paymentMethod:
-          type: string
-          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
-          enum:
-          - credit-card
-          - marketplace
-        publicEndpointAccess:
-          type: boolean
-          description: Optional. When 'false', all databases on this subscription will reject any connection attempt to the public endpoint and any connection attempt to the private endpoint that does not come from an IP address in the private address space defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3 ). You must use a [private connectivity method](https://redis.io/docs/latest/operate/rc/security/database-security/block-public-endpoints/#private-connectivity-methods ) to connect to a database with a blocked public endpoint.
-        commandType:
-          type: string
-          readOnly: true
-      description: Subscription update request message
-    SubscriptionMaintenanceWindowsSpec:
-      required:
-      - mode
-      type: object
-      properties:
-        mode:
-          type: string
-          description: 'Maintenance window mode: either ''manual'' or ''automatic''. Must provide ''windows'' if manual.'
-          example: manual
-          enum:
-          - manual
-          - automatic
-        windows:
-          type: array
-          description: Maintenance window timeframes if mode is set to 'manual'. Up to 7 maintenance windows can be provided.
-          items:
-            $ref: '#/components/schemas/MaintenanceWindowSpec'
     ResourceTag:
       type: object
       properties:
@@ -2034,44 +1930,62 @@ components:
         value:
           type: string
       description: List of resource tags to apply to the subscription. This will replace all existing tags.
-    CustomerManagedKey:
-      required:
-      - resourceName
+    ActiveActiveSubscriptionRegions:
       type: object
       properties:
-        resourceName:
-          type: string
-          description: The resource name of the customer managed key.
-          example: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY_NAME
-        region:
-          type: string
-          description: (Required for Active-Active subscriptions only) Region for the customer managed key as defined by the cloud provider.
-      description: Object representing a customer managed key (CMK), along with the region it is associated to.
-    CustomerManagedKeyProperties:
-      required:
-      - customerManagedKeys
-      type: object
-      properties:
-        customerManagedKeys:
+        subscriptionId:
+          type: integer
+          format: int32
+        links:
           type: array
-          description: The customer managed keys (CMK) to use for this subscription. If is active-active subscription, must set a key for each region.
           items:
-            $ref: '#/components/schemas/CustomerManagedKey'
-        deletionGracePeriod:
-          type: string
-          description: Optional. The grace period for deleting the subscription if Redis cannot access the provided key. Required when applying customer managed keys for a new subscription.
-          example: alerts-only
-          enum:
-          - alerts-only
-          - immediate
-          - 15-minutes
-          - 30-minutes
-          - 1-hour
-          - 4-hours
-          - 8-hours
-          - 12-hours
-          - 24-hours
-      description: Optional. Contains information about the keys used for each region. Can be used only with external cloud account
+            type: object
+            additionalProperties:
+              type: string
+      description: List of active-active subscription regions
+      example:
+        subscriptionId: 126
+        regions:
+        - regionId: 1
+          region: us-east-1
+          deploymentCidr: 10.0.0.0/24
+          vpcId: vpc-0bf863584c46321e4
+          databases:
+          - databaseId: 862
+            databaseName: Bdb
+            readOperationsPerSecond: 500
+            writeOperationsPerSecond: 500
+            respVersion: resp3
+            links: []
+          - databaseId: 864
+            databaseName: Bdb2
+            readOperationsPerSecond: 1000
+            writeOperationsPerSecond: 1000
+            respVersion: resp3
+            links: []
+          links: []
+        - regionId: 4
+          region: eu-west-1
+          deploymentCidr: 10.0.1.0/24
+          vpcId: vpc-0108fb753063ecf8b
+          databases:
+          - databaseId: 862
+            databaseName: Bdb
+            readOperationsPerSecond: 500
+            writeOperationsPerSecond: 500
+            respVersion: resp3
+            links: []
+          - databaseId: 864
+            databaseName: Bdb2
+            readOperationsPerSecond: 1000
+            writeOperationsPerSecond: 1000
+            respVersion: resp3
+            links: []
+          links: []
+        links:
+        - rel: self
+          href: https://api-cloudapi.qa.redislabs.com/v1/subscriptions/133876/regions
+          type: GET
     Subscription:
       type: object
       properties:
@@ -2149,20 +2063,119 @@ components:
         - rel: self
           href: https://api-cloudapi.qa.redislabs.com/v1/subscriptions/120416
           type: GET
-    BaseSubscriptionUpdateRequest:
+    SubscriptionPricing:
+      type: object
+      properties:
+        type:
+          type: string
+        typeDetails:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        quantityMeasurement:
+          type: string
+        pricePerUnit:
+          type: number
+          format: double
+        priceCurrency:
+          type: string
+        pricePeriod:
+          type: string
+        region:
+          type: string
+    SubscriptionUpdateRequest:
       type: object
       properties:
         subscriptionId:
           type: integer
           format: int32
           readOnly: true
+        name:
+          type: string
+          description: Optional. Updated subscription name.
+          example: My new subscription name
+        paymentMethodId:
+          type: integer
+          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get all payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
+          format: int32
+        paymentMethod:
+          type: string
+          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
+          enum:
+          - credit-card
+          - marketplace
+        publicEndpointAccess:
+          type: boolean
+          description: Optional. When 'false', all databases on this subscription will reject any connection attempt to the public endpoint and any connection attempt to the private endpoint that does not come from an IP address in the private address space defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918#section-3 ). You must use a [private connectivity method](https://redis.io/docs/latest/operate/rc/security/database-security/block-public-endpoints/#private-connectivity-methods ) to connect to a database with a blocked public endpoint.
         commandType:
           type: string
           readOnly: true
       description: Subscription update request message
-      oneOf:
-      - $ref: '#/components/schemas/SubscriptionUpdateRequest'
-      - $ref: '#/components/schemas/SubscriptionUpdateCMKRequest'
+    CustomerManagedKeyAccessDetails:
+      type: object
+      properties:
+        redisServiceAccount:
+          type: string
+        googlePredefinedRoles:
+          type: array
+          items:
+            type: string
+        googleCustomPermissions:
+          type: array
+          items:
+            type: string
+        redisIamRole:
+          type: string
+        requiredKeyPolicyStatements:
+          type: object
+        deletionGracePeriodOptions:
+          type: array
+          items:
+            type: string
+      description: Configuration regarding customer managed persistent storage encryption
+    DatabaseModuleSpec:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Redis advanced capability name. Use GET /database-modules for a list of available capabilities.
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+            description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
+            example: {}
+          description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
+          example: {}
+      description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
+    MaintenanceWindowSkipStatus:
+      type: object
+      properties:
+        remainingSkips:
+          type: integer
+          format: int32
+        currentSkipEnd:
+          type: string
+    LocalThroughput:
+      type: object
+      properties:
+        region:
+          type: string
+          description: Specify one of the selected cloud provider regions for the subscription.
+        writeOperationsPerSecond:
+          type: integer
+          description: 'Write operations for this region per second. Default: 1000 ops/sec'
+          format: int64
+          example: 1000
+        readOperationsPerSecond:
+          type: integer
+          description: 'Read operations for this region per second. Default: 1000 ops/sec'
+          format: int64
+          example: 1000
+      description: Optional. Expected read and write throughput for this region.
     SubscriptionPricings:
       type: object
       properties:
@@ -2170,74 +2183,61 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionPricing'
-    RedisVersion:
+    ActiveActiveRegionDeleteRequest:
       type: object
       properties:
-        version:
-          type: string
-        eolDate:
-          type: string
-          format: date
-        isPreview:
-          type: boolean
-        isDefault:
-          type: boolean
-    MaintenanceWindowSpec:
-      required:
-      - days
-      - durationInHours
-      - startHour
-      type: object
-      properties:
-        startHour:
+        subscriptionId:
           type: integer
-          description: Starting hour of the maintenance window. Can be between '0' (12 AM in the deployment region's local time) and '23' (11 PM in the deployment region's local time).
           format: int32
-          example: 12
-        durationInHours:
-          type: integer
-          description: The duration of the maintenance window in hours. Can be between 4-24 hours (or 8-24 hours if using 'ram-and-flash').
-          format: int32
-          example: 8
-        days:
-          type: array
-          description: 'Days where this maintenance window applies. Can contain one or more of: "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", or "Sunday".'
-          example:
-          - Monday
-          - Wednesday
-          items:
-            type: string
-            description: 'Days where this maintenance window applies. Can contain one or more of: "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", or "Sunday".'
-            example: '["Monday","Wednesday"]'
-      description: Maintenance window timeframes if mode is set to 'manual'. Up to 7 maintenance windows can be provided.
-    SubscriptionSpec:
-      required:
-      - regions
-      type: object
-      properties:
-        provider:
-          type: string
-          description: 'Optional. Cloud provider. Default: ''AWS'''
-          example: AWS
-          enum:
-          - AWS
-          - GCP
-        cloudAccountId:
-          type: integer
-          description: 'Optional. Cloud account identifier. Default: Redis internal cloud account (Cloud Account ID = 1). Use GET /cloud-accounts to list all available cloud accounts. Note: A subscription on Google Cloud can be created only with Redis internal cloud account.'
-          format: int32
-          example: 1
+          readOnly: true
         regions:
           type: array
-          description: The cloud provider region or list of regions (Active-Active only) and networking details.
+          description: The names of the regions to delete.
           items:
-            $ref: '#/components/schemas/SubscriptionRegionSpec'
+            $ref: '#/components/schemas/ActiveActiveRegionToDelete'
+        dryRun:
+          type: boolean
+          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, deleting any resources required by the plan. When ''true'': creates a read-only deployment plan and does not delete or modify any resources. Default: ''false'''
+          example: false
+        commandType:
+          type: string
+          readOnly: true
+      description: Active active region deletion request message
+    SubscriptionMaintenanceWindowsSpec:
+      required:
+      - mode
+      type: object
+      properties:
+        mode:
+          type: string
+          description: 'Maintenance window mode: either ''manual'' or ''automatic''. Must provide ''windows'' if manual.'
+          example: manual
+          enum:
+          - manual
+          - automatic
+        windows:
+          type: array
+          description: Maintenance window timeframes if mode is set to 'manual'. Up to 7 maintenance windows can be provided.
+          items:
+            $ref: '#/components/schemas/MaintenanceWindowSpec'
+    SubscriptionResourceTagsUpdateRequest:
+      required:
+      - resourceTags
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
         resourceTags:
           type: array
-          description: Optional. A list of resource tags to apply to the subscription. (max. 30 tags).
+          description: List of resource tags to apply to the subscription. This will replace all existing tags.
           items:
             $ref: '#/components/schemas/ResourceTag'
-      description: Cloud provider, region, and networking details.
+        commandType:
+          type: string
+          readOnly: true
+      description: Resource tags update request
   securitySchemes:
     x-api-key:
       type: apiKey

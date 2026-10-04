@@ -1022,77 +1022,18 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    FixedSubscriptions:
+    RedisVersion:
       type: object
       properties:
-        accountId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: Redis list of Essentials subscriptions in current account
-      example:
-        accountId: 40131
-        subscriptions:
-        - id: 151367
-          name: fixed-1
-          status: active
-          paymentMethodId: 8241
-          paymentMethodType: credit-card
-          planId: 98276
-          planName: Standard 1GB
-          size: 1
-          sizeMeasurementUnit: GB
-          provider: AWS
-          region: us-west-1
-          price: 22
-          pricePeriod: Month
-          priceCurrency: USD
-          maximumDatabases: 1
-          availability: Single-zone
-          connections: '1024'
-          cidrAllowRules: 8
-          supportDataPersistence: true
-          supportInstantAndDailyBackups: true
-          supportReplication: true
-          supportClustering: false
-          customerSupport: Standard
-          creationDate: '2022-11-21T20:02:21+02:00'
-          links: []
-        - id: 120416
-          name: subscription-name
-          status: active
-          paymentMethodId: 123
-          paymentMethodType: credit-card
-          planId: 123
-          planName: Standard 30MB
-          planType: pay-as-you-go
-          size: 30
-          sizeMeasurementUnit: MB
-          provider: AWS
-          region: us-east-1
-          price: 0
-          pricePeriod: Month
-          priceCurrency: USD
-          maximumDatabases: 1
-          availability: no-replication
-          connections: 30
-          cidrAllowRules: 1
-          supportDataPersistence: false
-          supportInstantAndDailyBackups: false
-          supportReplication: false
-          supportClustering: false
-          customerSupport: basic
-          creationDate: 20-Nov-2022
-          links: []
-        links:
-        - rel: self
-          href: http://localhost:8081/v1/fixed/subscriptions
-          type: GET
+        version:
+          type: string
+        eolDate:
+          type: string
+          format: date
+        isPreview:
+          type: boolean
+        isDefault:
+          type: boolean
     TaskStateUpdate:
       type: object
       properties:
@@ -1244,42 +1185,6 @@ components:
         - rel: self
           href: http://localhost:8081/v1/fixed/plans/16583
           type: GET
-    RedisVersions:
-      type: object
-      properties:
-        redisVersions:
-          type: array
-          items:
-            $ref: '#/components/schemas/RedisVersion'
-    FixedSubscriptionUpdateRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          description: Optional. Updated subscription name.
-          example: My new subscription
-        planId:
-          type: integer
-          description: Optional. An Essentials plan ID. The plan describes the dataset size, cloud provider and region, and available database configuration options. Use GET /fixed/plans/subscriptions/{subscriptionId} to get a list of compatible options for the specified subscription.
-          format: int32
-        paymentMethod:
-          type: string
-          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
-          enum:
-          - credit-card
-          - marketplace
-        paymentMethodId:
-          type: integer
-          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get a list of payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
-          format: int32
-        commandType:
-          type: string
-          readOnly: true
-      description: Essentials subscription update request
     FixedSubscriptionsPlans:
       type: object
       properties:
@@ -1349,18 +1254,6 @@ components:
         - rel: self
           href: http://localhost:8081/v1/fixed/plans?cloud_provider=AWS
           type: GET
-    RedisVersion:
-      type: object
-      properties:
-        version:
-          type: string
-        eolDate:
-          type: string
-          format: date
-        isPreview:
-          type: boolean
-        isDefault:
-          type: boolean
     FixedSubscription:
       type: object
       properties:
@@ -1460,6 +1353,113 @@ components:
         - rel: self
           href: http://localhost:8081/v1/fixed/subscriptions/151367
           type: GET
+    FixedSubscriptions:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: Redis list of Essentials subscriptions in current account
+      example:
+        accountId: 40131
+        subscriptions:
+        - id: 151367
+          name: fixed-1
+          status: active
+          paymentMethodId: 8241
+          paymentMethodType: credit-card
+          planId: 98276
+          planName: Standard 1GB
+          size: 1
+          sizeMeasurementUnit: GB
+          provider: AWS
+          region: us-west-1
+          price: 22
+          pricePeriod: Month
+          priceCurrency: USD
+          maximumDatabases: 1
+          availability: Single-zone
+          connections: '1024'
+          cidrAllowRules: 8
+          supportDataPersistence: true
+          supportInstantAndDailyBackups: true
+          supportReplication: true
+          supportClustering: false
+          customerSupport: Standard
+          creationDate: '2022-11-21T20:02:21+02:00'
+          links: []
+        - id: 120416
+          name: subscription-name
+          status: active
+          paymentMethodId: 123
+          paymentMethodType: credit-card
+          planId: 123
+          planName: Standard 30MB
+          planType: pay-as-you-go
+          size: 30
+          sizeMeasurementUnit: MB
+          provider: AWS
+          region: us-east-1
+          price: 0
+          pricePeriod: Month
+          priceCurrency: USD
+          maximumDatabases: 1
+          availability: no-replication
+          connections: 30
+          cidrAllowRules: 1
+          supportDataPersistence: false
+          supportInstantAndDailyBackups: false
+          supportReplication: false
+          supportClustering: false
+          customerSupport: basic
+          creationDate: 20-Nov-2022
+          links: []
+        links:
+        - rel: self
+          href: http://localhost:8081/v1/fixed/subscriptions
+          type: GET
+    FixedSubscriptionUpdateRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          description: Optional. Updated subscription name.
+          example: My new subscription
+        planId:
+          type: integer
+          description: Optional. An Essentials plan ID. The plan describes the dataset size, cloud provider and region, and available database configuration options. Use GET /fixed/plans/subscriptions/{subscriptionId} to get a list of compatible options for the specified subscription.
+          format: int32
+        paymentMethod:
+          type: string
+          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
+          enum:
+          - credit-card
+          - marketplace
+        paymentMethodId:
+          type: integer
+          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get a list of payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
+          format: int32
+        commandType:
+          type: string
+          readOnly: true
+      description: Essentials subscription update request
+    RedisVersions:
+      type: object
+      properties:
+        redisVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedisVersion'
   securitySchemes:
     x-api-key:
       type: apiKey

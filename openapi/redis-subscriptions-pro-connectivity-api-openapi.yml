@@ -2791,9 +2791,39 @@ components:
           type: string
           readOnly: true
       description: VPC peering creation request message
-    PrivateLinkActiveActiveConnectionsDisassociateRequest:
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    PrivateLinkActiveActivePrincipalsCreateRequest:
       required:
-      - connections
+      - principal
+      - regionId
       type: object
       properties:
         subscriptionId:
@@ -2805,49 +2835,6 @@ components:
           description: Deployment region id as defined by cloud provider
           format: int32
           readOnly: true
-        connections:
-          type: array
-          description: List of connections to disassociate from the private link. Each connection must include associationId, type, and principalId.
-          items:
-            $ref: '#/components/schemas/PrivateLinkConnectionDisassociate'
-        commandType:
-          type: string
-          readOnly: true
-      description: Request to disassociate connections from private link for Active-Active subscription
-    PrivateLinkPrincipalsDeleteRequest:
-      required:
-      - principal
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        principal:
-          type: string
-          description: An AWS account ID or ARN to remove from the private link
-          example: '123456789012'
-        commandType:
-          type: string
-          readOnly: true
-      description: Private Link principals delete request
-    PrivateLinkCreateRequest:
-      required:
-      - principal
-      - shareName
-      - type
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        shareName:
-          maxLength: 64
-          minLength: 0
-          type: string
-          description: Name of the resource share
-          example: my-redis-share
         principal:
           type: string
           description: AWS account ID or ARN of the principal (IAM user, role, or account)
@@ -2870,31 +2857,59 @@ components:
         commandType:
           type: string
           readOnly: true
-      description: Private Link create request
-    PrivateLinkConnectionDisassociate:
+      description: Request to add a principal to private link for Active-Active subscription
+    ActiveActivePscEndpointUpdateRequest:
       required:
-      - associationId
-      - principalId
-      - type
+      - endpointId
+      - pscServiceId
+      - regionId
+      - subscriptionId
       type: object
       properties:
-        associationId:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        pscServiceId:
+          type: integer
+          format: int32
+          readOnly: true
+        endpointId:
+          type: integer
+          format: int32
+          readOnly: true
+        regionId:
+          type: integer
+          description: Deployment region id as defined by cloud provider
+          format: int32
+          readOnly: true
+          example: 27
+        gcpProjectId:
           type: string
-          description: Resource share association ID
-          example: rsa-12345678
-        connectionId:
+          description: Google Cloud project ID.
+          example: my-gcp-project
+        gcpVpcName:
           type: string
-          description: VPC endpoint connection ID
-          example: vpce-con-12345678
-        type:
+          description: Name of the Google Cloud VPC that hosts your application.
+          example: my-vpc
+        gcpVpcSubnetName:
           type: string
-          description: Type of the connection
-          example: vpc_endpoint
-        principalId:
+          description: Name of your VPC's subnet of IP address ranges.
+          example: my-vpc-subnet
+        endpointConnectionName:
           type: string
-          description: Principal ID that owns the connection, e.g. AWS account ID
-          example: '123456789012'
-      description: Private link connection information for disassociation request
+          description: Prefix used to create PSC endpoints in the consumer application VPC. Endpoint names appear in Google Cloud as endpoint name prefix + endpoint number.
+          example: my-endpoint-connection
+        action:
+          type: string
+          description: Action to perform on the endpoint.
+          enum:
+          - accept
+          - reject
+        commandType:
+          type: string
+          readOnly: true
+      description: Private Service Connect endpoint update request
     ActiveActivePscEndpointCreateRequest:
       required:
       - endpointConnectionName
@@ -2979,6 +2994,52 @@ components:
           type: string
           readOnly: true
       description: VPC peering creation request message
+    PrivateLinkActiveActiveCreateRequest:
+      required:
+      - principal
+      - regionId
+      - shareName
+      - type
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        regionId:
+          type: integer
+          description: Deployment region id as defined by cloud provider
+          format: int32
+          readOnly: true
+        shareName:
+          maxLength: 64
+          minLength: 0
+          type: string
+          description: Name for the resource share
+          example: my-private-link-share
+        principal:
+          type: string
+          description: AWS account ID or ARN of the principal (IAM user, role, or account)
+          example: '123456789012'
+        type:
+          type: string
+          description: Type of the principal
+          example: aws_account
+          enum:
+          - aws_account
+          - organization
+          - organization_unit
+          - iam_role
+          - iam_user
+          - service_principal
+        alias:
+          type: string
+          description: Alias or friendly name for the principal
+          example: Production Account
+        commandType:
+          type: string
+          readOnly: true
+      description: Request to create a private link for Active-Active subscription
     PrivateLinkConnectionsDisassociateRequest:
       required:
       - connections
@@ -2997,9 +3058,129 @@ components:
           type: string
           readOnly: true
       description: Private Link connections disassociate request
-    ActiveActiveVpcPeeringCreateBaseRequest:
+    PrivateLinkActiveActiveConnectionsDisassociateRequest:
       required:
+      - connections
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        regionId:
+          type: integer
+          description: Deployment region id as defined by cloud provider
+          format: int32
+          readOnly: true
+        connections:
+          type: array
+          description: List of connections to disassociate from the private link. Each connection must include associationId, type, and principalId.
+          items:
+            $ref: '#/components/schemas/PrivateLinkConnectionDisassociate'
+        commandType:
+          type: string
+          readOnly: true
+      description: Request to disassociate connections from private link for Active-Active subscription
+    PrivateLinkConnectionDisassociate:
+      required:
+      - associationId
+      - principalId
+      - type
+      type: object
+      properties:
+        associationId:
+          type: string
+          description: Resource share association ID
+          example: rsa-12345678
+        connectionId:
+          type: string
+          description: VPC endpoint connection ID
+          example: vpce-con-12345678
+        type:
+          type: string
+          description: Type of the connection
+          example: vpc_endpoint
+        principalId:
+          type: string
+          description: Principal ID that owns the connection, e.g. AWS account ID
+          example: '123456789012'
+      description: Private link connection information for disassociation request
+    Cidr:
+      type: object
+      properties:
+        cidrAddress:
+          type: string
+      description: Optional. List of transit gateway attachment CIDRs.
+      example:
+      - 10.10.10.0/24
+      - 10.10.20.0/24
+    PscEndpointCreateRequest:
+      required:
+      - endpointConnectionName
+      - gcpProjectId
+      - gcpVpcName
+      - gcpVpcSubnetName
+      - pscServiceId
+      - subscriptionId
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        pscServiceId:
+          type: integer
+          format: int32
+          readOnly: true
+        gcpProjectId:
+          type: string
+          description: Google Cloud project ID.
+          example: my-gcp-project
+        gcpVpcName:
+          type: string
+          description: Name of the Google Cloud VPC that hosts your application.
+          example: my-vpc
+        gcpVpcSubnetName:
+          type: string
+          description: Name of your VPC's subnet of IP address ranges.
+          example: my-vpc-subnet
+        endpointConnectionName:
+          type: string
+          description: Prefix used to create PSC endpoints in the consumer application VPC. Endpoint names appear in Google Cloud as endpoint name prefix + endpoint number.
+          example: my-endpoint-connection
+        commandType:
+          type: string
+          readOnly: true
+      description: Private Service Connect endpoint create request
+    PrivateLinkActiveActivePrincipalsDeleteRequest:
+      required:
+      - principal
+      - regionId
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        regionId:
+          type: integer
+          description: Deployment region id as defined by cloud provider
+          format: int32
+          readOnly: true
+        principal:
+          type: string
+          description: An AWS account ID or ARN to remove from the private link
+          example: '123456789012'
+        commandType:
+          type: string
+          readOnly: true
+      description: Request to remove principals from private link for Active-Active subscription
+    ActiveActiveVpcPeeringCreateAwsRequest:
+      required:
+      - awsAccountId
+      - destinationRegion
       - sourceRegion
+      - vpcId
       type: object
       properties:
         provider:
@@ -3011,13 +3192,56 @@ components:
         sourceRegion:
           type: string
           description: Name of region to create a VPC peering from.
+        destinationRegion:
+          type: string
+          description: Name of region to create a VPC peering to.
+          example: us-east-1
+        awsAccountId:
+          type: string
+          description: AWS Account ID.
+          example: <aws-account-id>
+        vpcId:
+          type: string
+          description: VPC ID.
+          example: <vpc-identifier>
+        vpcCidr:
+          type: string
+          description: Optional. VPC CIDR.
+          example: <10.10.10.0/24>
+        vpcCidrs:
+          type: array
+          description: Optional. List of VPC CIDRs.
+          example:
+          - <10.10.10.0/24>
+          - <10.10.20.0/24>
+          items:
+            type: string
+            description: Optional. List of VPC CIDRs.
+            example: '["<10.10.10.0/24>","<10.10.20.0/24>"]'
         commandType:
           type: string
           readOnly: true
-      description: Active-Active VPC peering creation request message
-      oneOf:
-      - $ref: '#/components/schemas/ActiveActiveVpcPeeringCreateAwsRequest'
-      - $ref: '#/components/schemas/ActiveActiveVpcPeeringCreateGcpRequest'
+      description: VPC peering creation request message
+    VpcPeeringCreateGcpRequest:
+      required:
+      - vpcNetworkName
+      - vpcProjectUid
+      type: object
+      properties:
+        provider:
+          type: string
+        vpcProjectUid:
+          type: string
+          description: VPC project ID.
+          example: <vpc-identifer>
+        vpcNetworkName:
+          type: string
+          description: VPC network name.
+          example: <name>
+        commandType:
+          type: string
+          readOnly: true
+      description: Vpc peering creation request message
     VpcPeeringUpdateAwsRequest:
       type: object
       properties:
@@ -3048,120 +3272,23 @@ components:
           type: string
           readOnly: true
       description: VPC peering update request message
-    Cidr:
-      type: object
-      properties:
-        cidrAddress:
-          type: string
-      description: Optional. List of transit gateway attachment CIDRs.
-      example:
-      - 10.10.10.0/24
-      - 10.10.20.0/24
-    PrivateLinkActiveActivePrincipalsCreateRequest:
+    PrivateLinkPrincipalsDeleteRequest:
       required:
       - principal
-      - regionId
       type: object
       properties:
         subscriptionId:
           type: integer
-          format: int32
-          readOnly: true
-        regionId:
-          type: integer
-          description: Deployment region id as defined by cloud provider
           format: int32
           readOnly: true
         principal:
           type: string
-          description: AWS account ID or ARN of the principal (IAM user, role, or account)
+          description: An AWS account ID or ARN to remove from the private link
           example: '123456789012'
-        type:
-          type: string
-          description: Type of the principal
-          example: aws_account
-          enum:
-          - aws_account
-          - organization
-          - organization_unit
-          - iam_role
-          - iam_user
-          - service_principal
-        alias:
-          type: string
-          description: Alias or friendly name for the principal
-          example: Production Account
         commandType:
           type: string
           readOnly: true
-      description: Request to add a principal to private link for Active-Active subscription
-    TgwUpdateCidrsRequest:
-      type: object
-      properties:
-        cidrs:
-          type: array
-          description: Optional. List of transit gateway attachment CIDRs.
-          example:
-          - 10.10.10.0/24
-          - 10.10.20.0/24
-          items:
-            $ref: '#/components/schemas/Cidr'
-        commandType:
-          type: string
-          readOnly: true
-      description: Transit Gateway update attachment cidr/s request message
-    ActiveActivePscEndpointUpdateRequest:
-      required:
-      - endpointId
-      - pscServiceId
-      - regionId
-      - subscriptionId
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        pscServiceId:
-          type: integer
-          format: int32
-          readOnly: true
-        endpointId:
-          type: integer
-          format: int32
-          readOnly: true
-        regionId:
-          type: integer
-          description: Deployment region id as defined by cloud provider
-          format: int32
-          readOnly: true
-          example: 27
-        gcpProjectId:
-          type: string
-          description: Google Cloud project ID.
-          example: my-gcp-project
-        gcpVpcName:
-          type: string
-          description: Name of the Google Cloud VPC that hosts your application.
-          example: my-vpc
-        gcpVpcSubnetName:
-          type: string
-          description: Name of your VPC's subnet of IP address ranges.
-          example: my-vpc-subnet
-        endpointConnectionName:
-          type: string
-          description: Prefix used to create PSC endpoints in the consumer application VPC. Endpoint names appear in Google Cloud as endpoint name prefix + endpoint number.
-          example: my-endpoint-connection
-        action:
-          type: string
-          description: Action to perform on the endpoint.
-          enum:
-          - accept
-          - reject
-        commandType:
-          type: string
-          readOnly: true
-      description: Private Service Connect endpoint update request
+      description: Private Link principals delete request
     ProcessorResponse:
       type: object
       properties:
@@ -3807,35 +3934,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
     VpcPeeringCreateBaseRequest:
       type: object
       properties:
@@ -3848,83 +3946,6 @@ components:
       oneOf:
       - $ref: '#/components/schemas/VpcPeeringCreateAwsRequest'
       - $ref: '#/components/schemas/VpcPeeringCreateGcpRequest'
-    ActiveActiveVpcPeeringUpdateAwsRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        vpcPeeringId:
-          type: integer
-          description: VPC Peering id to update.
-          format: int32
-          readOnly: true
-        vpcCidr:
-          type: string
-          description: Optional. VPC CIDR.
-          example: <10.10.10.0/24>
-        vpcCidrs:
-          type: array
-          description: Optional. List of VPC CIDRs.
-          example:
-          - <10.10.10.0/24>
-          - <10.10.22.0/24>
-          items:
-            type: string
-            description: Optional. List of VPC CIDRs.
-            example: '["<10.10.10.0/24>","<10.10.22.0/24>"]'
-        commandType:
-          type: string
-          readOnly: true
-      description: Active-Active VPC peering update request message
-    ActiveActiveVpcPeeringCreateAwsRequest:
-      required:
-      - awsAccountId
-      - destinationRegion
-      - sourceRegion
-      - vpcId
-      type: object
-      properties:
-        provider:
-          type: string
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        sourceRegion:
-          type: string
-          description: Name of region to create a VPC peering from.
-        destinationRegion:
-          type: string
-          description: Name of region to create a VPC peering to.
-          example: us-east-1
-        awsAccountId:
-          type: string
-          description: AWS Account ID.
-          example: <aws-account-id>
-        vpcId:
-          type: string
-          description: VPC ID.
-          example: <vpc-identifier>
-        vpcCidr:
-          type: string
-          description: Optional. VPC CIDR.
-          example: <10.10.10.0/24>
-        vpcCidrs:
-          type: array
-          description: Optional. List of VPC CIDRs.
-          example:
-          - <10.10.10.0/24>
-          - <10.10.20.0/24>
-          items:
-            type: string
-            description: Optional. List of VPC CIDRs.
-            example: '["<10.10.10.0/24>","<10.10.20.0/24>"]'
-        commandType:
-          type: string
-          readOnly: true
-      description: VPC peering creation request message
     PrivateLinkPrincipalsCreateRequest:
       required:
       - principal
@@ -3957,68 +3978,30 @@ components:
           type: string
           readOnly: true
       description: Private Link principals create request
-    PscEndpointCreateRequest:
+    ActiveActiveVpcPeeringCreateBaseRequest:
       required:
-      - endpointConnectionName
-      - gcpProjectId
-      - gcpVpcName
-      - gcpVpcSubnetName
-      - pscServiceId
-      - subscriptionId
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        pscServiceId:
-          type: integer
-          format: int32
-          readOnly: true
-        gcpProjectId:
-          type: string
-          description: Google Cloud project ID.
-          example: my-gcp-project
-        gcpVpcName:
-          type: string
-          description: Name of the Google Cloud VPC that hosts your application.
-          example: my-vpc
-        gcpVpcSubnetName:
-          type: string
-          description: Name of your VPC's subnet of IP address ranges.
-          example: my-vpc-subnet
-        endpointConnectionName:
-          type: string
-          description: Prefix used to create PSC endpoints in the consumer application VPC. Endpoint names appear in Google Cloud as endpoint name prefix + endpoint number.
-          example: my-endpoint-connection
-        commandType:
-          type: string
-          readOnly: true
-      description: Private Service Connect endpoint create request
-    VpcPeeringCreateGcpRequest:
-      required:
-      - vpcNetworkName
-      - vpcProjectUid
+      - sourceRegion
       type: object
       properties:
         provider:
           type: string
-        vpcProjectUid:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        sourceRegion:
           type: string
-          description: VPC project ID.
-          example: <vpc-identifer>
-        vpcNetworkName:
-          type: string
-          description: VPC network name.
-          example: <name>
+          description: Name of region to create a VPC peering from.
         commandType:
           type: string
           readOnly: true
-      description: Vpc peering creation request message
-    PrivateLinkActiveActiveCreateRequest:
+      description: Active-Active VPC peering creation request message
+      oneOf:
+      - $ref: '#/components/schemas/ActiveActiveVpcPeeringCreateAwsRequest'
+      - $ref: '#/components/schemas/ActiveActiveVpcPeeringCreateGcpRequest'
+    PrivateLinkCreateRequest:
       required:
       - principal
-      - regionId
       - shareName
       - type
       type: object
@@ -4027,17 +4010,12 @@ components:
           type: integer
           format: int32
           readOnly: true
-        regionId:
-          type: integer
-          description: Deployment region id as defined by cloud provider
-          format: int32
-          readOnly: true
         shareName:
           maxLength: 64
           minLength: 0
           type: string
-          description: Name for the resource share
-          example: my-private-link-share
+          description: Name of the resource share
+          example: my-redis-share
         principal:
           type: string
           description: AWS account ID or ARN of the principal (IAM user, role, or account)
@@ -4060,7 +4038,37 @@ components:
         commandType:
           type: string
           readOnly: true
-      description: Request to create a private link for Active-Active subscription
+      description: Private Link create request
+    ActiveActiveVpcPeeringUpdateAwsRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        vpcPeeringId:
+          type: integer
+          description: VPC Peering id to update.
+          format: int32
+          readOnly: true
+        vpcCidr:
+          type: string
+          description: Optional. VPC CIDR.
+          example: <10.10.10.0/24>
+        vpcCidrs:
+          type: array
+          description: Optional. List of VPC CIDRs.
+          example:
+          - <10.10.10.0/24>
+          - <10.10.22.0/24>
+          items:
+            type: string
+            description: Optional. List of VPC CIDRs.
+            example: '["<10.10.10.0/24>","<10.10.22.0/24>"]'
+        commandType:
+          type: string
+          readOnly: true
+      description: Active-Active VPC peering update request message
     PscEndpointUpdateRequest:
       required:
       - endpointId
@@ -4106,6 +4114,21 @@ components:
           type: string
           readOnly: true
       description: Private Service Connect endpoint update request
+    TgwUpdateCidrsRequest:
+      type: object
+      properties:
+        cidrs:
+          type: array
+          description: Optional. List of transit gateway attachment CIDRs.
+          example:
+          - 10.10.10.0/24
+          - 10.10.20.0/24
+          items:
+            $ref: '#/components/schemas/Cidr'
+        commandType:
+          type: string
+          readOnly: true
+      description: Transit Gateway update attachment cidr/s request message
     ActiveActiveTgwUpdateCidrsRequest:
       type: object
       properties:
@@ -4121,29 +4144,6 @@ components:
           type: string
           readOnly: true
       description: Active active Transit Gateway update attachment cidr/s request message
-    PrivateLinkActiveActivePrincipalsDeleteRequest:
-      required:
-      - principal
-      - regionId
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        regionId:
-          type: integer
-          description: Deployment region id as defined by cloud provider
-          format: int32
-          readOnly: true
-        principal:
-          type: string
-          description: An AWS account ID or ARN to remove from the private link
-          example: '123456789012'
-        commandType:
-          type: string
-          readOnly: true
-      description: Request to remove principals from private link for Active-Active subscription
   securitySchemes:
     x-api-key:
       type: apiKey

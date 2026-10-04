@@ -11,97 +11,15 @@ info:
   - x-provenance differs across the merged source definitions and was not carried
   - x-sources differs across the merged source definitions and was not carried
   version: '1.0'
-  description: 'Operations tagged Users across 2 of this provider''s published API definitions: redis-openapi-generated.yml, redis-cloud-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Users across 2 of this provider''s published API definitions: redis-cloud-openapi.yml, redis-openapi-generated.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://packages.redis.io
 - url: https://api.redislabs.com
+- url: https://packages.redis.io
 tags:
 - name: Users
+  description: Data and operations related to account's users
+  x-order: '70'
 paths:
-  /users:
-    post:
-      operationId: post_users
-      tags:
-      - Users
-      summary: Create a user
-      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostUsersRequest'
-      responses:
-        '201':
-          description: Success (status as documented)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostUsersResponse'
-      x-evidence:
-        kind: documentation
-      security:
-      - bearer: []
-    servers:
-    - url: https://packages.redis.io
-  /users/{userid}:
-    get:
-      operationId: get_users_userid
-      tags:
-      - Users
-      summary: Retrieve a user by ID
-      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
-      parameters:
-      - name: userid
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Success (status as documented)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUsersUseridResponse'
-      x-evidence:
-        kind: documentation
-      security:
-      - bearer: []
-    servers:
-    - url: https://packages.redis.io
-  /users/{userid}/matches:
-    get:
-      operationId: get_users_userid_matches
-      tags:
-      - Users
-      summary: Find matching users for a given user
-      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
-      parameters:
-      - name: userid
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: radiusKm
-        in: query
-        required: false
-        schema:
-          type: number
-        description: search radius in kilometers, default 500
-      responses:
-        '200':
-          description: Success (status as documented)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUsersUseridMatchesResponse'
-      x-evidence:
-        kind: documentation
-      security:
-      - bearer: []
-    servers:
-    - url: https://packages.redis.io
   /v1/users/{userId}:
     get:
       tags:
@@ -278,55 +196,92 @@ paths:
         x-auth-token: []
     servers:
     - url: https://api.redislabs.com
+  /users:
+    post:
+      operationId: post_users
+      tags:
+      - Users
+      summary: Create a user
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUsersRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostUsersResponse'
+      x-evidence:
+        kind: documentation
+      security:
+      - bearer: []
+    servers:
+    - url: https://packages.redis.io
+  /users/{userid}:
+    get:
+      operationId: get_users_userid
+      tags:
+      - Users
+      summary: Retrieve a user by ID
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      parameters:
+      - name: userid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersUseridResponse'
+      x-evidence:
+        kind: documentation
+      security:
+      - bearer: []
+    servers:
+    - url: https://packages.redis.io
+  /users/{userid}/matches:
+    get:
+      operationId: get_users_userid_matches
+      tags:
+      - Users
+      summary: Find matching users for a given user
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      parameters:
+      - name: userid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: radiusKm
+        in: query
+        required: false
+        schema:
+          type: number
+        description: search radius in kilometers, default 500
+      responses:
+        '200':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersUseridMatchesResponse'
+      x-evidence:
+        kind: documentation
+      security:
+      - bearer: []
+    servers:
+    - url: https://packages.redis.io
 components:
   schemas:
-    PostUsersResponse:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: generated UUID of the created user
-    PostUsersRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        interests:
-          type: array
-          description: array of strings
-        expertises:
-          type: array
-          description: array of strings
-        location:
-          type: object
-          description: object with latitude and longitude
-      required:
-      - name
-      - interests
-      - expertises
-      - location
-    GetUsersUseridResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        interests:
-          type: array
-          description: array of strings
-        expertises:
-          type: array
-          description: array of strings
-        location:
-          type: object
-          description: object with latitude and longitude
-    GetUsersUseridMatchesResponse:
-      type: object
-      properties:
-        matches:
-          type: array
-          description: list of matching User objects
     ProcessorResponse:
       type: object
       properties:
@@ -972,6 +927,27 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
+    AccountUsers:
+      type: object
+      properties:
+        account:
+          type: integer
+          format: int32
+      description: RedisLabs list of users in current account
+      example:
+        account: 1001
+        users:
+        - id: 60192
+          name: Clifford O'neill
+          email: clifford.mail@gmail.com
+          role: Viewer
+          userType: Local
+          hasApiKey: false
+          options:
+            billing: false
+            emailAlerts: false
+            operationalEmails: false
+            mfaEnabled: false
     TaskStateUpdate:
       type: object
       properties:
@@ -1034,27 +1010,6 @@ components:
           emailAlerts: false
           operationalEmails: false
           mfaEnabled: false
-    AccountUsers:
-      type: object
-      properties:
-        account:
-          type: integer
-          format: int32
-      description: RedisLabs list of users in current account
-      example:
-        account: 1001
-        users:
-        - id: 60192
-          name: Clifford O'neill
-          email: clifford.mail@gmail.com
-          role: Viewer
-          userType: Local
-          hasApiKey: false
-          options:
-            billing: false
-            emailAlerts: false
-            operationalEmails: false
-            mfaEnabled: false
     AccountUserUpdateRequest:
       required:
       - name
@@ -1094,10 +1049,54 @@ components:
         mfaEnabled:
           type: boolean
       description: RedisLabs User options information
+    GetUsersUseridResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        interests:
+          type: array
+          description: array of strings
+        expertises:
+          type: array
+          description: array of strings
+        location:
+          type: object
+          description: object with latitude and longitude
+    PostUsersRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        interests:
+          type: array
+          description: array of strings
+        expertises:
+          type: array
+          description: array of strings
+        location:
+          type: object
+          description: object with latitude and longitude
+      required:
+      - name
+      - interests
+      - expertises
+      - location
+    PostUsersResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: generated UUID of the created user
+    GetUsersUseridMatchesResponse:
+      type: object
+      properties:
+        matches:
+          type: array
+          description: list of matching User objects
   securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
     x-api-key:
       type: apiKey
       name: x-api-key
@@ -1110,9 +1109,12 @@ components:
       type: apiKey
       name: x-auth-token
       in: header
+    bearer:
+      type: http
+      scheme: bearer
 externalDocs:
   description: Redis Cloud API Documentation
   url: https://docs.redislabs.com/latest/rc/api/
 x-refined-from:
-- redis-openapi-generated.yml
 - redis-cloud-openapi.yml
+- redis-openapi-generated.yml

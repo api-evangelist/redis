@@ -538,6 +538,29 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    AclRoleDatabaseSpec:
+      required:
+      - databaseId
+      - subscriptionId
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          description: Subscription ID for the database's subscription. Use 'GET /subscriptions' or 'GET /fixed/subscriptions' to get a list of available subscriptions and their IDs.
+          format: int32
+        databaseId:
+          type: integer
+          description: The database's ID. Use 'GET /subscriptions/{subscriptionId}/databases' or 'GET /fixed/subscriptions/{subscriptionId}/databases' to get a list of databases in a subscription and their IDs.
+          format: int32
+        regions:
+          type: array
+          description: (Active-Active databases only) Optional. A list of regions where this rule applies for this role.
+          example: []
+          items:
+            type: string
+            description: (Active-Active databases only) Optional. A list of regions where this rule applies for this role.
+            example: '[]'
+      description: A list of databases where the specified rule applies for this role.
     ProcessorResponse:
       type: object
       properties:
@@ -1183,222 +1206,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    AclUserCreateRequest:
-      required:
-      - name
-      - password
-      - role
-      type: object
-      properties:
-        name:
-          type: string
-          description: Access control user name.
-          example: ACL-user-example
-        role:
-          type: string
-          description: Name of the database access role to assign to this user. Use GET '/acl/roles' to get a list of database access roles.
-          example: ACL-role-example
-        password:
-          type: string
-          description: The database password for this user.
-          example: ab123AB$%^
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL user create request
-    AccountACLRoles:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: Redis list of ACL roles in current account
-      example:
-        accountId: 1001
-        roles:
-        - id: 395
-          name: role-name
-          redisRules:
-          - ruleId: 7
-            ruleName: Full-Access
-            databases:
-            - subscriptionId: 126
-              databaseId: 1
-              databaseName: DB-RCP-2-81-7
-          users: []
-          status: error
-    AclRoleUpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Optional. Changes the database access role name.
-          example: ACL-role-example
-        redisRules:
-          type: array
-          description: Optional. Changes the Redis ACL rules to assign to this database access role.
-          items:
-            $ref: '#/components/schemas/AclRoleRedisRuleSpec'
-        roleId:
-          type: integer
-          format: int32
-          readOnly: true
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL role update request
-    AclRoleCreateRequest:
-      required:
-      - name
-      - redisRules
-      type: object
-      properties:
-        name:
-          type: string
-          description: Database access role name.
-          example: ACL-role-example
-        redisRules:
-          type: array
-          description: A list of Redis ACL rules to assign to this database access role.
-          items:
-            $ref: '#/components/schemas/AclRoleRedisRuleSpec'
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL role create request
-    AclRedisRuleCreateRequest:
-      required:
-      - name
-      - redisRule
-      type: object
-      properties:
-        name:
-          type: string
-          description: Redis ACL rule name.
-          example: ACL-rule-example
-        redisRule:
-          type: string
-          description: Redis ACL rule pattern. See [ACL syntax](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/configure-acls/#define-permissions-with-acl-syntax) to learn how to define rules.
-          example: +set allkeys allchannels
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL redis rule create request
-    AclUserUpdateRequest:
-      type: object
-      properties:
-        userId:
-          type: integer
-          format: int32
-          readOnly: true
-        role:
-          type: string
-          description: Optional. Changes the ACL role assigned to the user. Use GET '/acl/roles' to get a list of database access roles.
-          example: ACL-role-example
-        password:
-          type: string
-          description: Optional. Changes the user's database password.
-          example: ab123AB$%^
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL user update request
-    AclRoleDatabaseSpec:
-      required:
-      - databaseId
-      - subscriptionId
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          description: Subscription ID for the database's subscription. Use 'GET /subscriptions' or 'GET /fixed/subscriptions' to get a list of available subscriptions and their IDs.
-          format: int32
-        databaseId:
-          type: integer
-          description: The database's ID. Use 'GET /subscriptions/{subscriptionId}/databases' or 'GET /fixed/subscriptions/{subscriptionId}/databases' to get a list of databases in a subscription and their IDs.
-          format: int32
-        regions:
-          type: array
-          description: (Active-Active databases only) Optional. A list of regions where this rule applies for this role.
-          example: []
-          items:
-            type: string
-            description: (Active-Active databases only) Optional. A list of regions where this rule applies for this role.
-            example: '[]'
-      description: A list of databases where the specified rule applies for this role.
-    AclRoleRedisRuleSpec:
-      required:
-      - databases
-      - ruleName
-      type: object
-      properties:
-        ruleName:
-          type: string
-          description: The name of a Redis ACL rule to assign to the role. Use 'GET /acl/redisRules' to get a list of available rules for your account.
-          example: Read-Only
-        databases:
-          type: array
-          description: A list of databases where the specified rule applies for this role.
-          items:
-            $ref: '#/components/schemas/AclRoleDatabaseSpec'
-      description: Optional. Changes the Redis ACL rules to assign to this database access role.
-    AclRedisRuleUpdateRequest:
-      required:
-      - name
-      - redisRule
-      type: object
-      properties:
-        redisRuleId:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          description: Optional. Changes the Redis ACL rule name.
-          example: ACL-rule-example
-        redisRule:
-          type: string
-          description: Optional. Changes the Redis ACL rule pattern. See [ACL syntax](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/configure-acls/#define-permissions-with-acl-syntax) to learn how to define rules.
-          example: +set allkeys allchannels
-        commandType:
-          type: string
-          readOnly: true
-      description: ACL redis rule update request
     AccountACLRedisRules:
       type: object
       properties:
@@ -1430,6 +1237,70 @@ components:
           acl: +@read ~*
           isDefault: true
           status: active
+    AclUserUpdateRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+          readOnly: true
+        role:
+          type: string
+          description: Optional. Changes the ACL role assigned to the user. Use GET '/acl/roles' to get a list of database access roles.
+          example: ACL-role-example
+        password:
+          type: string
+          description: Optional. Changes the user's database password.
+          example: ab123AB$%^
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL user update request
+    AccountACLRoles:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: Redis list of ACL roles in current account
+      example:
+        accountId: 1001
+        roles:
+        - id: 395
+          name: role-name
+          redisRules:
+          - ruleId: 7
+            ruleName: Full-Access
+            databases:
+            - subscriptionId: 126
+              databaseId: 1
+              databaseName: DB-RCP-2-81-7
+          users: []
+          status: error
+    AclRedisRuleCreateRequest:
+      required:
+      - name
+      - redisRule
+      type: object
+      properties:
+        name:
+          type: string
+          description: Redis ACL rule name.
+          example: ACL-rule-example
+        redisRule:
+          type: string
+          description: Redis ACL rule pattern. See [ACL syntax](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/configure-acls/#define-permissions-with-acl-syntax) to learn how to define rules.
+          example: +set allkeys allchannels
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL redis rule create request
     AccountACLUsers:
       type: object
       properties:
@@ -1451,6 +1322,135 @@ components:
           role: role-name
           status: active
           links: []
+    AclRoleUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional. Changes the database access role name.
+          example: ACL-role-example
+        redisRules:
+          type: array
+          description: Optional. Changes the Redis ACL rules to assign to this database access role.
+          items:
+            $ref: '#/components/schemas/AclRoleRedisRuleSpec'
+        roleId:
+          type: integer
+          format: int32
+          readOnly: true
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL role update request
+    AclUserCreateRequest:
+      required:
+      - name
+      - password
+      - role
+      type: object
+      properties:
+        name:
+          type: string
+          description: Access control user name.
+          example: ACL-user-example
+        role:
+          type: string
+          description: Name of the database access role to assign to this user. Use GET '/acl/roles' to get a list of database access roles.
+          example: ACL-role-example
+        password:
+          type: string
+          description: The database password for this user.
+          example: ab123AB$%^
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL user create request
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    AclRedisRuleUpdateRequest:
+      required:
+      - name
+      - redisRule
+      type: object
+      properties:
+        redisRuleId:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          description: Optional. Changes the Redis ACL rule name.
+          example: ACL-rule-example
+        redisRule:
+          type: string
+          description: Optional. Changes the Redis ACL rule pattern. See [ACL syntax](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/configure-acls/#define-permissions-with-acl-syntax) to learn how to define rules.
+          example: +set allkeys allchannels
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL redis rule update request
+    AclRoleCreateRequest:
+      required:
+      - name
+      - redisRules
+      type: object
+      properties:
+        name:
+          type: string
+          description: Database access role name.
+          example: ACL-role-example
+        redisRules:
+          type: array
+          description: A list of Redis ACL rules to assign to this database access role.
+          items:
+            $ref: '#/components/schemas/AclRoleRedisRuleSpec'
+        commandType:
+          type: string
+          readOnly: true
+      description: ACL role create request
+    AclRoleRedisRuleSpec:
+      required:
+      - databases
+      - ruleName
+      type: object
+      properties:
+        ruleName:
+          type: string
+          description: The name of a Redis ACL rule to assign to the role. Use 'GET /acl/redisRules' to get a list of available rules for your account.
+          example: Read-Only
+        databases:
+          type: array
+          description: A list of databases where the specified rule applies for this role.
+          items:
+            $ref: '#/components/schemas/AclRoleDatabaseSpec'
+      description: Optional. Changes the Redis ACL rules to assign to this database access role.
     ACLUser:
       type: object
       properties:

@@ -939,43 +939,6 @@ components:
           type: string
           readOnly: true
       description: Cloud Account definition
-    CloudAccounts:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: RedisLabs Cloud Accounts information
-      example:
-        accountId: 40131
-        cloudAccounts:
-        - id: 1
-          name: Redis Internal Resources
-          provider: AWS
-          status: active
-          links: []
-        - id: 2
-          name: 'CAPI User '
-          provider: AWS
-          status: active
-          accessKeyId: A***A
-          links: []
-        - id: 3
-          name: API Cloud account
-          provider: AWS
-          status: active
-          accessKeyId: A***4
-          links: []
-        links:
-        - rel: self
-          href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts
-          type: GET
     CloudAccount:
       type: object
       properties:
@@ -1014,6 +977,43 @@ components:
         links:
         - rel: self
           href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts/1
+          type: GET
+    CloudAccounts:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: RedisLabs Cloud Accounts information
+      example:
+        accountId: 40131
+        cloudAccounts:
+        - id: 1
+          name: Redis Internal Resources
+          provider: AWS
+          status: active
+          links: []
+        - id: 2
+          name: 'CAPI User '
+          provider: AWS
+          status: active
+          accessKeyId: A***A
+          links: []
+        - id: 3
+          name: API Cloud account
+          provider: AWS
+          status: active
+          accessKeyId: A***4
+          links: []
+        links:
+        - rel: self
+          href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts
           type: GET
     CloudAccountUpdateRequest:
       required:

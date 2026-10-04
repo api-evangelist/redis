@@ -1229,83 +1229,104 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
-    Database:
+    LocalRegionProperties:
       type: object
       properties:
+        region:
+          type: string
+          description: Required. Name of the region to update.
+        remoteBackup:
+          $ref: '#/components/schemas/DatabaseBackupConfig'
+        localThroughputMeasurement:
+          $ref: '#/components/schemas/LocalThroughput'
+        dataPersistence:
+          type: string
+          description: Optional. Type and rate of data persistence for this region. If set, 'globalDataPersistence' will not apply to this region.
+          enum:
+          - none
+          - aof-every-1-second
+          - aof-every-write
+          - snapshot-every-1-hour
+          - snapshot-every-6-hours
+          - snapshot-every-12-hours
+        password:
+          type: string
+          description: Optional. Changes the password used to access the database in this region. If set, 'globalPassword' will not apply to this region.
+          example: P@ssw0rd
+        sourceIp:
+          type: array
+          description: 'Optional. List of source IP addresses or subnet masks to whitelist in this region. If set, Redis clients will be able to connect to the database in this region only from within the specified source IP addresses ranges, and ''globalSourceIp'' will not apply to this region. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
+          items:
+            type: string
+            description: 'Optional. List of source IP addresses or subnet masks to whitelist in this region. If set, Redis clients will be able to connect to the database in this region only from within the specified source IP addresses ranges, and ''globalSourceIp'' will not apply to this region. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
+        alerts:
+          type: array
+          description: Optional. Redis database alert settings for this region. If set, 'glboalAlerts' will not apply to this region.
+          items:
+            $ref: '#/components/schemas/DatabaseAlertSpec'
+        respVersion:
+          type: string
+          description: Optional. Redis Serialization Protocol version for this region. Must be compatible with Redis version.
+          example: resp3
+          enum:
+          - resp2
+          - resp3
+        enableDefaultUser:
+          type: boolean
+          description: Optional. When 'true', allows connecting to the database with the 'default' user. When 'false', only defined access control users can connect to the database. If set, 'globalEnableDefaultUser' will not apply to this region.
+      description: Optional. A list of regions and local settings to update.
+    DatabaseTagUpdateRequest:
+      required:
+      - value
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
         databaseId:
           type: integer
           format: int32
+          readOnly: true
+        key:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          description: Database tag value
+        commandType:
+          type: string
+          readOnly: true
+      description: Database tag update request message
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
         links:
           type: array
           items:
             type: object
             additionalProperties:
               type: string
-      example:
-        databaseId: 1
-        name: DB-RCP-2-81-7
-        protocol: redis
-        provider: AWS
-        region: us-east-1
-        redisVersion: '7.4'
-        respVersion: resp3
-        status: active
-        datasetSizeInGb: 2
-        memoryUsedInMb: 4
-        memoryStorage: ram
-        supportOSSClusterApi: true
-        useExternalEndpointForOSSClusterApi: true
-        dataPersistence: snapshot-every-1-hour
-        replication: false
-        dataEvictionPolicy: noeviction
-        throughputMeasurement:
-          by: operations-per-second
-          value: 2500
-        activatedOn: '2021-08-29T13:03:08Z'
-        lastModified: '2021-08-29T13:03:08Z'
-        publicEndpoint: redis-17571.c235866.us-east-1-1.ec2.qa-cloud.rlrcp.com:17571
-        privateEndpoint: redis-17571.internal.c235866.us-east-1-1.ec2.qa-cloud.rlrcp.com:17571
-        dynamicEndpoints:
-          public: malleable-ultraquiet-point-31101.db-qa.redis.io:17571
-          private: cherry-cook-turn-91868.db-qa.redis.io:17571
-        replica:
-          syncSources:
-          - endpoint: redis://localhost:6379
-            encryption: true
-            clientCert: "-----BEGIN CERTIFICATE-----\n ... -----END CERTIFICATE-----"
-        clustering:
-          numberOfShards: 1
-          regexRules:
-          - ordinal: 1
-            pattern: (?<tag>.*)
-          - ordinal: 0
-            pattern: .*\{(?<tag>.*)\}.*
-          hashingPolicy: standard
-        security:
-          enableDefaultUser: true
-          password: redis123456redis
-          sslClientAuthentication: false
-          tlsClientAuthentication: false
-          enableTls: false
-          sourceIps:
-          - 0.0.0.0/0
-        modules:
-        - id: 18536
-          name: RedisJSON
-          capabilityName: JSON
-          version: 2.0.6
-          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
-          parameters: []
-        alerts: []
-        links:
-        - rel: self
-          href: https://api-cloudapi.qa.redislabs.com/v1/subscriptions/120416/databases/51170941
-          type: GET
-    TargetVersion:
-      type: object
-      properties:
-        redisVersion:
-          type: string
     DatabaseSyncSourceSpec:
       required:
       - endpoint
@@ -1321,204 +1342,24 @@ components:
           type: string
           description: TLS/SSL certificate chain of the sync source. If not set and the source is a Redis Cloud database, it will automatically detect the certificate to use.
       description: Optional. This database will be a replica of the specified Redis databases, provided as a list of objects with endpoint and certificate details.
-    DatabaseAvailableVersionsResponse:
-      type: object
-      properties:
-        targets:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetVersion'
-    CloudTag:
-      type: object
-      properties:
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-        key:
-          type: string
-        value:
-          type: string
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-      description: Database tag
-      example:
-        key: environment
-        value: production
-        createdAt: '2024-05-21T20:02:21+02:00'
-        updatedAt: '2024-06-21T20:02:21+02:00'
-        links:
-        - rel: self
-          type: GET
-          href: http://localhost:8081/v1/fixed/subscriptions/178867/databases/51412930/tags
-    DatabaseSlowLogEntries:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/DatabaseSlowLogEntry'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    CrdbUpdatePropertiesRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        databaseId:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          description: Optional. Updated database name. Database name is limited to 40 characters or less and must include only letters, digits, and hyphens ('-'). It must start with a letter and end with a letter or digit.
-          example: Redis-database-example
-        dryRun:
-          type: boolean
-          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, updating any resources required by the plan. When ''true'': creates a read-only deployment plan and does not update any resources. Default: ''false'''
-          example: false
-        memoryLimitInGb:
-          minimum: 0.1
-          type: number
-          description: Optional. Total memory in GB, including replication and other overhead. You cannot set both datasetSizeInGb and totalMemoryInGb.
-          format: double
-          example: 1
-          deprecated: true
-        datasetSizeInGb:
-          minimum: 0.1
-          type: number
-          description: Optional. The maximum amount of data in the dataset for this database in GB. You cannot set both datasetSizeInGb and totalMemoryInGb. If ‘replication’ is 'true', the database’s total memory will be twice as large as the datasetSizeInGb.If ‘replication’ is false, the database’s total memory will be the datasetSizeInGb value.
-          format: double
-          example: 1
-        supportOSSClusterApi:
-          type: boolean
-          description: 'Optional. Support Redis [OSS Cluster API](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#oss-cluster-api). Default: ''false'''
-        useExternalEndpointForOSSClusterApi:
-          type: boolean
-          description: Optional. If set to 'true', the database will use the external endpoint for OSS Cluster API. This setting blocks the database's private endpoint. Can only be set if 'supportOSSClusterAPI' is 'true'.
-          example: false
-        clientSslCertificate:
-          type: string
-          description: Optional. A public key client TLS/SSL certificate with new line characters replaced with '\n'. If specified, mTLS authentication will be required to authenticate user connections if it is not already required. If set to an empty string, TLS client certificates will be removed and mTLS will not be required. TLS connection may still apply, depending on the value of 'enableTls'.
-          deprecated: true
-        clientTlsCertificates:
-          type: array
-          description: Optional. A list of client TLS/SSL certificates. If specified, mTLS authentication will be required to authenticate user connections. If set to an empty list, TLS client certificates will be removed and mTLS will not be required. TLS connection may still apply, depending on the value of 'enableTls'.
-          items:
-            $ref: '#/components/schemas/DatabaseCertificateSpec'
-        enableTls:
-          type: boolean
-          description: Optional. When 'true', requires TLS authentication for all connections - mTLS with valid clientTlsCertificates, regular TLS when clientTlsCertificates is not provided. If enableTls is set to 'false' while mTLS is required, it will remove the mTLS requirement and erase previously provided clientTlsCertificates.
-        globalDataPersistence:
-          type: string
-          description: Optional. Type and rate of data persistence in all regions that don't set local 'dataPersistence'.
-          enum:
-          - none
-          - aof-every-1-second
-          - aof-every-write
-          - snapshot-every-1-hour
-          - snapshot-every-6-hours
-          - snapshot-every-12-hours
-        globalPassword:
-          type: string
-          description: Optional. Changes the password used to access the database in all regions that don't set a local 'password'.
-        globalEnableDefaultUser:
-          type: boolean
-          description: Optional. When 'true', allows connecting to the database with the 'default' user in all regions that don't set local 'enableDefaultUser'. When 'false', only defined access control users can connect to the database.
-        globalSourceIp:
-          type: array
-          description: 'Optional. List of source IP addresses or subnet masks to whitelist in all regions that don''t set local ''sourceIp'' settings. If set, Redis clients will be able to connect to this database only from within the specified source IP addresses ranges. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
-          items:
-            type: string
-            description: 'Optional. List of source IP addresses or subnet masks to whitelist in all regions that don''t set local ''sourceIp'' settings. If set, Redis clients will be able to connect to this database only from within the specified source IP addresses ranges. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
-        globalAlerts:
-          type: array
-          description: Optional. Redis database alert settings in all regions that don't set local 'alerts'.
-          items:
-            $ref: '#/components/schemas/DatabaseAlertSpec'
-        regions:
-          type: array
-          description: Optional. A list of regions and local settings to update.
-          items:
-            $ref: '#/components/schemas/LocalRegionProperties'
-        dataEvictionPolicy:
-          type: string
-          description: Optional. Data eviction policy.
-          enum:
-          - allkeys-lru
-          - allkeys-lfu
-          - allkeys-lrm
-          - allkeys-random
-          - volatile-lru
-          - volatile-lfu
-          - volatile-lrm
-          - volatile-random
-          - volatile-ttl
-          - noeviction
-        autoMinorVersionUpgrade:
-          type: boolean
-          description: Optional. Automatically upgrades the database to newer minor versions within the same major release. Applies to version 8.4 and above.
-        commandType:
-          type: string
-          readOnly: true
-      description: Active-Active database update local properties request message
-    DatabaseTagsUpdateRequest:
+    DatabaseThroughputSpec:
       required:
-      - tags
+      - by
+      - value
       type: object
       properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        databaseId:
-          type: integer
-          format: int32
-          readOnly: true
-        tags:
-          type: array
-          description: List of database tags.
-          items:
-            $ref: '#/components/schemas/tag'
-        commandType:
+        by:
           type: string
-          readOnly: true
-      description: Database tags update request message
-    DatabaseVersionUpgradeStatus:
-      type: object
-      properties:
-        databaseId:
-          type: integer
-          format: int32
-        targetRedisVersion:
-          type: string
-        progress:
-          type: number
-          format: double
-        upgradeStatus:
-          type: string
+          description: Throughput measurement method. Use 'operations-per-second' for all new databases.
           enum:
-          - in-progress
-          - in-progress-recovery-pending
-          - done
-          - failed
-    DatabaseCertificate:
-      type: object
-      properties:
-        publicCertificatePEMString:
-          type: string
-          description: An X.509 PEM (base64) encoded server certificate with new line characters replaced by '\n'.
-      description: Database certificate
+          - operations-per-second
+          - number-of-shards
+        value:
+          type: integer
+          description: Throughput value in the selected measurement method.
+          format: int64
+          example: 10000
+      description: Optional. Throughput measurement method.
     DatabaseCreateRequest:
       required:
       - name
@@ -1694,28 +1535,105 @@ components:
           description: Optional. The query performance factor adds extra compute power specifically for search and query databases. You can increase your queries per second by the selected factor.
           example: 2x
       description: Database definition
-    DatabaseThroughputSpec:
+    ReplicaOfSpec:
       required:
-      - by
+      - syncSources
+      type: object
+      properties:
+        syncSources:
+          type: array
+          description: Optional. This database will be a replica of the specified Redis databases, provided as a list of objects with endpoint and certificate details.
+          items:
+            $ref: '#/components/schemas/DatabaseSyncSourceSpec'
+      description: Optional. Changes Replica Of (also known as Active-Passive) configuration details.
+    CloudTag:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        key:
+          type: string
+        value:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      description: Database tag
+      example:
+        key: environment
+        value: production
+        createdAt: '2024-05-21T20:02:21+02:00'
+        updatedAt: '2024-06-21T20:02:21+02:00'
+        links:
+        - rel: self
+          type: GET
+          href: http://localhost:8081/v1/fixed/subscriptions/178867/databases/51412930/tags
+    DatabaseCertificate:
+      type: object
+      properties:
+        publicCertificatePEMString:
+          type: string
+          description: An X.509 PEM (base64) encoded server certificate with new line characters replaced by '\n'.
+      description: Database certificate
+    CloudTags:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        accountId:
+          type: integer
+          format: int32
+      description: Redis list of database tags
+      example:
+        accountId: 40131
+        tags:
+        - key: environment
+          value: production
+          createdAt: '2024-05-21T20:02:21+02:00'
+          updatedAt: '2024-06-21T20:02:21+02:00'
+          links: []
+        - key: owner
+          value: Clifford O'neill
+          createdAt: '2024-05-21T20:02:21+02:00'
+          updatedAt: '2024-06-21T20:02:21+02:00'
+          links: []
+        links:
+        - rel: self
+          href: http://localhost:8081/v1/fixed/subscriptions/178867/databases/51412930/tags
+          type: GET
+    tag:
+      required:
+      - key
       - value
       type: object
       properties:
-        by:
+        key:
           type: string
-          description: Throughput measurement method. Use 'operations-per-second' for all new databases.
-          enum:
-          - operations-per-second
-          - number-of-shards
+          description: Database tag key.
+          example: environment
         value:
-          type: integer
-          description: Throughput value in the selected measurement method.
-          format: int64
-          example: 10000
-      description: Optional. Throughput measurement method.
-    DatabaseImportRequest:
-      required:
-      - importFromUri
-      - sourceType
+          type: string
+          description: Database tag value.
+          example: production
+        commandType:
+          type: string
+          readOnly: true
+      description: Database tag
+    TargetVersion:
+      type: object
+      properties:
+        redisVersion:
+          type: string
+    DatabaseBackupRequest:
       type: object
       properties:
         subscriptionId:
@@ -1726,10 +1644,120 @@ components:
           type: integer
           format: int32
           readOnly: true
-        sourceType:
+        regionName:
           type: string
-          description: Type of storage from which to import the database RDB file or Redis data.
-          example: http
+          description: Required for Active-Active databases. Name of the cloud provider region to back up. When backing up an Active-Active database, you must back up each region separately.
+        adhocBackupPath:
+          type: string
+          description: Optional. Manually backs up data to this location, instead of the set 'remoteBackup' location.
+          example: s3://<backup-path>
+        commandType:
+          type: string
+          readOnly: true
+      description: Database backup request message
+    DatabaseTagCreateRequest:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          type: string
+          description: Database tag key.
+          example: environment
+        value:
+          type: string
+          description: Database tag value.
+          example: production
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        databaseId:
+          type: integer
+          format: int32
+          readOnly: true
+        commandType:
+          type: string
+          readOnly: true
+      description: Database tag
+    CrdbFlushRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        databaseId:
+          type: integer
+          format: int32
+          readOnly: true
+        commandType:
+          type: string
+          readOnly: true
+      description: Active-Active database flush request message
+    DatabaseVersionUpgradeStatus:
+      type: object
+      properties:
+        databaseId:
+          type: integer
+          format: int32
+        targetRedisVersion:
+          type: string
+        progress:
+          type: number
+          format: double
+        upgradeStatus:
+          type: string
+          enum:
+          - in-progress
+          - in-progress-recovery-pending
+          - done
+          - failed
+    DatabaseBackupConfig:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: 'Optional. Determine if backup should be active. Default: null'
+        interval:
+          type: string
+          description: 'Required when active is ''true''. Defines the interval between backups. Format: ''every-x-hours'', where x is one of 24, 12, 6, 4, 2, or 1. Example: "every-4-hours"'
+        backupInterval:
+          type: string
+          readOnly: true
+          enum:
+          - EVERY_24_HOURS
+          - EVERY_12_HOURS
+          - EVERY_6_HOURS
+          - EVERY_4_HOURS
+          - EVERY_2_HOURS
+          - EVERY_1_HOURS
+        timeUTC:
+          type: string
+          description: 'Optional. Hour when the backup starts. Available only for "every-12-hours" and "every-24-hours" backup intervals. Specified as an hour in 24-hour UTC time. Example: "14:00" is 2 PM UTC.'
+        databaseBackupTimeUTC:
+          type: string
+          readOnly: true
+          enum:
+          - HOUR_ONE
+          - HOUR_TWO
+          - HOUR_THREE
+          - HOUR_FOUR
+          - HOUR_FIVE
+          - HOUR_SIX
+          - HOUR_SEVEN
+          - HOUR_EIGHT
+          - HOUR_NINE
+          - HOUR_TEN
+          - HOUR_ELEVEN
+          - HOUR_TWELVE
+        storageType:
+          type: string
+          description: Required when active is 'true'. Type of storage to host backup files. Can be "aws-s3", "google-blob-storage", "azure-blob-storage", or "ftp". See [Set up backup storage locations](https://redis.io/docs/latest/operate/rc/databases/back-up-data/#set-up-backup-storage-locations) to learn how to set up backup storage locations.
+        backupStorageType:
+          type: string
+          readOnly: true
           enum:
           - http
           - redis
@@ -1737,54 +1765,104 @@ components:
           - aws-s3
           - azure-blob-storage
           - google-blob-storage
-        importFromUri:
-          type: array
-          description: One or more paths to source data files or Redis databases, as appropriate to specified source type.
-          items:
-            type: string
-            description: One or more paths to source data files or Redis databases, as appropriate to specified source type.
-        commandType:
+        storagePath:
           type: string
-          readOnly: true
-      description: Database import request
-    DatabaseUpgradeRedisVersionRequest:
-      required:
-      - targetRedisVersion
+          description: Required when active is 'true'. Path to the backup storage location.
+      description: Optional. Changes Remote backup configuration details.
+    DatabaseAvailableVersionsResponse:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetVersion'
+    Database:
       type: object
       properties:
         databaseId:
           type: integer
           format: int32
-          readOnly: true
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        targetRedisVersion:
-          type: string
-          description: The target Redis version the database will be upgraded to. Use GET /subscriptions/redis-versions to get a list of available Redis versions.
-          example: '7.4'
-        commandType:
-          type: string
-          readOnly: true
-      description: Upgrades the specified Pro database to a later Redis version.
-    DatabaseTrafficStateResponse:
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        databaseId: 1
+        name: DB-RCP-2-81-7
+        protocol: redis
+        provider: AWS
+        region: us-east-1
+        redisVersion: '7.4'
+        respVersion: resp3
+        status: active
+        datasetSizeInGb: 2
+        memoryUsedInMb: 4
+        memoryStorage: ram
+        supportOSSClusterApi: true
+        useExternalEndpointForOSSClusterApi: true
+        dataPersistence: snapshot-every-1-hour
+        replication: false
+        dataEvictionPolicy: noeviction
+        throughputMeasurement:
+          by: operations-per-second
+          value: 2500
+        activatedOn: '2021-08-29T13:03:08Z'
+        lastModified: '2021-08-29T13:03:08Z'
+        publicEndpoint: redis-17571.c235866.us-east-1-1.ec2.qa-cloud.rlrcp.com:17571
+        privateEndpoint: redis-17571.internal.c235866.us-east-1-1.ec2.qa-cloud.rlrcp.com:17571
+        dynamicEndpoints:
+          public: malleable-ultraquiet-point-31101.db-qa.redis.io:17571
+          private: cherry-cook-turn-91868.db-qa.redis.io:17571
+        replica:
+          syncSources:
+          - endpoint: redis://localhost:6379
+            encryption: true
+            clientCert: "-----BEGIN CERTIFICATE-----\n ... -----END CERTIFICATE-----"
+        clustering:
+          numberOfShards: 1
+          regexRules:
+          - ordinal: 1
+            pattern: (?<tag>.*)
+          - ordinal: 0
+            pattern: .*\{(?<tag>.*)\}.*
+          hashingPolicy: standard
+        security:
+          enableDefaultUser: true
+          password: redis123456redis
+          sslClientAuthentication: false
+          tlsClientAuthentication: false
+          enableTls: false
+          sourceIps:
+          - 0.0.0.0/0
+        modules:
+        - id: 18536
+          name: RedisJSON
+          capabilityName: JSON
+          version: 2.0.6
+          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
+          parameters: []
+        alerts: []
+        links:
+        - rel: self
+          href: https://api-cloudapi.qa.redislabs.com/v1/subscriptions/120416/databases/51170941
+          type: GET
+    DatabaseSlowLogEntry:
       type: object
       properties:
-        bdbId:
+        id:
           type: integer
           format: int32
-        trafficStatus:
-          type: string
-        canResume:
-          type: boolean
-        resumeInProgress:
-          type: boolean
-        stopReason:
-          type: string
-        resumeEligibleAt:
+        startTime:
           type: string
           format: date-time
+        duration:
+          type: integer
+          format: int32
+        arguments:
+          type: string
+      description: Database slowlog entry
     ProcessorResponse:
       type: object
       properties:
@@ -2430,9 +2508,9 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    DatabaseTagUpdateRequest:
+    DatabaseTagsUpdateRequest:
       required:
-      - value
+      - tags
       type: object
       properties:
         subscriptionId:
@@ -2443,45 +2521,92 @@ components:
           type: integer
           format: int32
           readOnly: true
-        key:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          description: Database tag value
+        tags:
+          type: array
+          description: List of database tags.
+          items:
+            $ref: '#/components/schemas/tag'
         commandType:
           type: string
           readOnly: true
-      description: Database tag update request message
-    TaskStateUpdate:
+      description: Database tags update request message
+    DatabaseAlertSpec:
+      required:
+      - name
+      - value
       type: object
       properties:
-        taskId:
+        name:
           type: string
-          format: uuid
+          description: Alert type. Available options depend on Plan type. See [Configure alerts](https://redis.io/docs/latest/operate/rc/databases/monitor-performance/#configure-metric-alerts) for more information.
+          example: dataset-size
+          enum:
+          - dataset-size
+          - datasets-size
+          - throughput-higher-than
+          - throughput-lower-than
+          - latency
+          - syncsource-error
+          - syncsource-lag
+          - connections-limit
+        value:
+          type: integer
+          description: Value over which an alert will be sent. Default values and range depend on the alert type. See [Configure alerts](https://redis.io/docs/latest/operate/rc/databases/monitor-performance/#configure-metric-alerts) for more information.
+          format: int32
+          example: 80
+      description: Optional. Changes Redis database alert details.
+    DatabaseImportRequest:
+      required:
+      - importFromUri
+      - sourceType
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        databaseId:
+          type: integer
+          format: int32
+          readOnly: true
+        sourceType:
+          type: string
+          description: Type of storage from which to import the database RDB file or Redis data.
+          example: http
+          enum:
+          - http
+          - redis
+          - ftp
+          - aws-s3
+          - azure-blob-storage
+          - google-blob-storage
+        importFromUri:
+          type: array
+          description: One or more paths to source data files or Redis databases, as appropriate to specified source type.
+          items:
+            type: string
+            description: One or more paths to source data files or Redis databases, as appropriate to specified source type.
         commandType:
           type: string
-        status:
+          readOnly: true
+      description: Database import request
+    DatabaseModuleSpec:
+      required:
+      - name
+      type: object
+      properties:
+        name:
           type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
+          description: Redis advanced capability name. Use GET /database-modules for a list of available capabilities.
+        parameters:
+          type: object
+          additionalProperties:
             type: object
-            additionalProperties:
-              type: string
+            description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
+            example: {}
+          description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
+          example: {}
+      description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
     AccountSubscriptionDatabases:
       type: object
       properties:
@@ -2838,141 +2963,44 @@ components:
           format: int64
           example: 1000
       description: Optional. Expected read and write throughput for this region.
-    DatabaseBackupConfig:
+    DatabaseTrafficStateResponse:
       type: object
       properties:
-        active:
-          type: boolean
-          description: 'Optional. Determine if backup should be active. Default: null'
-        interval:
-          type: string
-          description: 'Required when active is ''true''. Defines the interval between backups. Format: ''every-x-hours'', where x is one of 24, 12, 6, 4, 2, or 1. Example: "every-4-hours"'
-        backupInterval:
-          type: string
-          readOnly: true
-          enum:
-          - EVERY_24_HOURS
-          - EVERY_12_HOURS
-          - EVERY_6_HOURS
-          - EVERY_4_HOURS
-          - EVERY_2_HOURS
-          - EVERY_1_HOURS
-        timeUTC:
-          type: string
-          description: 'Optional. Hour when the backup starts. Available only for "every-12-hours" and "every-24-hours" backup intervals. Specified as an hour in 24-hour UTC time. Example: "14:00" is 2 PM UTC.'
-        databaseBackupTimeUTC:
-          type: string
-          readOnly: true
-          enum:
-          - HOUR_ONE
-          - HOUR_TWO
-          - HOUR_THREE
-          - HOUR_FOUR
-          - HOUR_FIVE
-          - HOUR_SIX
-          - HOUR_SEVEN
-          - HOUR_EIGHT
-          - HOUR_NINE
-          - HOUR_TEN
-          - HOUR_ELEVEN
-          - HOUR_TWELVE
-        storageType:
-          type: string
-          description: Required when active is 'true'. Type of storage to host backup files. Can be "aws-s3", "google-blob-storage", "azure-blob-storage", or "ftp". See [Set up backup storage locations](https://redis.io/docs/latest/operate/rc/databases/back-up-data/#set-up-backup-storage-locations) to learn how to set up backup storage locations.
-        backupStorageType:
-          type: string
-          readOnly: true
-          enum:
-          - http
-          - redis
-          - ftp
-          - aws-s3
-          - azure-blob-storage
-          - google-blob-storage
-        storagePath:
-          type: string
-          description: Required when active is 'true'. Path to the backup storage location.
-      description: Optional. Changes Remote backup configuration details.
-    CrdbFlushRequest:
-      type: object
-      properties:
-        subscriptionId:
+        bdbId:
           type: integer
           format: int32
-          readOnly: true
+        trafficStatus:
+          type: string
+        canResume:
+          type: boolean
+        resumeInProgress:
+          type: boolean
+        stopReason:
+          type: string
+        resumeEligibleAt:
+          type: string
+          format: date-time
+    DatabaseUpgradeRedisVersionRequest:
+      required:
+      - targetRedisVersion
+      type: object
+      properties:
         databaseId:
           type: integer
           format: int32
           readOnly: true
-        commandType:
-          type: string
-          readOnly: true
-      description: Active-Active database flush request message
-    CloudTags:
-      type: object
-      properties:
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-        accountId:
+        subscriptionId:
           type: integer
           format: int32
-      description: Redis list of database tags
-      example:
-        accountId: 40131
-        tags:
-        - key: environment
-          value: production
-          createdAt: '2024-05-21T20:02:21+02:00'
-          updatedAt: '2024-06-21T20:02:21+02:00'
-          links: []
-        - key: owner
-          value: Clifford O'neill
-          createdAt: '2024-05-21T20:02:21+02:00'
-          updatedAt: '2024-06-21T20:02:21+02:00'
-          links: []
-        links:
-        - rel: self
-          href: http://localhost:8081/v1/fixed/subscriptions/178867/databases/51412930/tags
-          type: GET
-    DatabaseModuleSpec:
-      required:
-      - name
-      type: object
-      properties:
-        name:
+          readOnly: true
+        targetRedisVersion:
           type: string
-          description: Redis advanced capability name. Use GET /database-modules for a list of available capabilities.
-        parameters:
-          type: object
-          additionalProperties:
-            type: object
-            description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
-            example: {}
-          description: Optional. Redis advanced capability parameters. Use GET /database-modules to get the available capabilities and their parameters.
-          example: {}
-      description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database. Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for database versions 8 and above. All capabilities are bundled in the database by default.
-    tag:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          type: string
-          description: Database tag key.
-          example: environment
-        value:
-          type: string
-          description: Database tag value.
-          example: production
+          description: The target Redis version the database will be upgraded to. Use GET /subscriptions/redis-versions to get a list of available Redis versions.
+          example: '7.4'
         commandType:
           type: string
           readOnly: true
-      description: Database tag
+      description: Upgrades the specified Pro database to a later Redis version.
     DatabaseUpdateRequest:
       type: object
       properties:
@@ -3125,91 +3153,22 @@ components:
           description: Optional. Changes the query performance factor. The query performance factor adds extra compute power specifically for search and query databases. You can increase your queries per second by the selected factor.
           example: 2x
       description: Database update request
-    DatabaseAlertSpec:
-      required:
-      - name
-      - value
+    DatabaseSlowLogEntries:
       type: object
       properties:
-        name:
-          type: string
-          description: Alert type. Available options depend on Plan type. See [Configure alerts](https://redis.io/docs/latest/operate/rc/databases/monitor-performance/#configure-metric-alerts) for more information.
-          example: dataset-size
-          enum:
-          - dataset-size
-          - datasets-size
-          - throughput-higher-than
-          - throughput-lower-than
-          - latency
-          - syncsource-error
-          - syncsource-lag
-          - connections-limit
-        value:
-          type: integer
-          description: Value over which an alert will be sent. Default values and range depend on the alert type. See [Configure alerts](https://redis.io/docs/latest/operate/rc/databases/monitor-performance/#configure-metric-alerts) for more information.
-          format: int32
-          example: 80
-      description: Optional. Changes Redis database alert details.
-    LocalRegionProperties:
-      type: object
-      properties:
-        region:
-          type: string
-          description: Required. Name of the region to update.
-        remoteBackup:
-          $ref: '#/components/schemas/DatabaseBackupConfig'
-        localThroughputMeasurement:
-          $ref: '#/components/schemas/LocalThroughput'
-        dataPersistence:
-          type: string
-          description: Optional. Type and rate of data persistence for this region. If set, 'globalDataPersistence' will not apply to this region.
-          enum:
-          - none
-          - aof-every-1-second
-          - aof-every-write
-          - snapshot-every-1-hour
-          - snapshot-every-6-hours
-          - snapshot-every-12-hours
-        password:
-          type: string
-          description: Optional. Changes the password used to access the database in this region. If set, 'globalPassword' will not apply to this region.
-          example: P@ssw0rd
-        sourceIp:
+        entries:
           type: array
-          description: 'Optional. List of source IP addresses or subnet masks to whitelist in this region. If set, Redis clients will be able to connect to the database in this region only from within the specified source IP addresses ranges, and ''globalSourceIp'' will not apply to this region. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
           items:
-            type: string
-            description: 'Optional. List of source IP addresses or subnet masks to whitelist in this region. If set, Redis clients will be able to connect to the database in this region only from within the specified source IP addresses ranges, and ''globalSourceIp'' will not apply to this region. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
-        alerts:
+            $ref: '#/components/schemas/DatabaseSlowLogEntry'
+        links:
           type: array
-          description: Optional. Redis database alert settings for this region. If set, 'glboalAlerts' will not apply to this region.
           items:
-            $ref: '#/components/schemas/DatabaseAlertSpec'
-        respVersion:
-          type: string
-          description: Optional. Redis Serialization Protocol version for this region. Must be compatible with Redis version.
-          example: resp3
-          enum:
-          - resp2
-          - resp3
-        enableDefaultUser:
-          type: boolean
-          description: Optional. When 'true', allows connecting to the database with the 'default' user. When 'false', only defined access control users can connect to the database. If set, 'globalEnableDefaultUser' will not apply to this region.
-      description: Optional. A list of regions and local settings to update.
-    DatabaseTagCreateRequest:
-      required:
-      - key
-      - value
+            type: object
+            additionalProperties:
+              type: string
+    CrdbUpdatePropertiesRequest:
       type: object
       properties:
-        key:
-          type: string
-          description: Database tag key.
-          example: environment
-        value:
-          type: string
-          description: Database tag value.
-          example: production
         subscriptionId:
           type: integer
           format: int32
@@ -3218,21 +3177,99 @@ components:
           type: integer
           format: int32
           readOnly: true
+        name:
+          type: string
+          description: Optional. Updated database name. Database name is limited to 40 characters or less and must include only letters, digits, and hyphens ('-'). It must start with a letter and end with a letter or digit.
+          example: Redis-database-example
+        dryRun:
+          type: boolean
+          description: 'Optional. When ''false'': Creates a deployment plan and deploys it, updating any resources required by the plan. When ''true'': creates a read-only deployment plan and does not update any resources. Default: ''false'''
+          example: false
+        memoryLimitInGb:
+          minimum: 0.1
+          type: number
+          description: Optional. Total memory in GB, including replication and other overhead. You cannot set both datasetSizeInGb and totalMemoryInGb.
+          format: double
+          example: 1
+          deprecated: true
+        datasetSizeInGb:
+          minimum: 0.1
+          type: number
+          description: Optional. The maximum amount of data in the dataset for this database in GB. You cannot set both datasetSizeInGb and totalMemoryInGb. If ‘replication’ is 'true', the database’s total memory will be twice as large as the datasetSizeInGb.If ‘replication’ is false, the database’s total memory will be the datasetSizeInGb value.
+          format: double
+          example: 1
+        supportOSSClusterApi:
+          type: boolean
+          description: 'Optional. Support Redis [OSS Cluster API](https://redis.io/docs/latest/operate/rc/databases/configuration/clustering/#oss-cluster-api). Default: ''false'''
+        useExternalEndpointForOSSClusterApi:
+          type: boolean
+          description: Optional. If set to 'true', the database will use the external endpoint for OSS Cluster API. This setting blocks the database's private endpoint. Can only be set if 'supportOSSClusterAPI' is 'true'.
+          example: false
+        clientSslCertificate:
+          type: string
+          description: Optional. A public key client TLS/SSL certificate with new line characters replaced with '\n'. If specified, mTLS authentication will be required to authenticate user connections if it is not already required. If set to an empty string, TLS client certificates will be removed and mTLS will not be required. TLS connection may still apply, depending on the value of 'enableTls'.
+          deprecated: true
+        clientTlsCertificates:
+          type: array
+          description: Optional. A list of client TLS/SSL certificates. If specified, mTLS authentication will be required to authenticate user connections. If set to an empty list, TLS client certificates will be removed and mTLS will not be required. TLS connection may still apply, depending on the value of 'enableTls'.
+          items:
+            $ref: '#/components/schemas/DatabaseCertificateSpec'
+        enableTls:
+          type: boolean
+          description: Optional. When 'true', requires TLS authentication for all connections - mTLS with valid clientTlsCertificates, regular TLS when clientTlsCertificates is not provided. If enableTls is set to 'false' while mTLS is required, it will remove the mTLS requirement and erase previously provided clientTlsCertificates.
+        globalDataPersistence:
+          type: string
+          description: Optional. Type and rate of data persistence in all regions that don't set local 'dataPersistence'.
+          enum:
+          - none
+          - aof-every-1-second
+          - aof-every-write
+          - snapshot-every-1-hour
+          - snapshot-every-6-hours
+          - snapshot-every-12-hours
+        globalPassword:
+          type: string
+          description: Optional. Changes the password used to access the database in all regions that don't set a local 'password'.
+        globalEnableDefaultUser:
+          type: boolean
+          description: Optional. When 'true', allows connecting to the database with the 'default' user in all regions that don't set local 'enableDefaultUser'. When 'false', only defined access control users can connect to the database.
+        globalSourceIp:
+          type: array
+          description: 'Optional. List of source IP addresses or subnet masks to whitelist in all regions that don''t set local ''sourceIp'' settings. If set, Redis clients will be able to connect to this database only from within the specified source IP addresses ranges. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
+          items:
+            type: string
+            description: 'Optional. List of source IP addresses or subnet masks to whitelist in all regions that don''t set local ''sourceIp'' settings. If set, Redis clients will be able to connect to this database only from within the specified source IP addresses ranges. Example: [''192.168.10.0/32'', ''192.168.12.0/24'']'
+        globalAlerts:
+          type: array
+          description: Optional. Redis database alert settings in all regions that don't set local 'alerts'.
+          items:
+            $ref: '#/components/schemas/DatabaseAlertSpec'
+        regions:
+          type: array
+          description: Optional. A list of regions and local settings to update.
+          items:
+            $ref: '#/components/schemas/LocalRegionProperties'
+        dataEvictionPolicy:
+          type: string
+          description: Optional. Data eviction policy.
+          enum:
+          - allkeys-lru
+          - allkeys-lfu
+          - allkeys-lrm
+          - allkeys-random
+          - volatile-lru
+          - volatile-lfu
+          - volatile-lrm
+          - volatile-random
+          - volatile-ttl
+          - noeviction
+        autoMinorVersionUpgrade:
+          type: boolean
+          description: Optional. Automatically upgrades the database to newer minor versions within the same major release. Applies to version 8.4 and above.
         commandType:
           type: string
           readOnly: true
-      description: Database tag
-    ReplicaOfSpec:
-      required:
-      - syncSources
-      type: object
-      properties:
-        syncSources:
-          type: array
-          description: Optional. This database will be a replica of the specified Redis databases, provided as a list of objects with endpoint and certificate details.
-          items:
-            $ref: '#/components/schemas/DatabaseSyncSourceSpec'
-      description: Optional. Changes Replica Of (also known as Active-Passive) configuration details.
+      description: Active-Active database update local properties request message
     DatabaseCertificateSpec:
       required:
       - publicCertificatePEMString
@@ -3242,43 +3279,6 @@ components:
           type: string
           description: Client certificate public key in PEM format, with new line characters replaced with '\n'.
       description: Optional. A list of client TLS/SSL certificates. If specified, mTLS authentication will be required to authenticate user connections. If set to an empty list, TLS client certificates will be removed and mTLS will not be required. TLS connection may still apply, depending on the value of 'enableTls'.
-    DatabaseSlowLogEntry:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        startTime:
-          type: string
-          format: date-time
-        duration:
-          type: integer
-          format: int32
-        arguments:
-          type: string
-      description: Database slowlog entry
-    DatabaseBackupRequest:
-      type: object
-      properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        databaseId:
-          type: integer
-          format: int32
-          readOnly: true
-        regionName:
-          type: string
-          description: Required for Active-Active databases. Name of the cloud provider region to back up. When backing up an Active-Active database, you must back up each region separately.
-        adhocBackupPath:
-          type: string
-          description: Optional. Manually backs up data to this location, instead of the set 'remoteBackup' location.
-          example: s3://<backup-path>
-        commandType:
-          type: string
-          readOnly: true
-      description: Database backup request message
   securitySchemes:
     x-api-key:
       type: apiKey
