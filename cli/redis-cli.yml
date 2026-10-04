@@ -1,0 +1,20 @@
+generated: '2026-10-04'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://redis.io/docs/latest/develop/tools/cli/index.html.md
+sources:
+- https://redis.io/docs/latest/develop/tools/cli/index.html.md
+- https://redis.io/docs/latest/develop/tools/insight/release-notes/index.html.md
+- https://redis.io/docs/latest/develop/tools/redis-for-vscode/index.html.md
+- https://redis.io/docs/latest/develop/clients/index.html.md
+install:
+- method: build from source
+  command: $ make redis-cli
+commands:
+- group: basic
+  commands:
+  - INCR
+  - PING
+  - FLUSHALL
+binary: redis-cli
+docs: https://redis.io/docs/latest/develop/tools/cli/index.html.md

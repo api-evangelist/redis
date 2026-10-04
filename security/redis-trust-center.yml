@@ -1,4 +1,4 @@
-generated: '2026-07-11'
+generated: '2026-10-04'
 method: searched
 probe: true
 source: https://trust.redis.io/
@@ -12,6 +12,7 @@ certifications:
 - HIPAA
 - GDPR
 - CSA STAR
+- FIPS 140
 evidence:
 - source: https://trust.redis.io/
   keywords:

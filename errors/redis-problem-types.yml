@@ -1,0 +1,93 @@
+generated: '2026-10-04'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/redis-cloud-openapi.yml
+format: rfc9457
+envelope:
+  media_type: application/problem+json
+  schema: MemoryProblemDetails
+coverage:
+  operations: 179
+  statuses_declared: 12
+problems:
+- status: 400
+  title: Bad Request
+  description: Bad Request - The server cannot process the request due to something that is perceived to be a client
+    error
+  operations: 179
+  media_types: []
+  schema: null
+- status: 401
+  title: Unauthorized
+  description: Unauthorized - Authentication failed for requested resource
+  operations: 179
+  media_types: []
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+  operations: 179
+  media_types: []
+  schema: null
+- status: 404
+  title: Not Found
+  description: Not Found - The resource you were trying to reach was not found or does not exist
+  operations: 179
+  media_types: []
+  schema: null
+- status: 408
+  title: Request Timeout
+  description: Request Timeout - The server didn't receive a complete request message within the server's allotted
+    timeout period
+  operations: 107
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Conflict - request could not be processed because of a conflict (primarily due to another resource
+    that exist with new updated name)
+  operations: 107
+  media_types: []
+  schema: null
+- status: 412
+  title: Precondition Failed
+  description: Precondition Failed - Feature flag for this flow is off
+  operations: 179
+  media_types: []
+  schema: null
+- status: 422
+  title: Unprocessable Content
+  description: Unprocessable Entity - The server understands the request, and the syntax of the request is correct,
+    but it was unable to process the contai
+  operations: 26
+  media_types: []
+  schema: null
+- status: 424
+  title: Failed Dependency
+  description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable
+    or /errors/database-out-o
+  operations: 5
+  media_types:
+  - application/problem+json
+  schema: MemoryProblemDetails
+- status: 429
+  title: Too Many Requests
+  description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account.
+    Please re-submit API requests after reso
+  operations: 179
+  media_types: []
+  schema: null
+- status: 500
+  title: Internal Server Error
+  description: Internal system error - If this error persists, please contact customer support
+  operations: 179
+  media_types: []
+  schema: null
+- status: 503
+  title: Service Unavailable
+  description: Service Unavailable - Server is temporarily unable to handle the request, please try again later.
+    If this error persists, please contact cus
+  operations: 179
+  media_types: []
+  schema: null

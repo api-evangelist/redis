@@ -1,0 +1,1847 @@
+openapi: 3.2.0
+info:
+  title: Redis Cloud Agent Memory - Stores API
+  description: Redis Cloud API
+  contact:
+    name: Customer Support
+    url: https://support.redislabs.com
+    email: support@redis.com
+  version: Version 1
+servers:
+- url: https://api.redislabs.com
+security:
+- x-api-key: []
+  x-api-secret-key: []
+  x-auth-token: []
+tags:
+- name: Agent Memory - Stores
+  description: All operations related to Agent Memory store lifecycle
+  x-order: '20'
+paths:
+  /v1/memory-stores:
+    get:
+      tags:
+      - Agent Memory - Stores
+      summary: List memory stores
+      description: List the Agent Memory stores for the account
+      operationId: listMemoryStores
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '200':
+          description: Memory stores returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryStoreListResponse'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '424':
+          description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable or /errors/database-out-of-memory. When the error originates from the Agent Memory service the body is an application/problem+json document (MemoryProblemDetails) carrying the service's error type and detail
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MemoryProblemDetails'
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+    post:
+      tags:
+      - Agent Memory - Stores
+      summary: Create memory store
+      description: 'Create an Agent Memory store on the database identified by database Id. The request is accepted and processed asynchronously: errors reported by the Agent Memory service are returned in the task status (see GET /tasks/{taskId}), not in this response'
+      operationId: createMemoryStore
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryStoreCreateRequest'
+        required: true
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateUpdate'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '403':
+          description: Forbidden - Not allowed to create requested resource (primarily due to not active resource)
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with the new name
+        '422':
+          description: Unprocessable Entity - The server understands the request, and the syntax of the request is correct, but it was unable to process the contained instructions
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+  /v1/memory-stores/{storeId}/api-keys:
+    get:
+      tags:
+      - Agent Memory - Stores
+      summary: List memory store API keys
+      description: List the API keys of the Agent Memory store identified by store Id. Key values are obfuscated
+      operationId: listMemoryStoreApiKeys
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '424':
+          description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable or /errors/database-out-of-memory. When the error originates from the Agent Memory service the body is an application/problem+json document (MemoryProblemDetails) carrying the service's error type and detail
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MemoryProblemDetails'
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+    post:
+      tags:
+      - Agent Memory - Stores
+      summary: Create memory store API key
+      description: Create an API key for the Agent Memory store identified by store Id. The generated key value is returned once and cannot be retrieved again
+      operationId: createMemoryStoreApiKey
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryStoreApiKeyCreateRequest'
+        required: true
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '403':
+          description: Forbidden - Not allowed to create requested resource (primarily due to not active resource)
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '201':
+          description: API key created. The generated key value is returned once in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryStoreApiKeyCreateResponse'
+        '424':
+          description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable or /errors/database-out-of-memory. When the error originates from the Agent Memory service the body is an application/problem+json document (MemoryProblemDetails) carrying the service's error type and detail
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MemoryProblemDetails'
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with the new name
+        '422':
+          description: Unprocessable Entity - The server understands the request, and the syntax of the request is correct, but it was unable to process the contained instructions
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+  /v1/memory-stores/{storeId}:
+    get:
+      tags:
+      - Agent Memory - Stores
+      summary: Get memory store
+      description: Get the Agent Memory store identified by store Id
+      operationId: getMemoryStore
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '200':
+          description: Memory store returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryStoreResponse'
+        '424':
+          description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable or /errors/database-out-of-memory. When the error originates from the Agent Memory service the body is an application/problem+json document (MemoryProblemDetails) carrying the service's error type and detail
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MemoryProblemDetails'
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+    delete:
+      tags:
+      - Agent Memory - Stores
+      summary: Delete memory store
+      description: 'Delete the Agent Memory store identified by store Id. The request is accepted and processed asynchronously: errors reported by the Agent Memory service are returned in the task status (see GET /tasks/{taskId}), not in this response'
+      operationId: deleteMemoryStore
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      - name: flush
+        in: query
+        description: Whether to flush all data from the database before deleting the memory store
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateUpdate'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+    patch:
+      tags:
+      - Agent Memory - Stores
+      summary: Update memory store
+      description: 'Update the configuration of the Agent Memory store identified by store Id. The request is accepted and processed asynchronously: errors reported by the Agent Memory service are returned in the task status (see GET /tasks/{taskId}), not in this response'
+      operationId: updateMemoryStore
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryStoreUpdateRequest'
+        required: true
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateUpdate'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+  /v1/memory-stores/{storeId}/session-memory:
+    delete:
+      tags:
+      - Agent Memory - Stores
+      summary: Empty memory store session memory
+      description: 'Clear the session (working) memory of the Agent Memory store identified by store Id. The request is accepted and processed asynchronously: errors reported by the Agent Memory service are returned in the task status (see GET /tasks/{taskId}), not in this response'
+      operationId: emptyMemoryStore
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateUpdate'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+  /v1/memory-stores/{storeId}/entries:
+    delete:
+      tags:
+      - Agent Memory - Stores
+      summary: Flush memory store entries
+      description: 'Clear all working memory sessions and long-term memories from the Agent Memory store identified by store Id. The request is accepted and processed asynchronously: errors reported by the Agent Memory service are returned in the task status (see GET /tasks/{taskId}), not in this response'
+      operationId: flushMemoryStore
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStateUpdate'
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+  /v1/memory-stores/{storeId}/api-keys/{apiKeyId}:
+    delete:
+      tags:
+      - Agent Memory - Stores
+      summary: Delete memory store API key
+      description: Delete the API key identified by API key Id from the Agent Memory store identified by store Id
+      operationId: deleteMemoryStoreApiKey
+      parameters:
+      - name: storeId
+        in: path
+        description: Memory store ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[A-Za-z0-9-]+$
+          type: string
+        example: store-123
+      - name: apiKeyId
+        in: path
+        description: Memory store API key ID.
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 64
+          pattern: ^[0-9a-f]{64}$
+          type: string
+        example: 28f3c30edaf527218d6ca25972b795c0d04ca8c7a6ffe4ec45bb9f5789277aca
+      responses:
+        '400':
+          description: Bad Request - The server cannot process the request due to something that is perceived to be a client error
+        '412':
+          description: Precondition Failed - Feature flag for this flow is off
+        '403':
+          description: Forbidden - Not allowed to access requested resource (primarily due to client source IP API Key restrictions)
+        '401':
+          description: Unauthorized - Authentication failed for requested resource
+        '204':
+          description: API key deleted.
+        '404':
+          description: Not Found - The resource you were trying to reach was not found or does not exist
+        '424':
+          description: Failed Dependency - The memory store's database is unavailable or out of memory, e.g. /errors/resource-unavailable or /errors/database-out-of-memory. When the error originates from the Agent Memory service the body is an application/problem+json document (MemoryProblemDetails) carrying the service's error type and detail
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MemoryProblemDetails'
+        '408':
+          description: Request Timeout - The server didn't receive a complete request message within the server's allotted timeout period
+        '409':
+          description: Conflict - request could not be processed because of a conflict (primarily due to another resource that exist with new updated name)
+        '429':
+          description: Too Many Requests - Too many resources are concurrently created / updated / deleted in the account. Please re-submit API requests after resource changes are completed)
+        '500':
+          description: Internal system error - If this error persists, please contact customer support
+        '503':
+          description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
+components:
+  schemas:
+    MemoryStoreTypeStrategyUpdate:
+      required:
+      - typeName
+      type: object
+      properties:
+        typeName:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[a-zA-Z][a-zA-Z0-9_-]*$
+          type: string
+          description: Name of the existing custom memory type to edit. Required
+          example: travel_preference
+        prompt:
+          type: string
+          description: Replacement extraction prompt. Omit to leave unchanged
+        enabled:
+          type: boolean
+          description: Replacement enabled flag. Omit to leave unchanged
+          example: true
+      description: Edit of the extraction strategy of an existing custom memory type. Only the prompt and the enabled flag may change; the type's name, description and fields are immutable
+    MemoryStoreExtractionCadenceConfig:
+      required:
+      - activeIntervalSeconds
+      type: object
+      properties:
+        activeIntervalSeconds:
+          maximum: 600
+          minimum: 60
+          type: integer
+          description: Interval in seconds between extraction runs while a session is active (60-600). Required
+          format: int32
+          example: 120
+      description: How often the long-term memory extraction pipeline runs. Optional on both create and update
+    MemoryStoreCustomMemoryType:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[a-zA-Z][a-zA-Z0-9_-]*$
+          type: string
+          description: Unique type name within the store (1-64 characters, starts with a letter, then letters, digits, underscores or dashes). Must not collide with the built-in types semantic, episodic, message and session_summary_view. Required
+          example: travel_preference
+        description:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Human-readable description of what this type captures (1-200 characters). Required
+          example: Preferences the user expressed about travel
+        fields:
+          type: array
+          description: Structured fields of a record of this type. Optional; a type without fields accepts direct writes without structured attributes
+          items:
+            $ref: '#/components/schemas/MemoryStoreCustomField'
+        extractionStrategy:
+          $ref: '#/components/schemas/MemoryStoreCustomExtractionStrategy'
+      description: A custom category of long-term memory with its structured fields and optional extraction strategy. Name, description and fields are immutable once registered
+    MemoryStoreSummarizationThresholdConfig:
+      required:
+      - retainCount
+      - threshold
+      type: object
+      properties:
+        threshold:
+          maximum: 10000
+          minimum: 0
+          type: integer
+          description: Number of active session events that triggers a summarization cycle (0-10000). Must be greater than retainCount. Required
+          format: int32
+          example: 50
+        retainCount:
+          maximum: 10000
+          minimum: 0
+          type: integer
+          description: Number of most recent events kept unsummarized after each cycle (0-10000); everything older is condensed into the running summary. Must be less than threshold. Required
+          format: int32
+          example: 10
+      description: Event-count trigger for session summarization. threshold must be greater than retainCount
+    MemoryStoreCustomDetectorsConfig:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Toggle for the whole custom group. False leaves the detectors stored but inactive. Required
+          example: true
+        detectors:
+          maxItems: 32
+          minItems: 0
+          type: array
+          description: Authored detectors (at most 32). On update, omitting this list keeps the stored detectors; a non-empty list replaces them wholesale; an explicitly empty list clears them
+          items:
+            $ref: '#/components/schemas/MemoryStoreCustomDetector'
+      description: Deterministic detection using customer-authored detectors stored on the store. Evaluated together with the built-in detectors as one set
+    MemoryStoreLongTermMemoryCreateConfig:
+      required:
+      - ttlSeconds
+      type: object
+      properties:
+        ttlSeconds:
+          maximum: 31536000
+          minimum: 1
+          type: integer
+          description: Time-to-live of long-term memory entries, in seconds (1 second to 1 year). Required
+          format: int32
+          example: 31536000
+        embedding:
+          $ref: '#/components/schemas/MemoryStoreModelConfig'
+      description: Long-term (persistent) memory configuration accepted on creation. When omitted, the store uses the default long-term memory TTL of 1 year
+    MemoryStoreApiKeyCreateRequest:
+      required:
+      - keyName
+      type: object
+      properties:
+        keyName:
+          maxLength: 100
+          minLength: 0
+          pattern: ^\S+$
+          type: string
+          description: Name of the API key.
+          example: my-agent-key
+      description: Memory store API key creation request
+    MemoryStoreLongTermMemoryUpdateConfig:
+      type: object
+      properties:
+        ttlSeconds:
+          maximum: 31536000
+          minimum: 1
+          type: integer
+          description: New time-to-live of long-term memory entries, in seconds (1 second to 1 year). Omit to leave unchanged
+          format: int32
+          example: 31536000
+        embedding:
+          $ref: '#/components/schemas/MemoryStoreModelConfig'
+      description: Long-term memory configuration accepted on update. Only the TTL and the embedding credential can change
+    MemoryStoreModelConfig:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: Model provider. Validated against the providers supported by the Agent Memory service. Immutable after creation
+          example: openai
+        model:
+          type: string
+          description: Model name as advertised by the provider. Required on create. On update, omit to keep the current model; the LLM model may be changed within the stored provider, the embedding model may not
+          example: gpt-4o-mini
+        credentials:
+          $ref: '#/components/schemas/MemoryStoreModelCredentials'
+      description: 'Requested model selection for one purpose (LLM or embedding). On create, llm and longTermMemory.embedding must be supplied together to opt the store into customer-selected models; supplying only one is rejected. Omitting both keeps the platform-owned configuration, and such a store cannot be moved onto customer-selected models later: an update with llm is rejected with /errors/model-config-immutable'
+    MemoryStoreCreateRequest:
+      required:
+      - databaseId
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 0
+          type: string
+          description: Memory store name
+          example: my-memory-store
+        databaseId:
+          type: integer
+          description: ID of the database used by the memory store
+          format: int32
+          example: 12345
+        shortMemory:
+          $ref: '#/components/schemas/MemoryStoreShortMemoryConfig'
+        longTermMemory:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryCreateConfig'
+        llm:
+          $ref: '#/components/schemas/MemoryStoreModelConfig'
+        extractionStrategy:
+          type: string
+          description: How long-term memories are extracted from sessions. INSTRUCT uses LLM tool calling to create, update and delete granular memories
+          example: INSTRUCT
+          enum:
+          - INSTRUCT
+        summarization:
+          $ref: '#/components/schemas/MemoryStoreSummarizationConfig'
+        longTermMemoryExclusions:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryExclusions'
+        customMemoryTypes:
+          maxItems: 3
+          minItems: 0
+          type: array
+          description: Optional. Custom memory types to register on the store (at most 3 per store). When omitted only the built-in types are available
+          items:
+            $ref: '#/components/schemas/MemoryStoreCustomMemoryType'
+        extractionCadence:
+          $ref: '#/components/schemas/MemoryStoreExtractionCadenceConfig'
+        commandType:
+          type: string
+          readOnly: true
+      description: Memory store creation request
+    MemoryStoreDetectorSelection:
+      required:
+      - enabled
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Built-in detector ID from the Agent Memory detector catalog: credit-card, email, ip-address, phone or us-ssn. Unknown IDs are rejected. Required'
+          example: credit-card
+        enabled:
+          type: boolean
+          description: Whether this detector is active. A disabled selection is still stored. Required
+          example: true
+        action:
+          type: string
+          description: What happens to a memory this detector matches. Defaults to redact. When several detectors disagree, drop wins
+          example: redact
+          enum:
+          - redact
+          - drop
+      description: One selected platform built-in detector
+    MemoryStoreSemanticExclusionConfig:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether semantic exclusion is enabled. Required
+          example: true
+        prompt:
+          type: string
+          description: Customer-authored instruction describing what must not be remembered (max 2000 characters). On update, omit to keep the stored prompt
+          example: Do not remember payment card numbers or home addresses
+      description: Advisory, LLM-mediated exclusion of sensitive content from long-term memory
+    MemoryStoreRegexSpec:
+      required:
+      - pattern
+      type: object
+      properties:
+        pattern:
+          maxLength: 512
+          minLength: 0
+          type: string
+          description: Pattern in RE2 syntax (1-512 characters). Lookaround and backreferences are not supported. Rejected if it does not compile or can match empty text. Required
+          example: \b\d{3}-\d{2}-\d{4}\b
+      description: Regular expression matcher
+    MemoryStoreCustomExtractionStrategy:
+      required:
+      - prompt
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: Prompt used to extract memories of this type. Required
+          example: Extract the user's travel preferences
+        enabled:
+          type: boolean
+          description: Whether extraction for this type is active. Defaults to true
+          example: true
+      description: How memories of a custom type are extracted from session events
+    ProcessorResponse:
+      type: object
+      properties:
+        resourceId:
+          type: integer
+          format: int32
+        additionalResourceId:
+          type: integer
+          format: int32
+        resource:
+          type: object
+        error:
+          type: string
+          enum:
+          - UNAUTHORIZED
+          - ACCOUNT_POC_INACTIVE_PENDING
+          - CLOUD_ACCOUNT_NOT_ACTIVE
+          - CLOUD_ACCOUNT_NOT_FOUND
+          - CLOUD_ACCOUNT_USED
+          - CLOUD_ACCOUNT_INVALID_CREDS
+          - CLOUD_ACCOUNT_NAME_EXISTS
+          - CLOUD_ACCOUNT_ACCESS_KEY_EXISTS
+          - CLOUD_ACCOUNT_PERMISSION_FAILED
+          - CLOUD_ACCOUNT_ALLOCATION_FAILURE
+          - NOT_KNOWN_CLOUD_PROVIDER
+          - MULTIPLE_CLOUD_PROVIDERS_NOT_SUPPORTED
+          - SUBSCRIPTION_NOT_ACTIVE
+          - SUBSCRIPTION_CONTAINS_NON_ACTIVE_DATABASE
+          - SUBSCRIPTION_NOT_FOUND
+          - SUBSCRIPTION_IN_USE
+          - SUBSCRIPTION_CA_PROVIDER_MISMATCH
+          - SUBSCRIPTION_NETWORKING_MISSING
+          - NETWORKING_CIDR_MISSING
+          - SUBSCRIPTION_INVALID_CIDR
+          - NETWORKING_SECURITY_GROUP_MISSING
+          - NETWORKING_SUBNET_IDS_MISSING
+          - NETWORKING_VPC_ID_MISSING
+          - NETWORKING_CIDR_IS_NOT_SUPPORTED
+          - NETWORKING_VPC_WITH_SUBNETS_AND_SECURITY_GROUP_IS_NOT_SUPPORTED
+          - NETWORKING_VPC_WITH_SUBNETS_AND_SECURITY_GROUP_IS_NOT_SUPPORTED_FOR_INTERNAL_CLOUD_ACCOUNT
+          - INVALID_NUMBER_OF_SUBNET_IDS
+          - SUBSCRIPTION_PI_NOT_FOUND
+          - SUBSCRIPTION_INVALID_REGION_NAME
+          - SUBSCRIPTION_INVALID_REGION_ID
+          - SUBSCRIPTION_BAD_PREFERRED_AZ_SIZE
+          - SUBSCRIPTION_REGION_DOES_NOT_SUPPORT_MULTI_AZ
+          - SUBSCRIPTION_AA_NON_MAZ_REGION_NOT_SUPPORTED
+          - SUBSCRIPTION_PREFERRED_AZ_INVALID_VALUE
+          - SUBSCRIPTION_PREFERRED_AZ_MUST_BE_DEFINED_ONCE
+          - SUBSCRIPTION_PREFERRED_AZ_IS_DISABLED
+          - SUBSCRIPTION_MUST_HAVE_AT_LEAST_ONE_DATABASE
+          - SUBSCRIPTION_REDIS_VERSION_INVALID_VALUE
+          - SUBSCRIPTION_REDIS_VERSION_CONFLICT
+          - ACTIVE_ACTIVE_SUBSCRIPTION_PREVIEW_REDIS_VERSION_IS_NOT_SUPPORTED
+          - SUBSCRIPTION_GCP_ALLOW_ONLY_INTERNAL
+          - CLUSTER_UNDER_MAINTENANCE
+          - ACTIVE_ACTIVE_SUBSCRIPTION_IS_NOT_SUPPORTED
+          - RESOURCE_TAGS_EXCEEDS_MAXIMUM_COUNT
+          - RESOURCE_TAG_KEY_EXCEEDS_MAXIMUM_LENGTH
+          - RESOURCE_TAG_VALUE_EXCEEDS_MAXIMUM_LENGTH
+          - RESOURCE_TAGS_NOT_ALLOWED_WITH_INTERNAL_CLOUD_ACCOUNT
+          - RESOURCE_TAGS_NOT_ALLOWED
+          - RESOURCE_TAGS_NAME_NOT_ALLOWED
+          - RESOURCE_TAGS_EMPTY_KEY
+          - RESOURCE_TAGS_DUPLICATE_KEY
+          - RESOURCE_TAGS_MISSING_VALUE
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_IS_NOT_SUPPORTED
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_MISSING_USAGE_PERMISSIONS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_MISSING_GET_KEY_PERMISSIONS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_MISSING_GET_IAM_POLICY_PERMISSIONS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_DISABLED_KEY
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_INVALID_KEY_NAME
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_WRONG_REGION
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_NOT_ALLOWED_WITH_CLOUD_PROVIDER_MANAGED_KEY
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_NOT_ALLOWED_WITH_INTERNAL_CLOUD_ACCOUNT
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_REQUIRED_FOR_EXTERNAL_CLOUD_ACCOUNT
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_DELETION_GRACE_PERIOD_REQUIRED
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_INVALID_NUMBER_OF_KEYS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_REGION_NOT_REQUIRED
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_REGION_REQUIRED
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_MISSING_KEYS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_INVALID_REGION
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_DUPLICATE_REGIONS
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_INVALID_FORMAT
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_UPDATE_IS_NOT_SUPPORTED
+          - CUSTOMER_MANAGED_PERSISTENT_STORAGE_ENCRYPTION_KEY_SUBSCRIPTION_INVALID_STATUS
+          - ACTIVE_ACTIVE_CREATE_A_REGION_CUSTOMER_MANAGED_KEY_RESOURCE_NAME_SUBSCRIPTION_IS_NOT_CUSTOMER_MANAGED
+          - ACTIVE_ACTIVE_CREATE_A_REGION_CUSTOMER_MANAGED_KEY_RESOURCE_NAME_IS_NOT_SET
+          - PLANNED_SUBSCRIPTION_INVALID_PLAN_ID
+          - PLANNER_TIMEOUT
+          - PLANNER_FAILURE
+          - PLANNER_NOT_ENOUGH_AZS
+          - PLANNER_INVALID_INSTANCE_TYPE_PER_AZ
+          - PLANNER_MODULE_PLAN_CLUSTERING_ERROR
+          - PLANNER_MODULE_PLAN_RESHARDING_ERROR
+          - PLANNER_INVALID_PLAN
+          - PLANNER_INVALID_SIZE
+          - PLANNER_INVALID_NUMBER
+          - PLANNER_INVALID_THROUGHPUT
+          - PROVISION_FAILURE
+          - DATABASE_NOT_ACTIVE
+          - DATABASE_NOT_FOUND
+          - DATABASE_SUBSCRIPTION_MISMATCH
+          - DATABASE_CANT_EDIT_THROUGHPUT_BY
+          - DATABASE_INVALID_SHARDS_COUNT
+          - DATABASE_CONTAIN_MEMCACHED_USERNAME
+          - DATABASE_CONTAIN_MEMCACHED_PASSWORD
+          - DATABASE_SUBSCRIPTION_IN_PENDING_STATUS
+          - DATABASE_THROUGHPUT_TOO_BIG
+          - DATABASE_INVALID_THROUGHPUT_INCREMENT
+          - DATABASE_MODULE_NOT_SUPPORTING_SHARD_THROUGHPUT_OPTION
+          - DATABASE_MODULE_NOT_SUPPORTED
+          - DATABASE_QUERY_PERFORMANCE_FACTOR_INVALID_VALUE
+          - DATABASE_QUERY_PERFORMANCE_FACTOR_SEARCH_IS_REQUIRED
+          - DATABASE_QUERY_PERFORMANCE_FACTOR_IS_NOT_SUPPORTED
+          - DATABASE_QUERY_PERFORMANCE_FACTOR_IS_NOT_SUPPORTED_ON_ACTIVE_ACTIVE
+          - REDISEARCH_SUPPORTS_ONLY_OPERATIONS_PER_SECOND_AS_THROUGHPUT_MEASUREMENT
+          - REDIS_GRAPH_SUPPORTS_ONLY_OPS_PER_SECOND_AS_THROUGHPUT_MEASUREMENT
+          - DATABASE_RESP_VERSION_IS_NOT_SUPPORTED
+          - DATABASE_RESP_VERSION_IS_NOT_SUPPORTED_ON_CREATE_SUBSCRIPTION
+          - DATABASE_ROF_NOT_SUPPORTED
+          - DATABASE_REDISGRAPH_OVERSIZED
+          - DATABASE_BACKUP_NOT_SUPPORTED
+          - DATABASE_EVICTION_NOT_SUPPORTED
+          - DATABASE_AOF_NOT_SUPPORTED
+          - DATABASE_REPLICA_OF_NOT_SUPPORTED
+          - DATABASE_SNAPSHOT_NOT_SUPPORTED
+          - DATABASE_CLUSTERING_NOT_SUPPORTED
+          - DATABASE_INVALID_THREAD_NUMBER
+          - DATABASE_HASH_NOT_SUPPORTED
+          - DATABASE_RESHARD_NOT_SUPPORTED
+          - DATABASE_FEATURE_NOT_SUPPORTED
+          - DATABASE_NAME_EXISTS
+          - DATABASE_NAME_DUPLICATE
+          - DATABASE_INVALID_NAME
+          - DATABASE_NAME_TOO_LONG
+          - DATABASE_SIZE_TOO_SMALL
+          - DATABASE_SIZE_TOO_BIG
+          - DATABASE_SIZE_LIMIT_NOT_DEFINED
+          - DATABASE_SIZE_LIMIT_INVALID_TOO_MANY_MEMORY_SPECIFICATIONS
+          - DATABASE_PASSWORD_IS_BLANK
+          - DATABASE_PASSWORD_IS_TOO_LONG
+          - DATABASE_REDIS_SEARCH_MODULE_VALUE_IS_NOT_INTEGER
+          - DATABASE_REDIS_SEARCH_MODULE_VALUE_NOT_IN_RANGE
+          - DATABASE_MODULE_MUST_BE_DEFINED_ONCE
+          - DATABASE_MEMCACHED_CONTAINS_MODULES
+          - DATABASE_MEMCACHED_NOT_SUPPORT_OSS_CLUSTER_API
+          - REDIS_ON_FLASH_DATABASE_MEMCACHED_PROTOCOL_IS_NOT_ALLOWED
+          - DATABASE_MEMCACHED_CONTAINS_REDIS_PASSWORD
+          - DATABASE_MEMCACHED_CONTAINS_REDIS_DEFAULT_USER
+          - DATABASE_MEMCACHED_SASL_USERNAME_IS_BLANK
+          - DATABASE_MEMCACHED_SASL_PASSWORD_IS_BLANK
+          - DATABASE_MEMCACHED_SASL_PASSWORD_MAX_LENGTH
+          - DATABASE_REDIS_FLEX_CONTAINS_MODULES
+          - DATABASE_AVERAGE_ITEM_SIZE_NOT_ALLOWED
+          - DATABASE_RAM_PERCENTAGE_NOT_ALLOWED
+          - DATABASE_RAM_PERCENTAGE_NOT_SUPPORTED
+          - DATABASE_RAM_PERCENTAGE_IS_INVALID
+          - DATABASE_AVERAGE_ITEM_SIZE_IS_DEPRECATED
+          - DATABASE_MEMORY_LIMIT_IS_INVALID_FOR_ROF
+          - DATABASE_DATASET_SIZE_IS_INVALID_FOR_ROF
+          - DATABASE_SIZE_SMALLER_THAN_USAGE
+          - DATABASE_USAGE_EXCEEDS_GLOBAL_LIMIT
+          - DATABASE_USAGE_EXCEEDS_LOCAL_LIMIT
+          - DATABASE_INVALID_CERT
+          - DATABASE_EXPIRED_CERT
+          - DATABASE_MISSING_CERT
+          - DATABASE_CLIENT_SSL_CERTIFICATE_DEPRECATED
+          - DATABASE_CLIENT_SSL_CERTIFICATE_MORE_THAN_1_ACTIVE
+          - DATABASE_SIP_OVER_LIMIT
+          - DATABASE_INVALID_SIP
+          - DATABASE_INVALID_SIP_FREE_PLAN
+          - DATABASE_INVALID_ALERTS
+          - DATABASE_INVALID_MODULE
+          - DATABASE_INVALID_MODULE_PARAMETER
+          - DATABASE_INVALID_MODULE_PARAMETER_VALUE
+          - DATABASE_EXPLICIT_MODULES_NOT_SUPPORTED_FOR_THIS_REDIS_VERSION
+          - DATABASE_INVALID_ALERT_VALUE
+          - DATABASE_SHARDING_TYPE_IS_IMMUTABLE
+          - DATABASE_SHARDING_TYPE_IS_NOT_SUPPORTED
+          - DATABASE_REGEX_RULES_NO_CLUSTERING
+          - DATABASE_REGEX_RULES_CHANGES_BLOCKED
+          - DATABASE_OSS_CLUSTER_NOT_SUPPORTED
+          - DATABASE_EXTERNAL_ENDPOINT_WITHOUT_OSS_CLUSTER
+          - CUSTOM_REGEX_RULES_IS_NOT_ALLOWED_WITHOUT_ENABLE_DATABASE_CLUSTERING_IS_TRUE
+          - DATABASE_OSS_CLUSTER_CUSTOM_REGEX_NOT_SUPPORTED
+          - DATABASE_OSS_CLUSTER_REPLICA_NOT_SUPPORTED
+          - DATABASE_REPLICA_OF_PROPERTY_DEPRECATED
+          - DATABASE_REPLICA_PER_SOURCE_OVER_LIMIT
+          - DATABASE_REPLICA_CYCLE
+          - DATABASE_INVALID_REPLICA
+          - DATABASE_UNSUPPORTED_REPLICA_OF_REDIS_FLEX
+          - DATABASE_REPLICAS_OVER_LIMIT
+          - DATABASE_BACKUP_DISABLED
+          - DATABASE_BACKUP_FAILED
+          - DATABASE_BACKUP_NOT_CONFIGURED
+          - DATABASE_INVALID_BACKUP_PATH
+          - DATABASE_INVALID_BACKUP_INTERVAL
+          - DATABASE_INVALID_TOO_MANY_BACKUP_SPECIFICATIONS
+          - DATABASE_INVALID_BACKUP_STORAGE_TYPE
+          - DATABASE_INVALID_IMPORT_SOURCE_TYPE
+          - DATABASE_INVALID_BACKUP_TIME_UTC
+          - DATABASE_INVALID_BACKUP_INTERVAL_AND_TIME_UTC_MISMATCH
+          - DATABASE_INVALID_BACKUP_PATH_USED_BY_ANOTHER_ACCOUNT
+          - DATABASE_INVALID_BACKUP_CONFIGURATION
+          - DATABASE_INVALID_REGEX_RULES
+          - DATABASE_INVALID_QUANTITY
+          - DATABASE_REPLICA_OF_VERSION_NOT_COMPATIBLE
+          - DATABASE_REPLICA_OF_SOURCE_INCOMPATIBLE
+          - DATABASE_IMPORT_FAILED
+          - DATABASE_IMPORT_FROM_NON_OSS
+          - DATABASE_IMPORT_SOURCE_NOT_FOUND
+          - DUPLICATE_DATABASE_IMPORT_SOURCE_PATH
+          - DATABASE_IMPORT_WRONG_SIZE
+          - DATABASE_IMPORT_URI_NOT_PROVIDED
+          - DATABASE_IMPORT_MULTIPLE_REDIS_SOURCES
+          - DATABASE_IMPORT_REDIS_BAD_URI
+          - DATABASE_REPLICA_OF_BAD_URI
+          - DATABASE_IMPORT_S3_BAD_URI
+          - DATABASE_IMPORT_HTTP_BAD_URI
+          - DATABASE_IMPORT_FTP_BAD_URI
+          - DATABASE_IMPORT_AZURE_BAD_URI
+          - DATABASE_IMPORT_GCS_BAD_URI
+          - DATABASE_IMPORT_NOT_ALLOWED
+          - DATABASE_PORT_INVALID_VALUE
+          - DATABASE_PORT_IS_UNAVAILABLE
+          - DATABASE_CUSTOM_PORT_NOT_SUPPORTED
+          - DATABASE_CUSTOM_PORT_NOT_UNIQUE
+          - DATABASE_AVERAGE_ITEM_SIZE_INVALID_VALUE
+          - DATABASE_REDIS_VERSION_IS_NOT_SUPPORTED
+          - DATABASE_REDIS_VERSION_IS_NOT_SUPPORTED_FOR_REGION
+          - DATABASE_REDIS_VERSION_IS_NOT_SUPPORTED_FOR_MEMCACHED
+          - DATABASE_REDIS_VERSION_IS_REQUIRED
+          - DATABASE_REDIS_VERSION_INVALID_VALUE
+          - INCOMPATIBLE_TF_PROVIDER
+          - DESIRED_SOFTWARE_VERSION_IS_NOT_SUPPORTED
+          - CONNECTIVITY_REQUESTS_ON_CUSTOMER_MANAGED_VPC_SUBSCRIPTION
+          - VPC_PEERING_NOT_ACTIVE
+          - VPC_PEERING_GENERAL_ERROR
+          - VPC_PEERING_INVALID_ACCOUNT
+          - VPC_PEERING_INVALID_VPC
+          - VPC_PEERING_INVALID_CIDR
+          - VPC_PEERING_CIDR_IS_MISSING
+          - VPC_PEERING_TOO_MANY_CIDR_SPECIFICATIONS
+          - VPC_PEERING_INVALID_REGION
+          - VPC_PEERING_ALREADY_EXIST
+          - VPC_PEERING_NOT_FOUND
+          - VPC_PEERING_INVALID_PROJECT
+          - VPC_PEERING_CLUSTER_NOT_ACTIVE
+          - VPC_PEERING_CIDR_OVERLAP
+          - VPC_PEERING_BELONGS_TO_DIFFERENT_CLOUD_PROVIDER
+          - VPC_PEERING_IS_NOT_KNOWN_CLOUD_PROVIDER
+          - CREATING_AN_ACTIVE_ACTIVE_VPC_PEERING_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - UPDATING_AN_ACTIVE_ACTIVE_VPC_PEERING_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - DELETING_AN_ACTIVE_ACTIVE_VPC_PEERING_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - DELETING_AN_ACTIVE_ACTIVE_VPC_PEERING_IS_NOT_ALLOWED_FOR_A_SUBSCRIPTION_WITH_NO_VPC_PEERINGS
+          - ACTIVE_ACTIVE_VPC_PEERING_NOT_FOUND
+          - VPC_PEERING_MULTIPLE_CIDRS_IS_DISABLED
+          - TGW_ACCEPTING_AN_ACTIVE_ACTIVE_TGW_RESOURCE_SHARE_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TGW_REJECTING_AN_ACTIVE_ACTIVE_TGW_RESOURCE_SHARE_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TGW_ACCEPTING_A_FLEXIBLE_SUBSCRIPTION_TGW_RESOURCE_SHARE_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_REJECTING_A_FLEXIBLE_SUBSCRIPTION_TGW_RESOURCE_SHARE_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_CREATING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TGW_DELETING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TGW_UPDATING_AN_ACTIVE_ACTIVE_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TGW_CREATING_A_FLEXIBLE_SUBSCRIPTION_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_UPDATING_A_FLEXIBLE_SUBSCRIPTION_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_DELETING_A_FLEXIBLE_SUBSCRIPTION_TGW_ATTACHMENT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_CLOUD_PROVIDER_IS_NOT_SUPPORTED
+          - TGW_RESOURCE_SHARE_DOES_NOT_EXIST
+          - TGW_DOES_NOT_EXIST
+          - TGW_ATTACHMENT_DOES_NOT_EXIST
+          - TGW_ATTACHMENT_IS_NOT_ACTIVE
+          - TGW_ATTACHMENT_CIDRS_INVALID_LENGTH
+          - TGW_ATTACHMENT_CIDRS_ARE_THE_SAME_AS_EXISTING_ONES
+          - TGW_ATTACHMENT_CIDRS_REQUEST_CONTAINS_DUPLICATES
+          - TGW_REGION_DOES_NOT_EXIST
+          - TGW_GETTING_ACTIVE_ACTIVE_SUBSCRIPTION_TGW_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - TGW_GETTING_ACTIVE_ACTIVE_SUBSCRIPTION_TGW_INVITATIONS_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - TGW_GETTING_SINGLE_REGION_TGWS_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - TGW_GETTING_SINGLE_REGION_TGW_INVITATIONS_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_ENDPOINT_INVALID_GCP_PROJECT_ID
+          - PSC_ENDPOINT_INVALID_VPC_NAME
+          - PSC_ENDPOINT_INVALID_VPC_SUBNET_NAME
+          - PSC_ENDPOINT_INVALID_CONNECTION_NAME
+          - PSC_SERVICE_ALREADY_EXISTS
+          - PSC_ENDPOINT_ALREADY_EXISTS
+          - PSC_CLOUD_PROVIDER_IS_NOT_SUPPORTED
+          - PSC_GET_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINTS_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_GET_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_CREATING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_CREATING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_DELETING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_DELETING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_CREATING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_CREATING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_CREATING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_IS_NOT_SUPPORTED
+          - PSC_UPDATING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_UPDATING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_DELETING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PSC_DELETING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_SERVICE_CONNECT_ENDPOINT_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - PSC_UPDATE_ENDPOINT_REQUEST_ACTION_INVALID_VALUE
+          - PSC_UPDATE_ENDPOINT_REQUEST_CANNOT_HAVE_BOTH_ACTION_AND_OTHER_FIELDS
+          - PSC_UPDATE_ENDPOINT_REQUEST_CANNOT_UPDATE_INITIALIZED_ENDPOINT
+          - PSC_SERVICE_NOT_FOUND
+          - PSC_ENDPOINT_NOT_FOUND
+          - PSC_ENDPOINT_NOT_ACTIVE
+          - PSC_ENDPOINT_NOT_CREATED_OR_DELETED
+          - PSC_ENDPOINT_CANNOT_BE_DELETED_WITHOUT_DELETION_SCRIPT
+          - PSC_SERVICE_CANNOT_DELETE_SERVICE_WITH_ACTIVE_ENDPOINTS
+          - PSC_SERVICE_NOT_ACTIVE
+          - PSC_ENDPOINT_SCRIPT_FAILED_TO_PARSE
+          - CIDR_WHITELIST_GENERAL_ERROR
+          - CIDR_WHITELIST_INVALID_CIDRS
+          - CIDR_WHITELIST_INVALID_SG
+          - CIDR_WHITELIST_LIMIT_EXCEEDED
+          - CIDR_WHITELIST_DUPLICATE_CIDRS
+          - CIDR_WHITELIST_DUPLICATE_SG
+          - CIDR_WHITELIST_NOT_ALLOWED
+          - CLIENT_PUBLIC_ACCESS_INVALID_SOURCE_IPS
+          - CLIENT_PUBLIC_ACCESS_NOT_SUPPORTED
+          - CLIENT_PUBLIC_ACCESS_ALREADY_SET
+          - CLIENT_PUBLIC_ACCESS_ON_NON_HOSTED
+          - AWS_ERROR_INSTANCE_LIMIT_EXCEEDED
+          - AWS_ERROR_VPC_LIMIT_EXCEEDED
+          - AWS_ERROR_INSUFFICIENT_INSTANCE_CAPACITY
+          - AWS_ERROR_VOLUME_LIMIT_EXCEEDED
+          - AWS_ERROR_MISMATCHING_CIDR
+          - AWS_ERROR_CONFLICTING_CIDR
+          - AWS_ERROR_VPC_DOES_NOT_EXIST
+          - AWS_ERROR_EXISTING_VPC_EQUAL_TO_REQUESTED
+          - PAYMENT_INFO_NOT_PROVIDED
+          - PAYMENT_INFO_EXPIRED
+          - PAYMENT_INFO_NOT_ALLOWED_IN_GCP_ACCOUNT
+          - CLOUD_PROVIDER_IS_NOT_GCP_IN_GCP_ACCOUNT
+          - PAYMENT_INFO_NOT_ALLOWED_IN_CONTRACT_ASSOCIATED_ACCOUNT
+          - PAYMENT_INFO_CHANGE_PROHIBITED_FOR_PRO_UNDER_CONTRACT
+          - LOCAL_THROUGHPUT_READ_AND_WRITE_OPERATIONS_PER_SECOND_VALUES_MUST_BE_IN_INCREMENTS_OF_500_OR_MINIMUM
+          - MISSING_REGIONS_BETWEEN_CLOUD_PROVIDERS_AND_DATABASES_LOCAL_THROUGHPUT_MEASUREMENTS
+          - MISSING_REGIONS_BETWEEN_LOCAL_THROUGHPUT_MEASUREMENTS_AND_SUBSCRIPTION_REGIONS
+          - CRDB_ACTIVE_ACTIVE_MISSING_LOCAL_THROUGHPUT_MEASUREMENT
+          - CRDB_ACTIVE_ACTIVE_REGIONS_MUST_BE_DEFINED_ONCE
+          - ACTIVE_ACTIVE_CREATE_A_REGION_MUST_CONTAIN_DATABASE_SPEC_TO_ALL_CRDBS_IN_SUBSCRIPTION
+          - ACTIVE_ACTIVE_CREATE_A_REGION_MUST_CONTAIN_LOCAL_THROUGHPUT_MEASUREMENT_IN_DATABASE_SPEC
+          - ACTIVE_ACTIVE_CREATE_A_REGION_MUST_BE_DEFINED_ONCE_PER_DATABASE
+          - ACTIVE_ACTIVE_CREATE_A_REGION_DATABASE_RESP_VERSION_IS_NOT_SUPPORTED
+          - TOO_MANY_LOCAL_THROUGHPUT_MEASUREMENTS_DEFINED_FOR_SPECIFIED_ACTIVE_ACTIVE_SUBSCRIPTION
+          - ACTIVE_ACTIVE_RAM_AND_FLASH_MEMORY_STORAGE_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_MODULE_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_MODULES_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_FOR_GCP_ACCOUNT_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_ALERT_NOT_SUPPORTED
+          - FLEXIBLE_DATABASE_ALERT_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_REPLICA_OF_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_PERIODIC_BACK_UP_PATH_NOT_ALLOWED
+          - ACTIVE_ACTIVE_CHANGE_REQUEST_PLANNING_FAILED
+          - ACTIVE_ACTIVE_CHANGE_REQUEST_PLANNING_EXPIRED
+          - ACTIVE_ACTIVE_MISSING_LOCAL_THROUGHPUT_MEASUREMENT
+          - ACTIVE_ACTIVE_BACKUP_MISSING_REGION_NAME
+          - ACTIVE_ACTIVE_BACKUP_STATUS_MISSING_REGION_NAME
+          - ACTIVE_ACTIVE_DATABASE_INVALID_CIDR_FORMAT
+          - ACTIVE_ACTIVE_DATABASE_INVALID_CIDR_OVERLAPPING_OTHER_REGIONS
+          - ACTIVE_ACTIVE_DATABASE_REPLICATION_CANNOT_BE_FALSE
+          - ACTIVE_ACTIVE_REGIONS_MUST_BE_DEFINED_ONCE
+          - ACTIVE_ACTIVE_SUBSCRIPTION_WITHOUT_REGIONS_IS_NOT_ALLOWED
+          - ACTIVE_ACTIVE_DATABASE_MEMCACHED_PROTOCOL_IS_NOT_ALLOWED
+          - ACTIVE_ACTIVE_DATABASE_SHARDING_MUST_BE_ENABLED
+          - ACTIVE_ACTIVE_DATABASE_MISSING_DATABASE_CONFIGURATION
+          - ACTIVE_ACTIVE_DATABASE_INVALID_THROUGHPUT
+          - ACTIVE_ACTIVE_MISMATCH_BETWEEN_REQUEST_REGIONS_AND_SUBSCRIPTION_REGIONS
+          - ACTIVE_ACTIVE_INVALID_UPDATE_DATABASE_NAME
+          - ACTIVE_ACTIVE_INVALID_CREATE_REGION_NAME
+          - ACTIVE_ACTIVE_INVALID_DELETE_REGION_NAME
+          - ACTIVE_ACTIVE_INVALID_BACKUP_REGION_NAME
+          - ACTIVE_ACTIVE_INVALID_BACKUP_STATUS_REGION_NAME
+          - ACTIVE_ACTIVE_DELETE_REGIONS_MUST_BE_DEFINED_ONCE
+          - ACTIVE_ACTIVE_DELETE_SUBSCRIPTION_MUST_BE_DEPLOYED_IN_AT_LEAST_ONE_REGION
+          - ACTIVE_ACTIVE_REQUEST_GENERAL_ERROR
+          - ACTIVE_ACTIVE_VPC_PEERING_INVALID_SOURCE_REGION_NAME
+          - ACTIVE_ACTIVE_VPC_PEERING_INVALID_AWS_ACCOUNT
+          - ACTIVE_ACTIVE_DATABASE_RESP_VERSION_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_PREVIEW_REDIS_VERSION_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_DATABASE_UPGRADE_IS_NOT_SUPPORTED
+          - LOCAL_THROUGHPUT_MEASUREMENT_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - BACKUP_REGION_NAME_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - BACKUP_STATUS_REGION_NAME_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - UPDATING_LOCAL_PROPERTIES_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - DISABLING_THE_DEFAULT_USER_AND_UPDATING_A_NEW_PASSWORD_IS_NOT_ALLOWED
+          - NOT_ALLOWED_TO_UPDATE_A_DATABASE_PASSWORD_WHEN_DEFAULT_USER_IS_DISABLED
+          - UPDATING_SINGLE_REGION_DATABASE_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - GETTING_ACTIVE_ACTIVE_SUBSCRIPTION_VPC_PEERINGS_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - UPDATING_SINGLE_REGION_CIDR_WHITE_LIST_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - GETTING_SINGLE_REGION_CIDR_WHITE_LIST_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - ADDING_REGION_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - DELETING_REGION_IS_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - SINGLE_REGION_SUBSCRIPTION_MUST_DEFINE_ONLY_ONE_REGION
+          - CREATING_A_SINGLE_REGION_VPC_PEERING_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - UPDATING_A_SINGLE_REGION_VPC_PEERING_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - DELETING_SINGLE_REGION_VPC_PEERING_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - GETTING_SINGLE_REGION_VPC_PEERINGS_IS_NOT_ALLOWED_WITH_ACTIVE_ACTIVE_SUBSCRIPTION
+          - ACTIVE_ACTIVE_DATABASE_LIMIT_EXCEEDED
+          - ACTIVE_ACTIVE_REGION_LIMIT_REACHED
+          - FIXED_DATABASE_NAME_IS_MISSING
+          - CREATING_FIXED_DATABASE_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - UPDATING_FIXED_DATABASE_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - DELETING_FIXED_DATABASE_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - FIXED_DATABASE_MEMORY_LIMIT_IN_GB_AND_DATA_SET_SIZE_SUPPORTED_ONLY_FOR_PAY_AS_YOU_GO
+          - FIXED_DATABASE_FIXED_SUBSCRIPTION_REACHED_MAX_DATABASES_COUNT
+          - FIXED_DATABASE_SOURCE_IPS_LIST_IS_GREATER_THAN_PLAN_MAX_COUNT_ALLOWED_SOURCE_IPS
+          - FIXED_DATABASE_ENABLE_DATABASE_CLUSTERING_SUPPORTED_ONLY_FOR_PAY_AS_YOU_GO
+          - FIXED_DATABASE_ENABLE_DATABASE_CLUSTERING_WITH_REDIS_SEARCH_OR_GRAPH_MODULES_IS_NOT_ALLOWED
+          - FIXED_DATABASE_PAYG_MEMORY_LIMIT_IN_GB_IS_MISSING
+          - FIXED_DATABASE_PAYG_MEMORY_LIMIT_IN_GB_OR_DATA_SET_SIZE_IN_GB_IS_MISSING
+          - FIXED_DATABASE_ALERT_NOT_SUPPORTED
+          - PAY_AS_YOU_GO_DATABASE_ALERT_NOT_SUPPORTED
+          - FIXED_DATABASE_REPLICA_OF_MEMCACHED_IS_NOT_SUPPORTED
+          - FIXED_DATABASE_STACK_PROTOCOL_CONTAINS_MODULES
+          - FIXED_DATABASE_STACK_PROTOCOL_IS_NOT_SUPPORTED_IN_SELECTED_PLAN_OR_CLUSTER
+          - FIXED_DATABASE_REDIS_PROTOCOL_IS_NOT_SUPPORTED_IN_SELECTED_PLAN
+          - FIXED_DATABASE_REPLICATION_IS_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_OSS_CLUSTER_API_IS_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_USE_EXTERNAL_ENDPOINT_FOR_OSS_CLUSTER_API_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_REGEX_RULES_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_ENABLE_TLS_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_CLIENT_SSL_CERTIFICATE_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_REPLICA_OF_NOT_SUPPORTED_IN_REQUESTED_PLAN
+          - FIXED_DATABASE_CLUSTER_DOES_NOT_SUPPORT_DATA_PERSISTENCE
+          - FIXED_DATABASE_NO_EVICTION_IS_NOT_SUPPORTED_BY_CLUSTER
+          - FIXED_DATABASE_DATA_EVICTION_POLICY_IS_NOT_SUPPORTED_BY_CLUSTER
+          - FIXED_DATABASE_DATA_EVICTION_POLICY_IS_NOT_SUPPORTED_BY_SELECTED_MODULES
+          - FIXED_DATABASE_EVICTION_POLICY_NOT_COMPATIBLE_WITH_REDIS_VERSION
+          - DATABASE_EVICTION_POLICY_NOT_COMPATIBLE_WITH_REDIS_VERSION
+          - DATABASE_EVICTION_POLICY_NOT_COMPATIBLE_WITH_REDIS_FLEX
+          - FIXED_DATABASE_EVICTION_POLICY_NOT_COMPATIBLE_WITH_REDIS_FLEX
+          - FIXED_DATABASE_REPLICA_OF_IS_NOT_SUPPORTED_BY_SELECTED_MODULES
+          - FIXED_DATABASE_DATA_PERSISTENCE_VALUE_NOT_SUPPORTED_FOR_FIXED
+          - FIXED_DATABASE_DATA_EVICTION_POLICY_IS_NOT_SUPPORTED_BY_ALL_MODULES_IN_SELECTED_PLAN_OR_CLUSTER
+          - FIXED_DATABASE_RESP_VERSION_IS_NOT_SUPPORTED
+          - FIXED_DATABASE_REDIS_FLEX_IS_NOT_SUPPORTED
+          - FIXED_DATABASE_STACK_PROTOCOL_IS_NOT_SUPPORTED_FOR_REDIS_FLEX
+          - FIXED_DATABASE_MEMCACHED_PROTOCOL_IS_NOT_SUPPORTED_FOR_REDIS_FLEX
+          - FIXED_DATABASE_MEMCACHED_PROTOCOL_IS_NOT_SUPPORTED_FOR_FREE_PLAN
+          - FIXED_DATABASE_NUMBER_OF_SHARDS_IS_NOT_SUPPORTED_FOR_THIS_ACCOUNT
+          - FIXED_DATABASE_NUMBER_OF_SHARDS_REQUIRES_DATABASE_CLUSTERING_ENABLED
+          - FIXED_DATABASE_NUMBER_OF_SHARDS_INVALID_VALUE
+          - PAYMENT_INFO_NOT_ALLOWED_WHEN_ACCOUNT_POC_ACTIVE
+          - FIXED_DATABASE_NUMBER_OF_SHARDS_SUPPORTED_ONLY_FOR_PAY_AS_YOU_GO
+          - FIXED_DATABASE_NUMBER_OF_SHARDS_NOT_A_MULTIPLE_OF_CURRENT_VALUE
+          - VPC_ID_NOT_ALLOWED_WITH_INTERNAL_CLOUD_ACCOUNT
+          - SUBNET_ID_NOT_ALLOWED_WITH_INTERNAL_CLOUD_ACCOUNT
+          - SECURITY_GROUP_ID_NOT_ALLOWED_WITH_INTERNAL_CLOUD_ACCOUNT
+          - CLIENT_SSL_CERTIFICATE_IS_NOT_ALLOWED_WITHOUT_ENABLE_TLS_IS_TRUE
+          - MARKETPLACE_PAYMENT_INFO_COLLISION
+          - ACCOUNT_MARKETPLACE_IS_NOT_ACTIVE
+          - ACCOUNT_MARKETPLACE_NOT_FOUND
+          - ACCOUNT_MARKETPLACE_NOT_SUPPORT_NON_HOSTED_ACCOUNTS
+          - PAYMENT_INVALID_CARD_NUMBER
+          - PAYMENT_INVALID_CCV
+          - PAYMENT_INVALID_CARD_TYPE
+          - PAYMENT_CVV_MISSING
+          - PAYMENT_GENERAL_ERROR
+          - PAYMENT_HOLD_FAILED
+          - ACL_USER_NAME_ALREADY_EXISTS
+          - ACL_USER_NAME_NOT_VALID
+          - ACL_USER_NOT_FOUND
+          - ACL_USER_NAME_IS_MISSING
+          - ACL_ROLE_NAME_IS_MISSING
+          - ACL_ROLE_REDIS_RULE_MUST_BE_DEFINED_ONLY_ONCE_PER_DATABASE
+          - ACL_ROLE_REDIS_RULE_ALREADY_EXISTS_FOR_REQUESTED_RESOURCE
+          - ACL_ROLE_REDIS_RULES_IS_MISSING
+          - ACL_ROLE_REDIS_RULES_DATABASES_SPEC_IS_MISSING
+          - ACL_ROLE_REDIS_RULES_DATABASES_DATABASE_ID_IS_MISSING
+          - ACL_ROLE_REDIS_RULES_DATABASES_SUBSCRIPTION_ID_IS_MISSING
+          - ACL_ROLE_REDIS_RULES_DATABASES_REGIONS_IS_MISSING
+          - ACL_ROLE_REDIS_RULES_DATABASES_REGION_MUST_BE_CRDB
+          - ACL_ROLE_REDIS_RULES_DATABASES_REGION_NOT_IN_PLAN
+          - ACL_ROLE_REDIS_RULES_DATABASES_REGION_NOT_UNIQUE
+          - ACL_ROLE_REDIS_RULES_DATABASES_REGION_IS_NOT_BELONGS_TO_DATABASE
+          - ACL_ROLE_NAME_NOT_VALID
+          - ACL_ROLE_DOES_NOT_EXISTS
+          - ACL_USER_PASSWORD_NOT_VALID
+          - ACL_USER_PASSWORD_IS_MISSING
+          - ACL_USER_CREATION_FAILURE
+          - ACL_REDIS_RULE_NAME_IS_MISSING
+          - ACL_REDIS_RULE_NAME_ALREADY_EXISTS
+          - ACL_REDIS_RULE_NAME_NOT_VALID
+          - ACL_REDIS_RULE_NAME_NOT_IN_RANGE
+          - ACL_REDIS_RULE_PATTERN_IS_MISSING
+          - ACL_REDIS_RULE_PATTERN_NOT_VALID
+          - ACL_REDIS_RULE_INVALID_PUBSUB_PATTERN
+          - ACL_REDIS_RULE_ACCOUNT_NOT_SUPPORT_PUBSUB_PATTERN
+          - ACL_REDIS_RULE_ALLCHANNELS_BEFORE_SPECIFIC_CHANNEL
+          - ACL_REDIS_RULE_INVALID_CATEGORY_RULE_PATTERN
+          - ACL_REDIS_RULE_INVALID_KEYSPACE_RULE_PATTERN
+          - ACL_REDIS_RULE_INVALID_COMMAND_OR_MODULE_COMMAND_RULE_PATTERN
+          - ACL_REDIS_RULE_ALLKEYS_BEFORE_SPECIFIC_KEY
+          - ACL_REDIS_RULE_CREATION_FAILURE
+          - ACL_REDIS_RULE_NOT_FOUND
+          - ACL_REDIS_RULE_CANNOT_UPDATE_DEFAULT
+          - ACL_REDIS_RULE_CANNOT_DELETE_DEFAULT
+          - ACL_REDIS_RULE_CANNOT_DELETE_WHEN_ASSOCIATED_WITH_ROLES
+          - ACL_REDIS_RULE_NOT_ACTIVE
+          - ACL_GENERAL_ERROR
+          - ACL_ROLE_NAME_ALREADY_EXISTS
+          - ACL_ROLE_HAS_ACTIVE_USERS_AND_CANNOT_BE_DELETED
+          - ACL_ROLE_IS_IN_PENDING_STATUS_AND_CANNOT_BE_DELETED
+          - ACL_ROLE_IS_IN_PENDING_STATUS_AND_CANNOT_BE_UPDATED
+          - ACL_ROLE_NOT_FOUND
+          - ACL_ROLE_ID_IS_MISSING
+          - ACL_REDIS_RULE_DOES_NOT_EXISTS
+          - ACL_REDIS_RULE_INVALID_KEY_PERMISSION_PATTERN
+          - ACL_REDIS_RULE_INVALID_SELECTORS_PATTERN
+          - BDB_IS_NOT_IN_CORRECT_VERSION_FOR_GIVEN_ACL_VERSION
+          - USER_NOT_FOUND
+          - USER_INSUFFICIENT_ROLE
+          - USER_NAME_IS_INVALID
+          - USER_CANNOT_UPDATE_IT_IS_OWN_ROLE
+          - USER_WITHOUT_OWNER_PERMISSION_CANNOT_UPDATE_USERS
+          - USER_WITHOUT_OWNER_PERMISSION_CANNOT_PERFORM_ACTIONS_ON_USERS
+          - USER_CANNOT_BE_UPDATED_OR_DELETED_BEFORE_VERIFICATION
+          - USER_ROLE_DOES_NOT_EXISTS
+          - USER_ROLE_IS_MISSING
+          - USER_CANNOT_DELETE_OWN_USER
+          - ENTITY_NOT_FOUND
+          - FIXED_SUBSCRIPTION_CREATE_PLAN_NOT_FOUND
+          - FIXED_SUBSCRIPTION_UPDATE_INVALID_PLAN
+          - FIXED_SUBSCRIPTION_PLAN_NOT_PROVIDED
+          - FIXED_SUBSCRIPTION_ACCOUNT_ALREADY_HAS_A_FREE_PLAN
+          - FIXED_MISMATCH_BETWEEN_REQUEST_PLAN_CLOUD_PROVIDER_AND_SUBSCRIPTION_CLOUD_PROVIDER
+          - FIXED_MISMATCH_BETWEEN_REQUEST_PLAN_REGION_AND_SUBSCRIPTION_REGION
+          - FIXED_SUBSCRIPTION_PLAN_MAX_DATABASES_SMALLER_THEN_CURRENT_SUBSCRIPTION_DATABASES_COUNT
+          - FIXED_SUBSCRIPTION_PLAN_SIZE_SMALLER_THEN_CURRENT_SUBSCRIPTION_USAGE
+          - FIXED_SUBSCRIPTION_PLAN_NOT_SUPPORT_REPLICA_OF
+          - FIXED_SUBSCRIPTION_PLAN_DATABASES_ARE_RESTRICTED_TO_A_SINGLE_CLUSTER
+          - FIXED_SUBSCRIPTION_PLAN_NOT_SUPPORT_TLS
+          - FIXED_SUBSCRIPTION_PLAN_CANNOT_CHANGED_FROM_AVAILABILITY_OF_SINGLE_ZONE_OR_NO_REPLICATION_TO_MULTI_ZONE
+          - FIXED_SUBSCRIPTION_PLAN_CANNOT_CHANGED_FROM_AVAILABILITY_OF_MULTI_ZONE_TO_SINGLE_ZONE_OR_NO_REPLICATION
+          - FIXED_SUBSCRIPTION_PLAN_MAX_SOURCE_IPS_IS_SMALLER_THEN_ONE_OF_EXISTING_DATABSE_SOURCE_IPS
+          - FIXED_SUBSCRIPTION_INVALID_NAME
+          - FIXED_SUBSCRIPTION_NAME_NOT_PROVIDED
+          - REDIS_FLEX_PLAN_CANNOT_BE_UPDATED_TO_NON_REDIS_FLEX
+          - NON_REDIS_FLEX_PLAN_CANNOT_BE_UPDATED_TO_REDIS_FLEX_PLAN
+          - DELETING_A_FIXED_SUBSCRIPTION_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - UPDATING_A_FIXED_SUBSCRIPTION_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - UPDATING_A_FIXED_SUBSCRIPTION_PLAN_IS_NOT_ALLOWED_WHILE_THE_SUBSCRIPTION_OR_BDB_IS_PENDING
+          - FIXED_PAYMENT_INFO_NOT_ALLOWED_IN_FREE_FIXED_PLAN
+          - FREE_PLAN_IS_ALLOWED_ONLY_FOR_ACCOUNTS_WITH_VALID_PAYMENT_INFO
+          - BACKUP_A_FIXED_DATABASE_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - IMPORT_A_FIXED_DATABASE_IS_NOT_ALLOWED_WITH_A_FLEXIBLE_SUBSCRIPTION
+          - TOO_MANY_PENDING_SUBSCRIPTIONS
+          - BAD_REQUEST
+          - GENERAL_ERROR
+          - CONFLICT_ERROR
+          - UNKNOWN_STATUS
+          - CRDB_FLUSH_FAILURE
+          - CRDB_FLUSH_ACTION_NOT_ALLOWED_WITH_SINGLE_REGION_SUBSCRIPTION
+          - DATABASE_NAME_CHANGE_NOT_SUPPORTED
+          - DATABASE_INVALID_LOCATION_BACKUP
+          - DATABASE_GENERAL_ERROR_BACKUP
+          - CLUSTER_COMMUNICATION_ERROR
+          - MAINTENANCE_WINDOW_INVALID_MAINTENANCE_WINDOW_SPEC_PROVIDED
+          - MAINTENANCE_WINDOW_INVALID_MAINTENANCE_WINDOW_MODE_PROVIDED
+          - MAINTENANCE_WINDOW_MANUAL_MODE_WITH_NO_MAINTENANCE_WINDOWS
+          - MAINTENANCE_WINDOW_AUTOMATIC_MODE_WITH_MAINTENANCE_WINDOWS
+          - MAINTENANCE_WINDOW_GREATER_THAN_MAXIMUM_ALLOWABLE_MAINTENANCE_WINDOWS_PROVIDED
+          - MAINTENANCE_WINDOW_INVALID_START_HOUR
+          - MAINTENANCE_WINDOW_INVALID_DURATION_IN_HOURS
+          - MAINTENANCE_WINDOW_INVALID_DAYS
+          - MAINTENANCE_WINDOW_DUPLICATE_DAYS
+          - MAINTENANCE_WINDOW_INVALID_DURATION_FOR_ROF_SUBSCRIPTION
+          - MAINTENANCE_WINDOW_UNKNOWN_MEMORY_STORAGE_TYPE
+          - DATABASE_UPGRADE_IS_ALREADY_RUNNING
+          - DATABASE_CLUSTER_IS_IN_MAINTENANCE
+          - DATABASE_IS_NOT_ACTIVE
+          - DATABASE_UPGRADE_WORKFLOW_NOT_FOUND
+          - DATABASE_UPGRADE_INVALID_REDIS_VERSION
+          - DATABASE_UPGRADE_OF_MEMCACHED_IS_NOT_SUPPORTED
+          - DATABASE_REPLICA_OF_INCOMPATIBLE_VERSION
+          - DATABASE_UPGRADE_FAILED
+          - DATABASE_INVALID_PLAN_TYPE
+          - DATABASE_UPGRADE_IS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_EXTERNAL_ACCOUNTS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_MULTIPLE_CLOUD_ACCOUNTS_NOT_SUPPORTED
+          - ACTIVE_ACTIVE_GCP_EXTERNAL_CLOUD_ACCOUNT_NOT_SUPPORTED
+          - DB_ENDPOINTS_SERVICE_NOT_FOUND
+          - ENDPOINTS_REDIRECTION_NOT_FOUND
+          - DATABASE_TRAFFIC_STATE_NOT_FOUND
+          - ENDPOINTS_REDIRECTION_SOURCE_HAS_NO_ENDPOINTS
+          - ENDPOINTS_REDIRECTION_TARGET_HAS_NO_ENDPOINTS
+          - ENDPOINTS_REDIRECTION_ALREADY_EXISTS
+          - DATABASE_IN_ACTIVE_ENDPOINTS_REDIRECTION
+          - ENDPOINTS_REDIRECTION_NOT_LATEST
+          - ENDPOINTS_REDIRECTION_NOT_COMPLETED
+          - ENDPOINTS_REDIRECTION_INVALID_ENDPOINT_TYPE
+          - ENDPOINTS_REDIRECTION_DATABASES_NOT_COMPATIBLE
+          - ENDPOINTS_REDIRECTION_DATABASE_STATE_NOT_SUPPORTED
+          - ENDPOINTS_REDIRECTION_CONNECTIVITY_MISMATCH
+          - ENDPOINTS_REDIRECTION_REVERT_WINDOW_EXCEEDED
+          - ENDPOINTS_REDIRECTION_ACCOUNT_MISMATCH
+          - ENDPOINTS_REDIRECTION_DNS_SERVICE_NOT_AVAILABLE
+          - DATABASE_TRAFFIC_RESUME_IN_PROGRESS
+          - DATABASE_TRAFFIC_NOT_STOPPED
+          - DATABASE_TRAFFIC_RESUME_NOT_ELIGIBLE
+          - DEDICATED_SUBSCRIPTION_PREFERRED_AZ_INVALID_VALUE
+          - DEDICATED_SUBSCRIPTION_INVALID_INSTANCE_NAME
+          - DEDICATED_SUBSCRIPTION_INVALID_REPLICATION
+          - PRIVATE_LINK_NOT_FOUND
+          - PRIVATE_LINK_ALREADY_EXISTS
+          - PRIVATE_LINK_PRINCIPAL_ALREADY_EXISTS
+          - PRIVATE_LINK_PRINCIPAL_NOT_FOUND
+          - PRIVATE_LINK_PRINCIPAL_INVALID_PRINCIPLE
+          - PRIVATE_LINK_PRINCIPAL_CANNOT_BE_OWNER_ACCOUNT
+          - PRIVATE_LINK_CLOUD_PROVIDER_NOT_SUPPORTED
+          - PRIVATE_LINK_GET_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_GET_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - PRIVATE_LINK_CREATING_PRINCIPLES_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_CREATING_PRINCIPLES_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - PRIVATE_LINK_DELETING_A_FLEXIBLE_SUBSCRIPTION_PRINCIPALS_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_DELETING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRINCIPALS_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - PRIVATE_LINK_CREATE_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_CREATE_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - PRIVATE_LINK_DELETING_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_DELETING_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - PRIVATE_LINK_IS_NOT_SUPPORTED
+          - PRIVATE_LINK_SERVICE_ERROR
+          - PRIVATE_LINK_SUBSCRIPTION_REACHED_MAX_DATABASES_COUNT
+          - PRIVATE_LINK_ALL_PRINCIPALS_MUST_BE_DELETED_BEFORE_DELETING_RESOURCE_LINK
+          - PRIVATE_LINK_DISASSOCIATE_CONNECTIONS_A_FLEXIBLE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_AN_ACTIVE_ACTIVE_SUBSCRIPTION
+          - PRIVATE_LINK_DISASSOCIATE_CONNECTIONS_AN_ACTIVE_ACTIVE_SUBSCRIPTION_PRIVATE_LINK_IS_NOT_ALLOWED_WITH_A_SINGLE_REGION_SUBSCRIPTION
+          - COST_REPORT_IS_NOT_SUPPORTED
+          - COST_REPORT_START_DATE_IS_MISSING
+          - COST_REPORT_END_DATE_IS_MISSING
+          - COST_REPORT_INVALID_DATE_FORMAT
+          - COST_REPORT_END_DATE_BEFORE_START_DATE
+          - COST_REPORT_DATE_RANGE_EXCEEDS_LIMIT
+          - COST_REPORT_TAG_KEY_EMPTY
+          - COST_REPORT_TAG_VALUE_EMPTY
+          - COST_REPORT_FUTURE_DATES_NOT_ALLOWED
+          - AGENT_MEMORY_IS_DISABLED
+          - AGENT_MEMORY_STORE_INVALID_REQUEST
+          - AGENT_MEMORY_STORE_NOT_FOUND
+          - AGENT_MEMORY_STORE_FORBIDDEN
+          - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
+        additionalInfo:
+          type: string
+    MemoryStoreResponse:
+      type: object
+      properties:
+        storeId:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        databaseId:
+          type: string
+        databaseName:
+          type: string
+        databaseProvider:
+          type: string
+        databaseRegion:
+          type: string
+        databaseAccessCidrs:
+          type: array
+          items:
+            type: string
+        subscriptionId:
+          type: string
+        shortMemory:
+          $ref: '#/components/schemas/MemoryStoreShortMemoryConfig'
+        longTermMemory:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryStatus'
+        llm:
+          $ref: '#/components/schemas/MemoryStoreModelStatus'
+        endpoint:
+          type: string
+        endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemoryStoreEndpoint'
+        extractionStrategy:
+          type: string
+          description: How long-term memories are extracted from sessions. INSTRUCT uses LLM tool calling to create, update and delete granular memories
+          enum:
+          - INSTRUCT
+        summarization:
+          $ref: '#/components/schemas/MemoryStoreSummarizationConfig'
+        longTermMemoryExclusions:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryExclusions'
+        customMemoryTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemoryStoreCustomMemoryType'
+        extractionCadence:
+          $ref: '#/components/schemas/MemoryStoreExtractionCadenceConfig'
+        status:
+          type: string
+          description: Lifecycle status of the memory store
+          enum:
+          - PROVISIONING
+          - READY
+          - UNAVAILABLE
+        errorMessage:
+          type: string
+        errorMessageTimestamp:
+          type: number
+          format: double
+      description: Memory store configuration and status
+    MemoryStoreCustomField:
+      required:
+      - description
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[a-zA-Z][a-zA-Z0-9_-]*$
+          type: string
+          description: Field name (1-64 characters, starts with a letter, then letters, digits, underscores or dashes). Required
+          example: preferred_airline
+        description:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Human-readable description of the field (1-200 characters). Required
+          example: Airline the user prefers to fly with
+        type:
+          type: string
+          description: Field data type. Required
+          example: str
+          enum:
+          - str
+          - int
+          - float
+          - bool
+          - list[str]
+          - list[float]
+          - object
+      description: A structured field of a custom memory type
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    MemoryStoreUpdateRequest:
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 1
+          pattern: .*\S.*
+          type: string
+          description: Optional. New memory store name (1-64 characters)
+          example: my-memory-store
+        shortMemory:
+          $ref: '#/components/schemas/MemoryStoreShortMemoryConfig'
+        longTermMemory:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryUpdateConfig'
+        llm:
+          $ref: '#/components/schemas/MemoryStoreModelConfig'
+        summarization:
+          $ref: '#/components/schemas/MemoryStoreSummarizationConfig'
+        longTermMemoryExclusions:
+          $ref: '#/components/schemas/MemoryStoreLongTermMemoryExclusions'
+        addCustomMemoryTypes:
+          maxItems: 3
+          minItems: 0
+          type: array
+          description: Optional. New custom memory types to append to the store's registry. A store may define at most 3 custom memory types in total, including those already registered. Existing types cannot be redefined
+          items:
+            $ref: '#/components/schemas/MemoryStoreCustomMemoryType'
+        updateCustomMemoryTypeStrategies:
+          type: array
+          description: Optional. Extraction strategy edits (prompt and enabled flag) for existing custom memory types
+          items:
+            $ref: '#/components/schemas/MemoryStoreTypeStrategyUpdate'
+        extractionCadence:
+          $ref: '#/components/schemas/MemoryStoreExtractionCadenceConfig'
+        commandType:
+          type: string
+          readOnly: true
+      description: Memory store update request
+    MemoryStoreSummarizationConfig:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether summarization is enabled for the store. Required
+          example: true
+        triggerStrategy:
+          type: string
+          description: What triggers a summarization cycle. Defaults to event_count
+          example: event_count
+          enum:
+          - event_count
+        eventCount:
+          $ref: '#/components/schemas/MemoryStoreSummarizationThresholdConfig'
+      description: Session summarization. When enabled, long sessions are periodically condensed into a running summary while the most recent events are retained. When omitted on create, nothing is stored and the store uses the deployment's default summarization settings, which GET returns as the store's summarization
+    MemoryStoreSummary:
+      type: object
+      properties:
+        storeId:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        databaseId:
+          type: string
+        databaseName:
+          type: string
+        subscriptionId:
+          type: string
+        extractionStrategy:
+          type: string
+          description: How long-term memories are extracted from sessions. INSTRUCT uses LLM tool calling to create, update and delete granular memories
+          enum:
+          - INSTRUCT
+        summarization:
+          $ref: '#/components/schemas/MemoryStoreSummarizationConfig'
+        llm:
+          $ref: '#/components/schemas/MemoryStoreModelStatus'
+        status:
+          type: string
+          description: Lifecycle status of the memory store
+          enum:
+          - PROVISIONING
+          - READY
+          - UNAVAILABLE
+    MemoryProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Stable, machine-readable error type, e.g. /errors/resource-not-found, /errors/invalid-data, /errors/insufficient-permissions, /errors/model-config-immutable
+          example: /errors/resource-not-found
+        title:
+          type: string
+          description: Short human-readable summary of the error type
+          example: Resource not found
+        status:
+          type: integer
+          description: HTTP status code of the response, repeated in the body
+          format: int32
+          example: 404
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence
+          example: memory store store-123 was not found
+        instance:
+          type: string
+          description: Identifier of the specific occurrence, when provided by the service
+        fields:
+          type: array
+          description: Per-field validation failures for /errors/invalid-data responses
+          items:
+            $ref: '#/components/schemas/MemoryProblemFieldError'
+      description: RFC 7807 problem details returned by the Agent Memory service when a synchronous memory store request fails. Returned with the application/problem+json media type
+    MemoryStoreLongTermMemoryStatus:
+      type: object
+      properties:
+        ttlSeconds:
+          type: integer
+          description: Time-to-live of long-term memory entries, in seconds
+          format: int32
+          example: 31536000
+        embedding:
+          $ref: '#/components/schemas/MemoryStoreModelStatus'
+      description: Long-term memory configuration as stored
+    MemoryStoreBuiltInDetectorsConfig:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Toggle for the whole built-in group. False leaves the selections stored but inactive. Required
+          example: true
+        detectors:
+          type: array
+          description: Selected detectors. On update, omitting this list keeps the stored selections; a non-empty list replaces them wholesale; an explicitly empty list clears them
+          items:
+            $ref: '#/components/schemas/MemoryStoreDetectorSelection'
+      description: Deterministic detection using platform-owned built-in detectors. Nothing is selected by default
+    MemoryStoreEndpoint:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Endpoint URL
+        provider:
+          type: string
+          description: Cloud provider hosting the endpoint
+          example: AWS
+        region:
+          type: string
+          description: Cloud region of the endpoint
+          example: us-east-1
+        egressIps:
+          type: array
+          description: Egress IP addresses used by the endpoint
+          items:
+            type: string
+            description: Egress IP addresses used by the endpoint
+        isAccessible:
+          type: boolean
+          description: Whether the endpoint is reachable from the store's database network
+      description: A regional endpoint through which the memory store is served
+    MemoryStoreShortMemoryConfig:
+      required:
+      - ttlSeconds
+      type: object
+      properties:
+        ttlSeconds:
+          maximum: 31536000
+          minimum: 1
+          type: integer
+          description: Time-to-live of short-term memory entries, in seconds (1 second to 1 year). Required
+          format: int32
+          example: 86400
+      description: Short-term (working) memory configuration
+    MemoryStoreLongTermMemoryExclusions:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Master toggle gating enforcement of all exclusion groups. Required
+          example: true
+        semantic:
+          $ref: '#/components/schemas/MemoryStoreSemanticExclusionConfig'
+        builtInDetectors:
+          $ref: '#/components/schemas/MemoryStoreBuiltInDetectorsConfig'
+        customDetectors:
+          $ref: '#/components/schemas/MemoryStoreCustomDetectorsConfig'
+      description: Store-level policy that keeps sensitive data out of long-term memory. When omitted on create, no policy is stored. On update, the policy is replaced as a whole but nested content that is omitted is preserved, so prefer read-modify-write of the complete policy. Disabling sets enabled=false; a stored policy cannot be removed
+    MemoryStoreListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemoryStoreSummary'
+      description: List of memory stores
+    MemoryStoreModelStatus:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: Model provider in use
+          example: openai
+        model:
+          type: string
+          description: Model in use
+          example: gpt-4o-mini
+      description: Resolved model in use for one purpose. Present only on stores with an explicit model selection
+    MemoryStoreCustomDetector:
+      required:
+      - enabled
+      - matcher
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 0
+          pattern: ^[a-zA-Z][a-zA-Z0-9_-]*$
+          type: string
+          description: Detector name (1-64 characters, starts with a letter, then letters, digits, underscores or dashes). Reported with every match; must be unique in the store and must not collide with a built-in detector ID. Required
+          example: internal-ticket-id
+        enabled:
+          type: boolean
+          description: Whether this detector is active. A disabled detector is still stored and validated. Required
+          example: true
+        action:
+          type: string
+          description: What happens to a memory this detector matches. Defaults to redact
+          example: redact
+          enum:
+          - redact
+          - drop
+        matcher:
+          $ref: '#/components/schemas/MemoryStoreMatcherSpec'
+      description: One customer-authored detector
+    MemoryStoreApiKeyCreateResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: Generated API key. Returned only once.
+          format: password
+      description: New memory store API key
+    MemoryStoreMatcherSpec:
+      required:
+      - kind
+      type: object
+      properties:
+        kind:
+          type: string
+          description: Matching technique. Required
+          example: regex
+          enum:
+          - regex
+        regex:
+          $ref: '#/components/schemas/MemoryStoreRegexSpec'
+      description: How a custom detector decides what to match. Exactly the block named by kind must be present
+    MemoryStoreModelCredentials:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: How the supplied secret is interpreted. Required
+          example: apiKey
+          enum:
+          - apiKey
+        apiKey:
+          type: string
+          description: The provider API key. Required on create. On update an omitted or blank value keeps the current key, so only the key being rotated needs to be sent
+          format: password
+          writeOnly: true
+      description: 'Customer-supplied credential for a model provider. Write-only: never returned by any operation'
+    MemoryProblemFieldError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Path of the offending request field
+          example: shortMemory.ttlSeconds
+        rule:
+          type: string
+          description: Validation rule that failed
+          example: min
+        message:
+          type: string
+          description: Human-readable message for the failure
+          example: must be at least 1
+      description: A single field validation failure
+  securitySchemes:
+    x-api-key:
+      type: apiKey
+      name: x-api-key
+      in: header
+    x-api-secret-key:
+      type: apiKey
+      name: x-api-secret-key
+      in: header
+    x-auth-token:
+      type: apiKey
+      name: x-auth-token
+      in: header
+externalDocs:
+  description: Redis Cloud API Documentation
+  url: https://docs.redislabs.com/latest/rc/api/

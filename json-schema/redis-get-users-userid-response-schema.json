@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/redis/main/json-schema/redis-get-users-userid-response-schema.json",
+  "title": "GetUsersUseridResponse",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/_ae-authored/redis-openapi-generated.yml#/components/schemas/GetUsersUseridResponse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "interests": {
+      "type": "array",
+      "description": "array of strings"
+    },
+    "expertises": {
+      "type": "array",
+      "description": "array of strings"
+    },
+    "location": {
+      "type": "object",
+      "description": "object with latitude and longitude"
+    }
+  }
+}

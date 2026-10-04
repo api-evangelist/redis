@@ -1,0 +1,61 @@
+openapi: 3.2.0
+info:
+  title: Redis Images API
+  version: '2026-10-04'
+  description: 'GENERATED FROM DOCUMENTATION by API Evangelist on 2026-10-04: 19 operation(s) read from 11 public documentation page(s) (each operation names its page in x-source). This is not the provider''s published contract; Redis has published no machine-readable contract that the pipeline could find. Engine: local.'
+  x-evidence-tiers:
+    code-example: 13
+    documentation: 6
+    pages-with-code: 9
+    pages-read: 11
+  x-generated-from: documentation
+  x-provenance: generated
+  x-authored-by: API Evangelist
+  x-generated: '2026-10-04'
+  x-generator: generate-contract-from-docs.py
+  x-engine: local
+  x-sources:
+  - https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+  - https://redis.io/tutorials/context-engineering-workshop-java.md
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+  - https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+  - https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+  - https://redis.io/tutorials/develop/rust.md
+  - https://redis.io/tutorials/howtos/socialnetwork.md
+  - https://redis.io/tutorials/create/azurefunctions.md
+  - https://redis.io/tutorials/howtos/frauddetection.md
+  - https://redis.io/tutorials/data-deduplication-with-redis.md
+servers:
+- url: https://packages.redis.io
+security:
+- bearer: []
+tags:
+- name: Images
+paths:
+  /images/sy1jschh/production/{productionid}:
+    get:
+      operationId: get_images_sy1jschh_production_productionid
+      tags:
+      - Images
+      summary: GET /images/sy1jschh/production/7d0f5ec479a55a55e4e30f8cd3ca28d51fbbfcbd-1400x23…
+      x-source: https://redis.io/tutorials/howtos/frauddetection.md
+      parameters:
+      - name: productionid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: curl request returning ip_blacklist after adding the IP to the Redis Cuckoo Filter](https://cdn.sanity.io/images/sy1jschh/production/7d0f5ec479a55a55e4e30f8cd3ca28d51fbbfcbd-1400x234.jpg)
+        collapsed_from: 2 example path(s) differing only at productionId
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer

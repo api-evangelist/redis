@@ -1,11 +1,14 @@
 aid: redis
+
 name: Redis
-description: Redis is an open source, in-memory data structure store used as a database, cache, message
-  broker, and streaming engine. It supports strings, hashes, lists, sets, sorted sets, streams, JSON,
-  and more. Redis is used by millions of developers for caching, session management, leaderboards, pub/sub
-  messaging, real-time analytics, and event streaming. The Redis project is governed by the Redis Community
-  and maintained by Redis Inc.
+
+description: Redis is an open source, in-memory data structure store used as a database, cache, message broker, and streaming engine. It supports
+  strings, hashes, lists, sets, sorted sets, streams, JSON, and more. Redis is used by millions of developers for caching, session management,
+  leaderboards, pub/sub messaging, real-time analytics, and event streaming. The Redis project is governed by the Redis Community and maintained
+  by Redis Inc.
+
 type: Index
+
 deliveryModel:
   model: saas
   open_source: false
@@ -17,6 +20,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: freemium
   onboarding: unknown
@@ -29,226 +33,852 @@ accessModel:
   - plans
   generated: '2026-07-22'
   method: derived
+
 image: https://redis.io/images/redis-logo.png
+
 url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/apis.yml
+
 tags:
-  - Cache
-  - Database
-  - In-Memory
-  - Key-Value Store
-  - NoSQL
-  - Open-Source
-  - Streaming
+- Cache
+- Database
+- In-Memory
+- Key-Value Store
+- NoSQL
+- Open-Source
+- Streaming
+
 tags_raw:
-  - Cache
-  - Database
-  - In-Memory
-  - Key-Value Store
-  - NoSQL
-  - Open Source
-  - Streaming
+- Cache
+- Database
+- In-Memory
+- Key-Value Store
+- NoSQL
+- Open Source
+- Streaming
+
 created: '2024-01-01'
+
 modified: '2026-05-04'
+
 specificationVersion: '0.23'
-apis:
-  - aid: redis:redis-core
-    name: Redis Core
-    description: Core Redis commands and data structure operations. Redis supports strings, hashes, lists,
-      sets, sorted sets, streams, and more. The primary interface is the Redis Serialization Protocol
-      (RESP) over TCP, with client libraries for all major programming languages.
-    humanURL: https://redis.io/docs/latest/commands/
-    tags:
-      - Cache
-      - Commands
-      - Core
-      - Database
-      - Key-Value
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/commands/
-      - type: GettingStarted
-        url: https://redis.io/docs/latest/get-started/
-      - type: GitHub
-        url: https://github.com/redis/redis
-      - type: JSONSchema
-        url: json-schema/redis-key-value-schema.json
-      - type: JSONSchema
-        url: json-schema/redis-command-schema.json
-      - type: JSONSchema
-        url: json-schema/redis-server-info-schema.json
-      - type: JSONStructure
-        url: json-structure/redis-key-value-structure.json
-      - type: JSONStructure
-        url: json-structure/redis-server-info-structure.json
-      - type: JSONLD
-        url: json-ld/redis-context.jsonld
-      - type: Vocabulary
-        url: vocabulary/redis-vocabulary.yml
-  - aid: redis:redis-cloud-api
-    name: Redis Cloud API
-    description: The Redis Cloud REST API for managing subscriptions, databases, cloud accounts, access
-      control, and logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
-    humanURL: https://redis.io/docs/latest/operate/rc/api/
-    tags:
-      - Cloud
-      - Management
-      - REST
-      - Subscription
-    tags_raw:
-      - Cloud
-      - Management
-      - REST
-      - Subscriptions
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/operate/rc/api/
-      - type: Authentication
-        url: https://redis.io/docs/latest/operate/rc/api/get-started/
-      - type: Examples
-        url: https://redis.io/docs/latest/operate/rc/api/examples/
-  - aid: redis:redis-enterprise-api
-    name: Redis Enterprise API
-    description: REST API for managing Redis Enterprise Software clusters. Provides endpoints for cluster
-      configuration, database creation and management, user access control, and monitoring. Available
-      at the cluster's port 9443.
-    humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
-    tags:
-      - Cluster
-      - Enterprise
-      - Management
-      - REST
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/operate/rs/references/rest-api/
-      - type: APIReference
-        url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
-  - aid: redis:redis-insight
-    name: Redis Insight
-    description: Redis Insight is a free GUI management tool for Redis. Provides database browsing, query
-      execution, memory analysis, slow log inspection, and Redis Streams visualization. Available as a
-      desktop app and Docker image.
-    humanURL: https://redis.io/docs/latest/develop/tools/insight/
-    tags:
-      - Developer Tools
-      - Management
-      - Visualization
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/develop/tools/insight/
-      - type: Download
-        url: https://redis.io/insight/
-      - type: Docker
-        url: https://hub.docker.com/r/redis/redisinsight
-common:
-  - type: TrustCenter
-    url: security/redis-trust-center.yml
-  - type: VulnerabilityDisclosure
-    url: security/redis-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/redis-domain-security.yml
-  - name: Redis Website
-    url: https://redis.io/
-    type: Website
-  - name: Redis Documentation
-    url: https://redis.io/docs/
-    type: Documentation
-  - name: Redis GitHub Organization
-    url: https://github.com/redis
-    type: GitHubOrg
-  - name: Redis Blog
-    url: https://redis.io/blog/
-    type: Blog
-  - name: Redis Community
-    url: https://redis.io/community/
-    type: Community
-  - name: Redis on LinkedIn
-    url: https://www.linkedin.com/company/redis/
-    type: LinkedIn
-  - name: Redis on X
-    url: https://twitter.com/redisinc
-    type: X
-  - name: Redis YouTube
-    url: https://www.youtube.com/c/Redisinc
-    type: YouTube
-  - name: Redis Status
-    url: https://status.redis.com/
-    type: StatusPage
-  - name: Redis Support
-    url: https://redis.io/support/
-    type: Support
-  - name: Redis Terms of Service
-    url: https://redis.io/legal/terms/
-    type: TermsOfService
-  - name: Redis Privacy Policy
-    url: https://redis.io/legal/privacy/
-    type: PrivacyPolicy
-  - name: Redis Command Reference
-    url: https://redis.io/docs/latest/commands/
-    type: Documentation
-  - name: Redis Client Libraries
-    url: https://redis.io/docs/latest/develop/connect/clients/
-    type: SDKs
-  - name: Redis npm Package
-    url: https://www.npmjs.com/package/redis
-    type: npm
-  - name: Redis PyPI Package
-    url: https://pypi.org/project/redis/
-    type: PyPI
-  - type: Features
-    data:
-      - 'Free: 30 MB shared cloud DB'
-      - 'Essentials from $0.007/hr ($5/mo min): 250 MB-100 GB DB, SSO/RBAC'
-      - 'Pro from $0.014/hr ($200/mo min): dedicated, multi-region active-active'
-      - 'Enterprise: self-managed Redis Enterprise Software, hybrid, on-prem'
-      - 'Multi-cloud: AWS, GCP, Azure'
-      - Cloud API for cluster management at 60 req/min
-      - 'Redis Stack modules: RediSearch, RedisJSON, RedisGraph, RedisTimeSeries, RedisBloom'
-      - Vector similarity search (RediSearch)
-      - Redis Flex (RAM:Flash ratio for cost reduction)
-      - Auto-tiering for hot/cold data
-      - Active-active geo-distribution (Pro)
-      - Up to 99.999% uptime (Pro)
-      - Encryption in transit and at rest (Essentials+)
-      - Private connectivity (Pro)
-      - OAuth + API keys
-      - Open-source self-managed Redis OSS alternative
-    sources:
-      - https://redis.io/pricing/
-    updated: '2026-05-04'
-  - type: Integrations
-    url: https://redis.io/partners/
-  - type: LlmsText
-    url: https://redis.io/llms.txt
-integrations:
-  - name: Redis Cloud
-  - name: Redis Software 64px
-  - name: Redis Open Source
-  - name: Redis for AI
-  - name: Image
-  - name: Ecosystem
-  - name: Integrated modules
-  - name: Redis Partner Network - Base
-  - name: Redis Partner Network - Builder
-  - name: Redis Partner Network - Hyper
-  - name: AWS
-  - name: Google Cloud
-  - name: Microsoft Azure
-  - name: Carahsoft
-  - name: Prodevans
-  - name: Shi
-  - name: Software one
-  - name: dataX
-  - name: virtus
-  - name: Softchoice
-  - name: Nttdata
-  - name: matrix
-  - name: logo
-  - name: Insight Partners
-  - name: Securemax
-  - name: Crayon
-  - name: Mfec
-  - name: Upstra
-  - name: Wysetek
+
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: AgenticAccess
+  url: agentic-access/redis-agentic-access.yml
+- type: FinOps
+  url: finops/redis-finops.yml
+- type: RateLimits
+  url: rate-limits/redis-rate-limits.yml
+- type: Plans
+  url: plans/redis-plans-pricing.yml
+- type: Spectral
+  url: rules/redis-rules.yml
+- type: Spectral
+  url: rules/redis-jsonschema-spectral-rules.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/redis-data-model.yml
+- type: CLI
+  url: cli/redis-cli.yml
+- type: Compliance
+  url: https://trust.redis.io/
+- type: Authentication
+  url: authentication/redis-authentication.yml
+- type: ErrorCatalog
+  url: errors/redis-problem-types.yml
+- type: Conformance
+  url: conformance/redis-conformance.yml
+- type: LLMsTxt
+  url: llms/redis-llms.txt
+- type: MCPServer
+  url: mcp/redis-mcp.yml
+- type: SecurityTxt
+  url: well-known/redis-security.txt
+- type: SecurityTxt
+  url: well-known/redis-docs-security.txt
+- type: WellKnown
+  url: well-known/redis-well-known.yml
+- type: Hosts
+  url: hosts/redis-hosts.yml
+- type: Vendors
+  url: vendors/redis-vendors.yml
+- type: Packages
+  url: packages/redis-packages.yml
+- type: Security
+  url: https://redis.io/security/notice-apache-log4j2-cve-2021-44228/
+- type: Pricing
+  url: https://redis.io/pricing/
+- type: Newsroom
+  url: https://redis.io/company/news/
+- type: Login
+  url: https://redis.io/login/
+- type: Leadership
+  url: https://redis.io/company/team/
+- type: ChangeLog
+  url: https://redis.io/docs/latest/develop/whats-new/
+- type: APIReference
+  url: https://redis.io/docs/latest/develop/reference/
+- type: GettingStarted
+  url: https://redis.io/docs/latest/operate/rc/rc-quickstart/index.html
+- type: TrustCenter
+  url: security/redis-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/redis-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/redis-domain-security.yml
+- name: Redis Website
+  url: https://redis.io/
+  type: Website
+- name: Redis Documentation
+  url: https://redis.io/docs/
+  type: Documentation
+- name: Redis GitHub Organization
+  url: https://github.com/redis
+  type: GitHubOrg
+- name: Redis Blog
+  url: https://redis.io/blog/
+  type: Blog
+- name: Redis Community
+  url: https://redis.io/community/
+  type: Community
+- name: Redis on LinkedIn
+  url: https://www.linkedin.com/company/redis/
+  type: LinkedIn
+- name: Redis on X
+  url: https://twitter.com/redisinc
+  type: X
+- name: Redis YouTube
+  url: https://www.youtube.com/c/Redisinc
+  type: YouTube
+- name: Redis Status
+  url: https://status.redis.com/
+  type: StatusPage
+- name: Redis Support
+  url: https://redis.io/support/
+  type: Support
+- name: Redis Terms of Service
+  url: https://redis.io/legal/terms/
+  type: TermsOfService
+- name: Redis Privacy Policy
+  url: https://redis.io/legal/privacy/
+  type: PrivacyPolicy
+- name: Redis Command Reference
+  url: https://redis.io/docs/latest/commands/
+  type: Documentation
+- name: Redis Client Libraries
+  url: https://redis.io/docs/latest/develop/connect/clients/
+  type: SDKs
+- name: Redis npm Package
+  url: https://www.npmjs.com/package/redis
+  type: npm
+- name: Redis PyPI Package
+  url: https://pypi.org/project/redis/
+  type: PyPI
+- type: Features
+  data:
+  - 'Free: 30 MB shared cloud DB'
+  - 'Essentials from $0.007/hr ($5/mo min): 250 MB-100 GB DB, SSO/RBAC'
+  - 'Pro from $0.014/hr ($200/mo min): dedicated, multi-region active-active'
+  - 'Enterprise: self-managed Redis Enterprise Software, hybrid, on-prem'
+  - 'Multi-cloud: AWS, GCP, Azure'
+  - Cloud API for cluster management at 60 req/min
+  - 'Redis Stack modules: RediSearch, RedisJSON, RedisGraph, RedisTimeSeries, RedisBloom'
+  - Vector similarity search (RediSearch)
+  - Redis Flex (RAM:Flash ratio for cost reduction)
+  - Auto-tiering for hot/cold data
+  - Active-active geo-distribution (Pro)
+  - Up to 99.999% uptime (Pro)
+  - Encryption in transit and at rest (Essentials+)
+  - Private connectivity (Pro)
+  - OAuth + API keys
+  - Open-source self-managed Redis OSS alternative
+  sources:
+  - https://redis.io/pricing/
+  updated: '2026-05-04'
+- type: Integrations
+  url: https://redis.io/partners/
+- type: LlmsText
+  url: https://redis.io/llms.txt
+
+apis:
+- aid: redis:redis-core
+  name: Redis Core
+  description: >-
+    Core Redis commands and data structure operations. Redis supports strings, hashes, lists, sets, sorted
+    sets, streams, and more. The primary interface is the Redis Serialization Protocol (RESP) over TCP,
+    with client libraries for all major programming languages.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Cache
+  - Commands
+  - Core
+  - Database
+  - Key-Value
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/commands/
+  - type: GettingStarted
+    url: https://redis.io/docs/latest/get-started/
+  - type: GitHub
+    url: https://github.com/redis/redis
+  - type: JSONSchema
+    url: json-schema/redis-key-value-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-command-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-server-info-schema.json
+  - type: JSONStructure
+    url: json-structure/redis-key-value-structure.json
+  - type: JSONStructure
+    url: json-structure/redis-server-info-structure.json
+  - type: JSONLD
+    url: json-ld/redis-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/redis-vocabulary.yml
+- aid: redis:redis-cloud-api
+  name: Redis Cloud API
+  description: >-
+    The Redis Cloud REST API for managing subscriptions, databases, cloud accounts, access control, and
+    logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
+  humanURL: https://redis.io/docs/latest/operate/rc/api/
+  tags:
+  - Cloud
+  - Management
+  - REST
+  - Subscription
+  tags_raw:
+  - Cloud
+  - Management
+  - REST
+  - Subscriptions
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rc/api/
+  - type: Authentication
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/
+  - type: Examples
+    url: https://redis.io/docs/latest/operate/rc/api/examples/
+- aid: redis:redis-enterprise-api
+  name: Redis Enterprise API
+  description: >-
+    REST API for managing Redis Enterprise Software clusters. Provides endpoints for cluster configuration,
+    database creation and management, user access control, and monitoring. Available at the cluster's
+    port 9443.
+  humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  tags:
+  - Cluster
+  - Enterprise
+  - Management
+  - REST
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  - type: APIReference
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
+- aid: redis:redis-insight
+  name: Redis Insight
+  description: >-
+    Redis Insight is a free GUI management tool for Redis. Provides database browsing, query execution,
+    memory analysis, slow log inspection, and Redis Streams visualization. Available as a desktop app
+    and Docker image.
+  humanURL: https://redis.io/docs/latest/develop/tools/insight/
+  tags:
+  - Developer Tools
+  - Management
+  - Visualization
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/develop/tools/insight/
+  - type: Download
+    url: https://redis.io/insight/
+  - type: Docker
+    url: https://hub.docker.com/r/redis/redisinsight
+- aid: redis:redis-account-api
+  name: Redis Account API
+  description: Current account details.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-account-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-actuator-api
+  name: Redis Actuator API
+  description: The Actuator API from Redis — 1 operation(s) for actuator.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Actuator
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-actuator-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-agent-memory-stores-api
+  name: Redis Agent Memory - Stores API
+  description: All operations related to Agent Memory store lifecycle
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Agent Memory - Stores
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-agent-memory-stores-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-ai-api
+  name: Redis AI API
+  description: The Ai API from Redis — 1 operation(s) for ai.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Ai
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-ai-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-bdbs-api
+  name: Redis Bdbs API
+  description: The Bdbs API from Redis — 1 operation(s) for bdbs.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Bdbs
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-bdbs-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-caches-api
+  name: Redis Caches API
+  description: The Caches API from Redis — 5 operation(s) for caches.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Caches
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-caches-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-cloud-accounts-api
+  name: Redis Cloud Accounts API
+  description: All operations related to cloud accounts (AWS only).
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Cloud Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-cloud-accounts-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-data-integration-api
+  name: Redis Data Integration API
+  description: The Data Integration API from Redis — 3 operation(s) for data integration.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Data Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-data-integration-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-databases-essentials-api
+  name: Redis Databases - Essentials API
+  description: All Essentials database operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Databases - Essentials
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-databases-essentials-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-databases-pro-api
+  name: Redis Databases - Pro API
+  description: All Pro database operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Databases - Pro
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-databases-pro-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-dedup-api
+  name: Redis Dedup API
+  description: The Dedup API from Redis — 2 operation(s) for dedup.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Dedup
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-dedup-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-endpoint-redirections-api
+  name: Redis Endpoint Redirections API
+  description: Dynamic endpoint redirection operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Endpoint Redirections
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-endpoint-redirections-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-gpg-api
+  name: Redis Gpg API
+  description: The Gpg API from Redis — 1 operation(s) for gpg.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Gpg
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-gpg-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-homebrew-api
+  name: Redis Homebrew API
+  description: The Homebrew API from Redis — 1 operation(s) for homebrew.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Homebrew
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-homebrew-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-images-api
+  name: Redis Images API
+  description: The Images API from Redis — 1 operation(s) for images.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-images-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-long-term-memory-api
+  name: Redis Long Term Memory API
+  description: The Long Term Memory API from Redis — 1 operation(s) for long term memory.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Long Term Memory
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-long-term-memory-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-redis-api-api
+  name: Redis Redis API
+  description: The Redis API API from Redis — 1 operation(s) for redis api.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Redis API
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-redis-api-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-redis-cli-api
+  name: Redis Redis Cli API
+  description: The Redis Cli API from Redis — 1 operation(s) for redis cli.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Redis Cli
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-redis-cli-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-role-based-access-control-rbac-api
+  name: Redis Role-based Access Control (RBAC) API
+  description: >-
+    All operations for [Role-based Access Control](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/role-based-access-control/)
+    (RBAC).
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Role-based Access Control (RBAC)
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-role-based-access-control-rbac-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-subscriptions-essentials-api
+  name: Redis Subscriptions - Essentials API
+  description: All Essentials subscription operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Subscriptions - Essentials
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-essentials-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-subscriptions-pro-api
+  name: Redis Subscriptions - Pro API
+  description: All Pro subscription operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Subscriptions - Pro
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-pro-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-subscriptions-pro-connectivity-api
+  name: Redis Subscriptions - Pro - Connectivity API
+  description: All Pro subscription connectivity operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Subscriptions - Pro - Connectivity
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-pro-connectivity-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-tasks-api
+  name: Redis Tasks API
+  description: >-
+    Tracks asynchronous background operations. See [API request lifecycle](https://redis.io/docs/latest/operate/rc/api/get-started/process-lifecycle/)
+    for more information.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-tasks-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+- aid: redis:redis-users-api
+  name: Redis Users API
+  description: The Users API from Redis — 5 operation(s) for users.
+  humanURL: https://redis.io/docs/latest/commands/
+  baseURL: https://packages.redis.io
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-users-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/redis-post-users-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-users-userid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-v1-long-term-memory-request-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-get-api-dedup-stats-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-response-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-post-api-dedup-dedupid-request-schema.json
+integrations:
+- name: Redis Cloud
+- name: Redis Software 64px
+- name: Redis Open Source
+- name: Redis for AI
+- name: Image
+- name: Ecosystem
+- name: Integrated modules
+- name: Redis Partner Network - Base
+- name: Redis Partner Network - Builder
+- name: Redis Partner Network - Hyper
+- name: AWS
+- name: Google Cloud
+- name: Microsoft Azure
+- name: Carahsoft
+- name: Prodevans
+- name: Shi
+- name: Software one
+- name: dataX
+- name: virtus
+- name: Softchoice
+- name: Nttdata
+- name: matrix
+- name: logo
+- name: Insight Partners
+- name: Securemax
+- name: Crayon
+- name: Mfec
+- name: Upstra
+- name: Wysetek
+
+x-coverage:
+  state: unreadable
+  reason: no-machine-readable-spec
+  method: derived
+  generated: '2026-10-04'
+  generator: derive-coverage.py (pre-flight evidence)
+  detail: >-
+    the company publishes developer documentation but serves no machine-readable contract from it
+  evidence:
+  - url: https://redis.io/mcp
+    status: null
+  - url: https://packages.redis.io/mcp
+    status: 403
+  - url: https://redis.io/
+    status: 200
+x-enrichment:
+  date: '2026-10-04'
+  status: enriched
+  artifacts_added: 30
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

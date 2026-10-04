@@ -1,0 +1,1258 @@
+generated: '2026-10-04'
+method: derived
+generator: derive-data-model.py
+source:
+- openapi/redis-cloud-openapi.yml
+notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entity>_id field
+summary:
+  entities: 174
+  entities_in_spec: 174
+  relationships: 184
+entities:
+- name: ACLUser
+  fields: 5
+  description: Redis ACL user information
+- name: AccountACLRedisRules
+  fields: 2
+  description: Redis list of ACL redis rules in current account
+- name: AccountACLRoles
+  fields: 2
+  description: Redis list of ACL roles in current account
+- name: AccountACLUsers
+  fields: 2
+  description: Redis list of ACL users in current account
+- name: AccountFixedSubscriptionDatabases
+  fields: 2
+  description: RedisLabs Account Subscription Databases information
+- name: AccountSessionLogEntries
+  fields: 2
+- name: AccountSessionLogEntry
+  fields: 8
+  description: Account session log entry
+- name: AccountSubscriptionDatabases
+  fields: 2
+  description: RedisLabs Account Subscription Databases information
+- name: AccountSubscriptions
+  fields: 2
+  description: RedisLabs list of subscriptions in current account
+- name: AccountSystemLogEntries
+  fields: 2
+- name: AccountSystemLogEntry
+  fields: 8
+  description: Account system log entry
+- name: AccountUser
+  fields: 8
+  description: RedisLabs User information
+- name: AccountUserOptions
+  fields: 4
+  description: RedisLabs User options information
+- name: AccountUserUpdateRequest
+  fields: 4
+  description: User update request
+- name: AccountUsers
+  fields: 1
+  description: RedisLabs list of users in current account
+- name: AclRedisRuleCreateRequest
+  fields: 3
+  description: ACL redis rule create request
+- name: AclRedisRuleUpdateRequest
+  fields: 4
+  description: ACL redis rule update request
+- name: AclRoleCreateRequest
+  fields: 3
+  description: ACL role create request
+- name: AclRoleDatabaseSpec
+  fields: 3
+  description: A list of databases where the specified rule applies for this role.
+- name: AclRoleRedisRuleSpec
+  fields: 2
+  description: Optional. Changes the Redis ACL rules to assign to this database access role.
+- name: AclRoleUpdateRequest
+  fields: 4
+  description: ACL role update request
+- name: AclUserCreateRequest
+  fields: 4
+  description: ACL user create request
+- name: AclUserUpdateRequest
+  fields: 4
+  description: ACL user update request
+- name: ActiveActivePscEndpointCreateRequest
+  fields: 8
+  description: Private Service Connect endpoint create request
+- name: ActiveActivePscEndpointUpdateRequest
+  fields: 10
+  description: Private Service Connect endpoint update request
+- name: ActiveActiveRegionCreateRequest
+  fields: 13
+  description: Active active region creation request message
+- name: ActiveActiveRegionDeleteRequest
+  fields: 4
+  description: Active active region deletion request message
+- name: ActiveActiveRegionToDelete
+  fields: 1
+  description: The names of the regions to delete.
+- name: ActiveActiveSubscriptionRegions
+  fields: 2
+  description: List of active-active subscription regions
+- name: ActiveActiveTgwUpdateCidrsRequest
+  fields: 2
+  description: Active active Transit Gateway update attachment cidr/s request message
+- name: ActiveActiveVpcPeeringCreateAwsRequest
+  fields: 9
+  description: VPC peering creation request message
+- name: ActiveActiveVpcPeeringCreateBaseRequest
+  fields: 4
+  description: Active-Active VPC peering creation request message
+- name: ActiveActiveVpcPeeringCreateGcpRequest
+  fields: 6
+  description: VPC peering creation request message
+- name: ActiveActiveVpcPeeringUpdateAwsRequest
+  fields: 5
+  description: Active-Active VPC peering update request message
+- name: BaseSubscriptionUpdateRequest
+  fields: 2
+  description: Subscription update request message
+- name: Cidr
+  fields: 1
+  description: Optional. List of transit gateway attachment CIDRs.
+- name: CidrWhiteListUpdateRequest
+  fields: 4
+  description: Update Pro subscription
+- name: CloudAccount
+  fields: 9
+  description: RedisLabs Cloud Account information
+- name: CloudAccountCreateRequest
+  fields: 8
+  description: Cloud Account definition
+- name: CloudAccountUpdateRequest
+  fields: 8
+  description: Cloud Account definition
+- name: CloudAccounts
+  fields: 2
+  description: RedisLabs Cloud Accounts information
+- name: CloudTag
+  fields: 5
+  description: Database tag
+- name: CloudTags
+  fields: 2
+  description: Redis list of database tags
+- name: CostReportCreateRequest
+  fields: 9
+  description: Cost report generation request
+- name: CrdbFlushRequest
+  fields: 3
+  description: Active-Active database flush request message
+- name: CrdbRegionSpec
+  fields: 2
+  description: 'List of databases in the subscription with local throughput details. Default: 1000 read and write
+    ops/sec for each database'
+- name: CrdbUpdatePropertiesRequest
+  fields: 20
+  description: Active-Active database update local properties request message
+- name: CreateEndpointsRedirectionRequest
+  fields: 5
+  description: Dynamic endpoint redirection request
+- name: CustomerManagedKey
+  fields: 2
+  description: Object representing a customer managed key (CMK), along with the region it is associated to.
+- name: CustomerManagedKeyAccessDetails
+  fields: 6
+  description: Configuration regarding customer managed persistent storage encryption
+- name: CustomerManagedKeyProperties
+  fields: 2
+  description: Optional. Contains information about the keys used for each region. Can be used only with external
+    cloud account
+- name: DataPersistenceEntry
+  fields: 2
+  description: RedisLabs data persistence information
+- name: DataPersistenceOptions
+  fields: 2
+- name: Database
+  fields: 2
+- name: DatabaseAlertSpec
+  fields: 2
+  description: Optional. Changes Redis database alert details.
+- name: DatabaseAvailableVersionsResponse
+  fields: 1
+- name: DatabaseBackupConfig
+  fields: 8
+  description: Optional. Changes Remote backup configuration details.
+- name: DatabaseBackupRequest
+  fields: 5
+  description: Database backup request message
+- name: DatabaseCertificate
+  fields: 1
+  description: Database certificate
+- name: DatabaseCertificateSpec
+  fields: 1
+  description: Optional. A list of client TLS/SSL certificates. If specified, mTLS authentication will be required
+    to authenticate user connections. If set to an empty list, TLS client certificates will be removed a
+- name: DatabaseCreateRequest
+  fields: 35
+  description: Database definition
+- name: DatabaseImportRequest
+  fields: 5
+  description: Database import request
+- name: DatabaseModuleSpec
+  fields: 2
+  description: Optional. Redis advanced capabilities (also known as modules) to be provisioned in the database.
+    Use GET /database-modules to get a list of available advanced capabilities. Don't specify modules for d
+- name: DatabaseSlowLogEntries
+  fields: 2
+- name: DatabaseSlowLogEntry
+  fields: 4
+  description: Database slowlog entry
+- name: DatabaseSyncSourceSpec
+  fields: 3
+  description: Optional. This database will be a replica of the specified Redis databases, provided as a list of
+    objects with endpoint and certificate details.
+- name: DatabaseTagCreateRequest
+  fields: 5
+  description: Database tag
+- name: DatabaseTagUpdateRequest
+  fields: 5
+  description: Database tag update request message
+- name: DatabaseTagsUpdateRequest
+  fields: 4
+  description: Database tags update request message
+- name: DatabaseThroughputSpec
+  fields: 2
+  description: Optional. Throughput measurement method.
+- name: DatabaseTrafficStateResponse
+  fields: 6
+- name: DatabaseUpdateRequest
+  fields: 31
+  description: Database update request
+- name: DatabaseUpgradeRedisVersionRequest
+  fields: 4
+  description: Upgrades the specified Pro database to a later Redis version.
+- name: DatabaseVersionUpgradeStatus
+  fields: 4
+- name: DynamicEndpoints
+  fields: 2
+  description: Database dynamic endpoints. This is available in private preview.
+- name: EndpointRedirectionDTO
+  fields: 5
+  description: Details of a single endpoint redirection.
+- name: EndpointsRedirectionResponse
+  fields: 11
+  description: Dynamic endpoint redirection status response message
+- name: FixedDatabase
+  fields: 30
+- name: FixedDatabaseBackupRequest
+  fields: 4
+  description: Essentials database backup request message
+- name: FixedDatabaseCreateRequest
+  fields: 26
+  description: Essentials database definition
+- name: FixedDatabaseImportRequest
+  fields: 5
+  description: Database import request
+- name: FixedDatabaseUpdateRequest
+  fields: 25
+  description: Essentials database update request
+- name: FixedDatabaseUpgradeRedisVersionRequest
+  fields: 4
+  description: Upgrades the specified Essentials database to a later Redis version.
+- name: FixedSubscription
+  fields: 27
+  description: Redis Essentials Subscription information
+- name: FixedSubscriptionCreateRequest
+  fields: 5
+  description: Essentials subscription create request
+- name: FixedSubscriptionUpdateRequest
+  fields: 6
+  description: Essentials subscription update request
+- name: FixedSubscriptions
+  fields: 2
+  description: Redis list of Essentials subscriptions in current account
+- name: FixedSubscriptionsPlan
+  fields: 25
+  description: Redis Essentials subscription plan information
+- name: FixedSubscriptionsPlans
+  fields: 1
+  description: Redis list of Essentials subscriptions plans
+- name: JsonNode
+  fields: 0
+- name: LocalRegionProperties
+  fields: 9
+  description: Optional. A list of regions and local settings to update.
+- name: LocalThroughput
+  fields: 3
+  description: Optional. Expected read and write throughput for this region.
+- name: MaintenanceWindow
+  fields: 3
+- name: MaintenanceWindowSkipStatus
+  fields: 2
+- name: MaintenanceWindowSpec
+  fields: 3
+  description: Maintenance window timeframes if mode is set to 'manual'. Up to 7 maintenance windows can be provided.
+- name: MemoryProblemDetails
+  fields: 6
+  description: RFC 7807 problem details returned by the Agent Memory service when a synchronous memory store request
+    fails. Returned with the application/problem+json media type
+- name: MemoryProblemFieldError
+  fields: 3
+  description: A single field validation failure
+- name: MemoryStoreApiKeyCreateRequest
+  fields: 1
+  description: Memory store API key creation request
+- name: MemoryStoreApiKeyCreateResponse
+  fields: 1
+  description: New memory store API key
+- name: MemoryStoreBuiltInDetectorsConfig
+  fields: 2
+  description: Deterministic detection using platform-owned built-in detectors. Nothing is selected by default
+- name: MemoryStoreCreateRequest
+  fields: 11
+  description: Memory store creation request
+- name: MemoryStoreCustomDetector
+  fields: 4
+  description: One customer-authored detector
+- name: MemoryStoreCustomDetectorsConfig
+  fields: 2
+  description: Deterministic detection using customer-authored detectors stored on the store. Evaluated together
+    with the built-in detectors as one set
+- name: MemoryStoreCustomExtractionStrategy
+  fields: 2
+  description: How memories of a custom type are extracted from session events
+- name: MemoryStoreCustomField
+  fields: 3
+  description: A structured field of a custom memory type
+- name: MemoryStoreCustomMemoryType
+  fields: 4
+  description: A custom category of long-term memory with its structured fields and optional extraction strategy.
+    Name, description and fields are immutable once registered
+- name: MemoryStoreDetectorSelection
+  fields: 3
+  description: One selected platform built-in detector
+- name: MemoryStoreEndpoint
+  fields: 5
+  description: A regional endpoint through which the memory store is served
+- name: MemoryStoreExtractionCadenceConfig
+  fields: 1
+  description: How often the long-term memory extraction pipeline runs. Optional on both create and update
+- name: MemoryStoreListResponse
+  fields: 1
+  description: List of memory stores
+- name: MemoryStoreLongTermMemoryCreateConfig
+  fields: 2
+  description: Long-term (persistent) memory configuration accepted on creation. When omitted, the store uses the
+    default long-term memory TTL of 1 year
+- name: MemoryStoreLongTermMemoryExclusions
+  fields: 4
+  description: Store-level policy that keeps sensitive data out of long-term memory. When omitted on create, no
+    policy is stored. On update, the policy is replaced as a whole but nested content that is omitted is pr
+- name: MemoryStoreLongTermMemoryStatus
+  fields: 2
+  description: Long-term memory configuration as stored
+- name: MemoryStoreLongTermMemoryUpdateConfig
+  fields: 2
+  description: Long-term memory configuration accepted on update. Only the TTL and the embedding credential can
+    change
+- name: MemoryStoreMatcherSpec
+  fields: 2
+  description: How a custom detector decides what to match. Exactly the block named by kind must be present
+- name: MemoryStoreModelConfig
+  fields: 3
+  description: Requested model selection for one purpose (LLM or embedding). On create, llm and longTermMemory.embedding
+    must be supplied together to opt the store into customer-selected models; supplying only one i
+- name: MemoryStoreModelCredentials
+  fields: 2
+  description: 'Customer-supplied credential for a model provider. Write-only: never returned by any operation'
+- name: MemoryStoreModelStatus
+  fields: 2
+  description: Resolved model in use for one purpose. Present only on stores with an explicit model selection
+- name: MemoryStoreRegexSpec
+  fields: 1
+  description: Regular expression matcher
+- name: MemoryStoreResponse
+  fields: 22
+  description: Memory store configuration and status
+- name: MemoryStoreSemanticExclusionConfig
+  fields: 2
+  description: Advisory, LLM-mediated exclusion of sensitive content from long-term memory
+- name: MemoryStoreShortMemoryConfig
+  fields: 1
+  description: Short-term (working) memory configuration
+- name: MemoryStoreSummarizationConfig
+  fields: 3
+  description: 'Session summarization. When enabled, long sessions are periodically condensed into a running summary
+    while the most recent events are retained. When omitted on create, nothing is stored and the store '
+- name: MemoryStoreSummarizationThresholdConfig
+  fields: 2
+  description: Event-count trigger for session summarization. threshold must be greater than retainCount
+- name: MemoryStoreSummary
+  fields: 10
+- name: MemoryStoreTypeStrategyUpdate
+  fields: 3
+  description: Edit of the extraction strategy of an existing custom memory type. Only the prompt and the enabled
+    flag may change; the type's name, description and fields are immutable
+- name: MemoryStoreUpdateRequest
+  fields: 10
+  description: Memory store update request
+- name: Module
+  fields: 3
+  description: RedisLabs database module information
+- name: ModulesData
+  fields: 2
+- name: PaymentMethods
+  fields: 2
+  description: RedisLabs Account payment methods
+- name: PrivateLinkActiveActiveConnectionsDisassociateRequest
+  fields: 4
+  description: Request to disassociate connections from private link for Active-Active subscription
+- name: PrivateLinkActiveActiveCreateRequest
+  fields: 7
+  description: Request to create a private link for Active-Active subscription
+- name: PrivateLinkActiveActivePrincipalsCreateRequest
+  fields: 6
+  description: Request to add a principal to private link for Active-Active subscription
+- name: PrivateLinkActiveActivePrincipalsDeleteRequest
+  fields: 4
+  description: Request to remove principals from private link for Active-Active subscription
+- name: PrivateLinkConnectionDisassociate
+  fields: 4
+  description: Private link connection information for disassociation request
+- name: PrivateLinkConnectionsDisassociateRequest
+  fields: 3
+  description: Private Link connections disassociate request
+- name: PrivateLinkCreateRequest
+  fields: 6
+  description: Private Link create request
+- name: PrivateLinkPrincipalsCreateRequest
+  fields: 5
+  description: Private Link principals create request
+- name: PrivateLinkPrincipalsDeleteRequest
+  fields: 3
+  description: Private Link principals delete request
+- name: ProcessorResponse
+  fields: 5
+- name: PscEndpointCreateRequest
+  fields: 7
+  description: Private Service Connect endpoint create request
+- name: PscEndpointUpdateRequest
+  fields: 9
+  description: Private Service Connect endpoint update request
+- name: RedisVersion
+  fields: 4
+- name: RedisVersions
+  fields: 1
+- name: Region
+  fields: 3
+  description: RedisLabs region information
+- name: Regions
+  fields: 2
+- name: ReplicaAsSourceEndpoints
+  fields: 2
+  description: Endpoints to use when configuring another database to replicate from this database (Make sure to
+    use this instead of the dynamic endpoints).
+- name: ReplicaOfSpec
+  fields: 1
+  description: Optional. Changes Replica Of (also known as Active-Passive) configuration details.
+- name: ResourceTag
+  fields: 2
+  description: List of resource tags to apply to the subscription. This will replace all existing tags.
+- name: RootAccount
+  fields: 1
+- name: SearchScalingFactorsData
+  fields: 2
+- name: Subscription
+  fields: 12
+  description: RedisLabs Subscription information
+- name: SubscriptionCreateRequest
+  fields: 13
+  description: Subscription create request
+- name: SubscriptionDatabaseSpec
+  fields: 19
+  description: One or more database specification(s) to create in this subscription.
+- name: SubscriptionMaintenanceWindows
+  fields: 4
+- name: SubscriptionMaintenanceWindowsSpec
+  fields: 2
+- name: SubscriptionPricing
+  fields: 8
+- name: SubscriptionPricings
+  fields: 1
+- name: SubscriptionRegionNetworkingSpec
+  fields: 4
+  description: Optional. Cloud networking details, per region. Required if creating an Active-Active subscription.
+- name: SubscriptionRegionSpec
+  fields: 4
+  description: The cloud provider region or list of regions (Active-Active only) and networking details.
+- name: SubscriptionResourceTagsUpdateRequest
+  fields: 3
+  description: Resource tags update request
+- name: SubscriptionSpec
+  fields: 4
+  description: Cloud provider, region, and networking details.
+- name: SubscriptionUpdateCMKRequest
+  fields: 4
+  description: Subscription update request message
+- name: SubscriptionUpdateRequest
+  fields: 6
+  description: Subscription update request message
+- name: Tag
+  fields: 2
+  description: Tag filter for cost report
+- name: TargetVersion
+  fields: 1
+- name: TaskStateUpdate
+  fields: 7
+- name: TasksStateUpdate
+  fields: 1
+- name: TgwUpdateCidrsRequest
+  fields: 2
+  description: Transit Gateway update attachment cidr/s request message
+- name: VpcPeeringCreateAwsRequest
+  fields: 7
+  description: VPC peering creation request message
+- name: VpcPeeringCreateBaseRequest
+  fields: 2
+  description: Vpc peering creation request message
+- name: VpcPeeringCreateGcpRequest
+  fields: 4
+  description: Vpc peering creation request message
+- name: VpcPeeringUpdateAwsRequest
+  fields: 5
+  description: VPC peering update request message
+- name: tag
+  fields: 3
+  description: Database tag
+relationships:
+- from: AclRoleDatabaseSpec
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: AclRoleDatabaseSpec
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: ActiveActiveTgwUpdateCidrsRequest
+  to: Cidr
+  type: has_many
+  via: cidrs
+- from: PrivateLinkActiveActiveCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PrivateLinkActiveActiveCreateRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: ActiveActiveVpcPeeringCreateAwsRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseTagUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseTagUpdateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: ActiveActivePscEndpointCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActivePscEndpointCreateRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: TaskStateUpdate
+  to: ProcessorResponse
+  type: has_one
+  via: response
+- from: SubscriptionDatabaseSpec
+  to: DatabaseThroughputSpec
+  type: has_one
+  via: throughputMeasurement
+- from: SubscriptionDatabaseSpec
+  to: LocalThroughput
+  type: has_many
+  via: localThroughputMeasurement
+- from: SubscriptionDatabaseSpec
+  to: DatabaseModuleSpec
+  type: has_many
+  via: modules
+- from: Subscription
+  to: CustomerManagedKeyAccessDetails
+  type: has_one
+  via: customerManagedKeyAccessDetails
+- from: MemoryStoreLongTermMemoryUpdateConfig
+  to: MemoryStoreModelConfig
+  type: has_one
+  via: embedding
+- from: CidrWhiteListUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: FixedDatabaseCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: FixedDatabaseCreateRequest
+  to: ReplicaOfSpec
+  type: has_one
+  via: replica
+- from: FixedDatabaseCreateRequest
+  to: DatabaseCertificateSpec
+  type: has_many
+  via: clientTlsCertificates
+- from: FixedDatabaseCreateRequest
+  to: DatabaseAlertSpec
+  type: has_many
+  via: alerts
+- from: FixedDatabaseCreateRequest
+  to: DatabaseModuleSpec
+  type: has_many
+  via: modules
+- from: DatabaseUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseUpdateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: DatabaseUpdateRequest
+  to: DatabaseThroughputSpec
+  type: has_one
+  via: throughputMeasurement
+- from: DatabaseUpdateRequest
+  to: ReplicaOfSpec
+  type: has_one
+  via: replica
+- from: DatabaseUpdateRequest
+  to: DatabaseCertificateSpec
+  type: has_many
+  via: clientTlsCertificates
+- from: DatabaseUpdateRequest
+  to: DatabaseBackupConfig
+  type: has_one
+  via: remoteBackup
+- from: DatabaseUpdateRequest
+  to: DatabaseAlertSpec
+  type: has_many
+  via: alerts
+- from: LocalRegionProperties
+  to: DatabaseBackupConfig
+  type: has_one
+  via: remoteBackup
+- from: LocalRegionProperties
+  to: LocalThroughput
+  type: has_one
+  via: localThroughputMeasurement
+- from: LocalRegionProperties
+  to: DatabaseAlertSpec
+  type: has_many
+  via: alerts
+- from: PscEndpointCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActiveVpcPeeringCreateBaseRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: BaseSubscriptionUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: Regions
+  to: Region
+  type: has_many
+  via: regions
+- from: ActiveActiveVpcPeeringUpdateAwsRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: EndpointsRedirectionResponse
+  to: EndpointRedirectionDTO
+  type: has_many
+  via: endpoints
+- from: PrivateLinkActiveActivePrincipalsCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PrivateLinkActiveActivePrincipalsCreateRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: PrivateLinkActiveActiveConnectionsDisassociateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PrivateLinkActiveActiveConnectionsDisassociateRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: PrivateLinkActiveActiveConnectionsDisassociateRequest
+  to: PrivateLinkConnectionDisassociate
+  type: has_many
+  via: connections
+- from: VpcPeeringUpdateAwsRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: MemoryStoreMatcherSpec
+  to: MemoryStoreRegexSpec
+  type: has_one
+  via: regex
+- from: DatabaseAvailableVersionsResponse
+  to: TargetVersion
+  type: has_many
+  via: targets
+- from: PrivateLinkPrincipalsCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreShortMemoryConfig
+  type: has_one
+  via: shortMemory
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreLongTermMemoryUpdateConfig
+  type: has_one
+  via: longTermMemory
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreModelConfig
+  type: has_one
+  via: llm
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreSummarizationConfig
+  type: has_one
+  via: summarization
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreLongTermMemoryExclusions
+  type: has_one
+  via: longTermMemoryExclusions
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreCustomMemoryType
+  type: has_many
+  via: addCustomMemoryTypes
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreTypeStrategyUpdate
+  type: has_many
+  via: updateCustomMemoryTypeStrategies
+- from: MemoryStoreUpdateRequest
+  to: MemoryStoreExtractionCadenceConfig
+  type: has_one
+  via: extractionCadence
+- from: FixedSubscriptionUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionUpdateCMKRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionUpdateCMKRequest
+  to: CustomerManagedKey
+  type: has_many
+  via: customerManagedKeys
+- from: CostReportCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionIds
+- from: CostReportCreateRequest
+  to: Database
+  type: belongs_to
+  via: databaseIds
+- from: CostReportCreateRequest
+  to: Tag
+  type: has_many
+  via: tags
+- from: MemoryProblemDetails
+  to: MemoryProblemFieldError
+  type: has_many
+  via: fields
+- from: AclRoleUpdateRequest
+  to: AclRoleRedisRuleSpec
+  type: has_many
+  via: redisRules
+- from: AccountSystemLogEntries
+  to: AccountSystemLogEntry
+  type: has_many
+  via: entries
+- from: TgwUpdateCidrsRequest
+  to: Cidr
+  type: has_many
+  via: cidrs
+- from: AccountUser
+  to: AccountUserOptions
+  type: has_one
+  via: options
+- from: SubscriptionMaintenanceWindowsSpec
+  to: MaintenanceWindowSpec
+  type: has_many
+  via: windows
+- from: AccountSessionLogEntries
+  to: AccountSessionLogEntry
+  type: has_many
+  via: entries
+- from: CrdbRegionSpec
+  to: LocalThroughput
+  type: has_one
+  via: localThroughputMeasurement
+- from: FixedDatabaseUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: FixedDatabaseUpdateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: FixedDatabaseUpdateRequest
+  to: ReplicaOfSpec
+  type: has_one
+  via: replica
+- from: FixedDatabaseUpdateRequest
+  to: DatabaseCertificateSpec
+  type: has_many
+  via: clientTlsCertificates
+- from: FixedDatabaseUpdateRequest
+  to: DatabaseAlertSpec
+  type: has_many
+  via: alerts
+- from: ModulesData
+  to: Module
+  type: has_many
+  via: modules
+- from: ActiveActiveRegionDeleteRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActiveRegionDeleteRequest
+  to: ActiveActiveRegionToDelete
+  type: has_many
+  via: regions
+- from: MemoryStoreModelConfig
+  to: MemoryStoreModelCredentials
+  type: has_one
+  via: credentials
+- from: AclRoleRedisRuleSpec
+  to: AclRoleDatabaseSpec
+  type: has_many
+  via: databases
+- from: ActiveActiveSubscriptionRegions
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PscEndpointUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseSlowLogEntries
+  to: DatabaseSlowLogEntry
+  type: has_many
+  via: entries
+- from: ActiveActivePscEndpointUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActivePscEndpointUpdateRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: SubscriptionMaintenanceWindows
+  to: MaintenanceWindow
+  type: has_many
+  via: windows
+- from: SubscriptionMaintenanceWindows
+  to: MaintenanceWindowSkipStatus
+  type: has_one
+  via: skipStatus
+- from: FixedSubscriptionsPlan
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: SubscriptionSpec
+  to: CloudAccount
+  type: belongs_to
+  via: cloudAccountId
+- from: SubscriptionSpec
+  to: SubscriptionRegionSpec
+  type: has_many
+  via: regions
+- from: SubscriptionSpec
+  to: ResourceTag
+  type: has_many
+  via: resourceTags
+- from: FixedDatabaseBackupRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: FixedDatabaseBackupRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: DatabaseVersionUpgradeStatus
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: SubscriptionResourceTagsUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionResourceTagsUpdateRequest
+  to: ResourceTag
+  type: has_many
+  via: resourceTags
+- from: DatabaseTagsUpdateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseTagsUpdateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: DatabaseTagsUpdateRequest
+  to: tag
+  type: has_many
+  via: tags
+- from: PrivateLinkConnectionsDisassociateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PrivateLinkConnectionsDisassociateRequest
+  to: PrivateLinkConnectionDisassociate
+  type: has_many
+  via: connections
+- from: FixedDatabaseUpgradeRedisVersionRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: FixedDatabaseUpgradeRedisVersionRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: CrdbUpdatePropertiesRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: CrdbUpdatePropertiesRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: CrdbUpdatePropertiesRequest
+  to: DatabaseCertificateSpec
+  type: has_many
+  via: clientTlsCertificates
+- from: CrdbUpdatePropertiesRequest
+  to: DatabaseAlertSpec
+  type: has_many
+  via: globalAlerts
+- from: CrdbUpdatePropertiesRequest
+  to: LocalRegionProperties
+  type: has_many
+  via: regions
+- from: SubscriptionRegionSpec
+  to: SubscriptionRegionNetworkingSpec
+  type: has_one
+  via: networking
+- from: DatabaseCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseCreateRequest
+  to: ReplicaOfSpec
+  type: has_one
+  via: replica
+- from: DatabaseCreateRequest
+  to: DatabaseThroughputSpec
+  type: has_one
+  via: throughputMeasurement
+- from: DatabaseCreateRequest
+  to: LocalThroughput
+  type: has_many
+  via: localThroughputMeasurement
+- from: DatabaseCreateRequest
+  to: DatabaseBackupConfig
+  type: has_one
+  via: remoteBackup
+- from: DatabaseCreateRequest
+  to: DatabaseCertificateSpec
+  type: has_many
+  via: clientTlsCertificates
+- from: DatabaseCreateRequest
+  to: DatabaseAlertSpec
+  type: has_many
+  via: alerts
+- from: DatabaseCreateRequest
+  to: DatabaseModuleSpec
+  type: has_many
+  via: modules
+- from: MemoryStoreBuiltInDetectorsConfig
+  to: MemoryStoreDetectorSelection
+  type: has_many
+  via: detectors
+- from: MemoryStoreCustomDetector
+  to: MemoryStoreMatcherSpec
+  type: has_one
+  via: matcher
+- from: TasksStateUpdate
+  to: TaskStateUpdate
+  type: has_many
+  via: tasks
+- from: AclRoleCreateRequest
+  to: AclRoleRedisRuleSpec
+  type: has_many
+  via: redisRules
+- from: DatabaseBackupRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseBackupRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreLongTermMemoryCreateConfig
+  to: MemoryStoreModelConfig
+  type: has_one
+  via: embedding
+- from: DataPersistenceOptions
+  to: DataPersistenceEntry
+  type: has_many
+  via: dataPersistence
+- from: DatabaseTagCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseTagCreateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreLongTermMemoryExclusions
+  to: MemoryStoreSemanticExclusionConfig
+  type: has_one
+  via: semantic
+- from: MemoryStoreLongTermMemoryExclusions
+  to: MemoryStoreBuiltInDetectorsConfig
+  type: has_one
+  via: builtInDetectors
+- from: MemoryStoreLongTermMemoryExclusions
+  to: MemoryStoreCustomDetectorsConfig
+  type: has_one
+  via: customDetectors
+- from: CrdbFlushRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: CrdbFlushRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreCustomDetectorsConfig
+  to: MemoryStoreCustomDetector
+  type: has_many
+  via: detectors
+- from: ActiveActiveVpcPeeringCreateGcpRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionCreateRequest
+  to: CustomerManagedKeyProperties
+  type: has_one
+  via: persistentStorageEncryptionKeys
+- from: SubscriptionCreateRequest
+  to: SubscriptionSpec
+  type: has_many
+  via: cloudProviders
+- from: SubscriptionCreateRequest
+  to: SubscriptionDatabaseSpec
+  type: has_many
+  via: databases
+- from: RedisVersions
+  to: RedisVersion
+  type: has_many
+  via: redisVersions
+- from: CloudAccountUpdateRequest
+  to: CloudAccount
+  type: belongs_to
+  via: cloudAccountId
+- from: PrivateLinkCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: SubscriptionPricings
+  to: SubscriptionPricing
+  type: has_many
+  via: pricing
+- from: ReplicaOfSpec
+  to: DatabaseSyncSourceSpec
+  type: has_many
+  via: syncSources
+- from: MemoryStoreCreateRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreShortMemoryConfig
+  type: has_one
+  via: shortMemory
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreLongTermMemoryCreateConfig
+  type: has_one
+  via: longTermMemory
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreModelConfig
+  type: has_one
+  via: llm
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreSummarizationConfig
+  type: has_one
+  via: summarization
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreLongTermMemoryExclusions
+  type: has_one
+  via: longTermMemoryExclusions
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreCustomMemoryType
+  type: has_many
+  via: customMemoryTypes
+- from: MemoryStoreCreateRequest
+  to: MemoryStoreExtractionCadenceConfig
+  type: has_one
+  via: extractionCadence
+- from: MemoryStoreSummarizationConfig
+  to: MemoryStoreSummarizationThresholdConfig
+  type: has_one
+  via: eventCount
+- from: PrivateLinkActiveActivePrincipalsDeleteRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: PrivateLinkActiveActivePrincipalsDeleteRequest
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: MemoryStoreLongTermMemoryStatus
+  to: MemoryStoreModelStatus
+  type: has_one
+  via: embedding
+- from: MemoryStoreSummary
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreSummary
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: MemoryStoreSummary
+  to: MemoryStoreSummarizationConfig
+  type: has_one
+  via: summarization
+- from: MemoryStoreSummary
+  to: MemoryStoreModelStatus
+  type: has_one
+  via: llm
+- from: MemoryStoreListResponse
+  to: MemoryStoreSummary
+  type: has_many
+  via: data
+- from: MemoryStoreResponse
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: MemoryStoreResponse
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: MemoryStoreResponse
+  to: MemoryStoreShortMemoryConfig
+  type: has_one
+  via: shortMemory
+- from: MemoryStoreResponse
+  to: MemoryStoreLongTermMemoryStatus
+  type: has_one
+  via: longTermMemory
+- from: MemoryStoreResponse
+  to: MemoryStoreModelStatus
+  type: has_one
+  via: llm
+- from: MemoryStoreResponse
+  to: MemoryStoreEndpoint
+  type: has_many
+  via: endpoints
+- from: MemoryStoreResponse
+  to: MemoryStoreSummarizationConfig
+  type: has_one
+  via: summarization
+- from: MemoryStoreResponse
+  to: MemoryStoreLongTermMemoryExclusions
+  type: has_one
+  via: longTermMemoryExclusions
+- from: MemoryStoreResponse
+  to: MemoryStoreCustomMemoryType
+  type: has_many
+  via: customMemoryTypes
+- from: MemoryStoreResponse
+  to: MemoryStoreExtractionCadenceConfig
+  type: has_one
+  via: extractionCadence
+- from: FixedDatabase
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: FixedDatabase
+  to: DynamicEndpoints
+  type: has_one
+  via: dynamicEndpoints
+- from: FixedDatabase
+  to: ReplicaAsSourceEndpoints
+  type: has_one
+  via: replicaAsSourceEndpoints
+- from: DatabaseImportRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: DatabaseImportRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: DatabaseUpgradeRedisVersionRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: DatabaseUpgradeRedisVersionRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActiveRegionCreateRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: ActiveActiveRegionCreateRequest
+  to: CrdbRegionSpec
+  type: has_many
+  via: databases
+- from: FixedDatabaseImportRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: FixedDatabaseImportRequest
+  to: Database
+  type: belongs_to
+  via: databaseId
+- from: PrivateLinkPrincipalsDeleteRequest
+  to: Subscription
+  type: belongs_to
+  via: subscriptionId
+- from: CustomerManagedKeyProperties
+  to: CustomerManagedKey
+  type: has_many
+  via: customerManagedKeys
+- from: MemoryStoreCustomMemoryType
+  to: MemoryStoreCustomField
+  type: has_many
+  via: fields
+- from: MemoryStoreCustomMemoryType
+  to: MemoryStoreCustomExtractionStrategy
+  type: has_one
+  via: extractionStrategy

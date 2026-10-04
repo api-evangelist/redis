@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  title: Redis Long Term Memory API
+  version: '2026-10-04'
+  description: 'GENERATED FROM DOCUMENTATION by API Evangelist on 2026-10-04: 19 operation(s) read from 11 public documentation page(s) (each operation names its page in x-source). This is not the provider''s published contract; Redis has published no machine-readable contract that the pipeline could find. Engine: local.'
+  x-evidence-tiers:
+    code-example: 13
+    documentation: 6
+    pages-with-code: 9
+    pages-read: 11
+  x-generated-from: documentation
+  x-provenance: generated
+  x-authored-by: API Evangelist
+  x-generated: '2026-10-04'
+  x-generator: generate-contract-from-docs.py
+  x-engine: local
+  x-sources:
+  - https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+  - https://redis.io/tutorials/context-engineering-workshop-java.md
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+  - https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+  - https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+  - https://redis.io/tutorials/develop/rust.md
+  - https://redis.io/tutorials/howtos/socialnetwork.md
+  - https://redis.io/tutorials/create/azurefunctions.md
+  - https://redis.io/tutorials/howtos/frauddetection.md
+  - https://redis.io/tutorials/data-deduplication-with-redis.md
+servers:
+- url: https://packages.redis.io
+security:
+- bearer: []
+tags:
+- name: Long Term Memory
+paths:
+  /v1/long-term-memory:
+    post:
+      operationId: post_v1_long_term_memory
+      tags:
+      - Long Term Memory
+      summary: POST /v1/long-term-memory
+      x-source: https://redis.io/tutorials/context-engineering-workshop-java.md
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1LongTermMemoryRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: "curl -X POST http://localhost:8000/v1/long-term-memory/  -H \"Content-Type: application/json\"  -d '{\n    \"memories\": [\n      {\n        \"id\": \"id-123456789\",\n        \"session_id\": \"user-2bfc7e6e-452f-40d6-b7e7-29855518B052\",\n        \"text\": \"My favorite programming language is Java\",\n        \"namespace\": \"long-term-memory\",\n        \"memory_type\": \"semantic\"\n      }\n    ]\n  }'\n```"
+components:
+  schemas:
+    PostV1LongTermMemoryRequest:
+      type: object
+      properties:
+        memories:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              session_id:
+                type: string
+              text:
+                type: string
+              namespace:
+                type: string
+              memory_type:
+                type: string
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,205 @@
+generated: '2026-10-04'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 16
+  own: 8
+  other_domain: 2
+  platform: 6
+  roles:
+  - api
+  - docs
+  - other
+  - status
+  - website
+hosts:
+- host: api.redis.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: redis.com
+  role: api
+  relation: other-domain
+- host: api.redis.io
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: redis.io
+  role: api
+  relation: own
+- host: cloud.redis.io
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: redis.io
+  role: other
+  relation: own
+- host: docs.redis.io
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  title: Docs
+  status: 200
+  registrable_domain: redis.io
+  role: docs
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrg
+  serves: []
+  registrable_domain: github.com
+  role: other
+  relation: platform
+- host: packages.redis.io
+  found_by:
+  - apis[]
+  - probed
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types: []
+  serves:
+  - api
+  - cdn
+  vendor: cloudfront
+  registrable_domain: redis.io
+  role: other
+  relation: own
+- host: pypi.org
+  found_by:
+  - pointer
+  types:
+  - PyPI
+  serves: []
+  registrable_domain: pypi.org
+  role: other
+  relation: platform
+- host: redis.io
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Security
+  - Pricing
+  - Newsroom
+  - Login
+  - Leadership
+  - ChangeLog
+  - APIReference
+  - GettingStarted
+  - Website
+  - Documentation
+  - Blog
+  - Community
+  - Support
+  - TermsOfService
+  - PrivacyPolicy
+  - SDKs
+  - Integrations
+  - LlmsText
+  serves:
+  - docs
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: redis.io
+  role: website
+  relation: own
+- host: status.redis.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: redis.com
+  role: status
+  relation: other-domain
+- host: status.redis.io
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: redis.io
+  role: status
+  relation: own
+- host: trust.redis.io
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - Compliance
+  serves: []
+  platform: app.safebase.io
+  registrable_domain: redis.io
+  role: other
+  relation: own
+- host: twitter.com
+  found_by:
+  - pointer
+  types:
+  - X
+  serves: []
+  registrable_domain: twitter.com
+  role: other
+  relation: platform
+- host: university.redis.io
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: redis.io
+  role: other
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform
+- host: www.npmjs.com
+  found_by:
+  - pointer
+  types:
+  - npm
+  serves: []
+  registrable_domain: npmjs.com
+  role: other
+  relation: platform
+- host: www.youtube.com
+  found_by:
+  - pointer
+  types:
+  - YouTube
+  serves: []
+  registrable_domain: youtube.com
+  role: other
+  relation: platform
