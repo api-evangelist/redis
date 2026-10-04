@@ -7,15 +7,20 @@ description: Redis is an open source, in-memory data structure store used as a d
   and maintained by Redis Inc.
 type: Index
 deliveryModel:
-  model: saas
-  open_source: false
+  model: unknown
+  license_evidence:
+    repo: redis/redis
+    spdx: NOASSERTION
+    stars: 76475
+  open_source: unknown
   commercial: true
   callable_host: false
-  label: Hosted service · you call their endpoint
-  confidence: medium
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
   source:
   - pricing
-  generated: '2026-08-28'
+  - repository-unlicensed
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -37,7 +42,7 @@ tags:
   - In-Memory
   - Key-Value Store
   - NoSQL
-  - Open-Source
+  - Open Source
   - Streaming
 tags_raw:
   - Cache
@@ -47,6 +52,7 @@ tags_raw:
   - NoSQL
   - Open Source
   - Streaming
+  - Open-Source
 created: '2024-01-01'
 modified: '2026-05-04'
 specificationVersion: '0.23'
@@ -58,6 +64,12 @@ apis:
       (RESP) over TCP, with client libraries for all major programming languages.
     humanURL: https://redis.io/docs/latest/commands/
     tags:
+      - Cache
+      - Commands
+      - Core
+      - Database
+      - Key-Value Store
+    tags_raw:
       - Cache
       - Commands
       - Core
