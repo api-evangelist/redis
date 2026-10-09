@@ -1,0 +1,598 @@
+openapi: 3.1.0
+info:
+  title: Redis API
+  version: '2026-10-04'
+  description: 'GENERATED FROM DOCUMENTATION by API Evangelist on 2026-10-04: 19 operation(s) read from 11 public documentation page(s) (each
+    operation names its page in x-source). This is not the provider''s published contract; Redis has published no machine-readable contract that
+    the pipeline could find. Engine: local.'
+  x-evidence-tiers:
+    code-example: 13
+    documentation: 6
+    pages-with-code: 9
+    pages-read: 11
+  x-generated-from: documentation
+  x-provenance: generated
+  x-authored-by: API Evangelist
+  x-generated: '2026-10-04'
+  x-generator: generate-contract-from-docs.py
+  x-engine: local
+  x-sources:
+  - https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+  - https://redis.io/tutorials/context-engineering-workshop-java.md
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+  - https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+  - https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+  - https://redis.io/tutorials/develop/rust.md
+  - https://redis.io/tutorials/howtos/socialnetwork.md
+  - https://redis.io/tutorials/create/azurefunctions.md
+  - https://redis.io/tutorials/howtos/frauddetection.md
+  - https://redis.io/tutorials/data-deduplication-with-redis.md
+servers:
+- url: https://packages.redis.io
+paths:
+  /:
+    get:
+      operationId: get
+      tags:
+      - Api
+      summary: GET /
+      x-source: https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl](https://curl.se/):'
+  /Homebrew/install/HEAD/install.sh:
+    get:
+      operationId: get_Homebrew_install_HEAD_install_sh
+      tags:
+      - Homebrew
+      summary: GET /Homebrew/install/HEAD/install.sh
+      x-source: https://redis.io/tutorials/create/azurefunctions.md
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+          ```'
+  /actuator/health:
+    get:
+      operationId: get_actuator_health
+      tags:
+      - Actuator
+      summary: GET /actuator/health
+      x-source: https://redis.io/tutorials/context-engineering-workshop-java.md
+      responses:
+        '200':
+          description: Success (shape read from the example response on the page)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActuatorHealthResponse'
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl http://localhost:8080/actuator/health
+
+          ```'
+  /ai/chat/string:
+    get:
+      operationId: get_ai_chat_string
+      tags:
+      - Ai
+      summary: GET /ai/chat/string
+      x-source: https://redis.io/tutorials/context-engineering-workshop-java.md
+      parameters:
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl -X GET "http://localhost:8080/ai/chat/string?query=Hello"
+
+          ```'
+  /api/dedup/stats:
+    get:
+      operationId: get_api_dedup_stats
+      tags:
+      - Api
+      summary: GET /api/dedup/stats
+      x-source: https://redis.io/tutorials/data-deduplication-with-redis.md
+      parameters:
+      - name: scope
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (shape read from the example response on the page)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiDedupStatsResponse'
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl http://localhost:8080/api/dedup/stats?scope=webhooks
+
+          ```'
+  /api/dedup/{dedupid}:
+    post:
+      operationId: post_api_dedup_dedupid
+      tags:
+      - Api
+      summary: POST /api/dedup/events
+      x-source: https://redis.io/tutorials/data-deduplication-with-redis.md
+      parameters:
+      - name: dedupid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostApiDedupDedupidRequest'
+      responses:
+        '201':
+          description: Success (shape read from the example response on the page)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostApiDedupDedupidResponse'
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: "curl -X POST http://localhost:8080/api/dedup/events  -H \"Content-Type: application/json\"  -d '{\n    \"scope\": \"webhooks\"\
+          ,\n    \"idempotencyKey\": \"evt-123\",\n    \"payload\": {\"orderId\": \"ord-123\", \"amount\": 49.95},\n    \"ttlSeconds\": 300\n\
+          \  }'\n```"
+        collapsed_from: 2 example path(s) differing only at dedupId
+  /gpg:
+    get:
+      operationId: get_gpg
+      tags:
+      - Gpg
+      summary: GET /gpg
+      x-source: https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+
+          echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee
+          /etc/apt/sources.list.d/redis.list
+
+          sudo apt-get update  > /dev/null 2>&1
+
+          sudo apt-get install redis  > /dev/null 2>&1
+
+          redis --daemonize yes
+
+          ```'
+  /images/sy1jschh/production/{productionid}:
+    get:
+      operationId: get_images_sy1jschh_production_productionid
+      tags:
+      - Images
+      summary: GET /images/sy1jschh/production/7d0f5ec479a55a55e4e30f8cd3ca28d51fbbfcbd-1400x234.jpg
+      x-source: https://redis.io/tutorials/howtos/frauddetection.md
+      parameters:
+      - name: productionid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: curl request returning ip_blacklist after adding the IP to the Redis Cuckoo Filter](https://cdn.sanity.io/images/sy1jschh/production/7d0f5ec479a55a55e4e30f8cd3ca28d51fbbfcbd-1400x234.jpg)
+        collapsed_from: 2 example path(s) differing only at productionId
+  /redis-cli/install.sh:
+    get:
+      operationId: get_redis_cli_install_sh
+      tags:
+      - Redis Cli
+      summary: GET /redis-cli/install.sh
+      x-source: https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: "curl -fsSL https://packages.redis.io/redis-cli/install.sh | sh \n The script detects your operating system and architecture,\
+          \ downloads the matching redis-cli binary, verifies its SHA-256 checksum, and installs it to /usr/local/bin (using sudo if required).\
+          \ If /usr/local/bin is not writable, it installs to ~/.local/bin instead. \n Note: \n As with any curl ... | sh command, review the\
+          \ install script b"
+  /users:
+    post:
+      operationId: post_users
+      tags:
+      - Users
+      summary: Create a user
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUsersRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostUsersResponse'
+      x-evidence:
+        kind: documentation
+  /users/{userid}:
+    get:
+      operationId: get_users_userid
+      tags:
+      - Users
+      summary: Retrieve a user by ID
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      parameters:
+      - name: userid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersUseridResponse'
+      x-evidence:
+        kind: documentation
+  /users/{userid}/matches:
+    get:
+      operationId: get_users_userid_matches
+      tags:
+      - Users
+      summary: Find matching users for a given user
+      x-source: https://redis.io/tutorials/howtos/socialnetwork.md
+      parameters:
+      - name: userid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: radiusKm
+        in: query
+        required: false
+        schema:
+          type: number
+        description: search radius in kilometers, default 500
+      responses:
+        '200':
+          description: Success (status as documented)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersUseridMatchesResponse'
+      x-evidence:
+        kind: documentation
+  /v1/bdbs:
+    get:
+      operationId: get_v1_bdbs
+      tags:
+      - Bdbs
+      summary: GET /v1/bdbs
+      x-source: https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl -u "demo@redislabs.com:password"  https://localhost:9443/v1/bdbs
+
+          ```'
+  /v1/caches/$CACHE_ID/entries/search:
+    get:
+      operationId: get_v1_caches_CACHE_ID_entries_search
+      tags:
+      - Caches
+      summary: GET /v1/caches/$CACHE_ID/entries/search
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries:
+    delete:
+      operationId: delete_v1_caches_cacheid_entries
+      tags:
+      - Caches
+      summary: DELETE /v1/caches/{cacheid}/entries
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries/search:
+    post:
+      operationId: post_v1_caches_cacheid_entries_search
+      tags:
+      - Caches
+      summary: Quick example
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1CachesCacheidEntriesSearchRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries/{entryid}:
+    delete:
+      operationId: delete_v1_caches_cacheid_entries_entryid
+      tags:
+      - Caches
+      summary: DELETE /v1/caches/{cacheid}/entries/{entryid}
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entryid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/{id}:
+    post:
+      operationId: post_v1_caches_cacheid_id
+      tags:
+      - Caches
+      summary: Quick example
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1CachesCacheidIdRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+        collapsed_from: 2 example path(s) differing only at id
+  /v1/long-term-memory:
+    post:
+      operationId: post_v1_long_term_memory
+      tags:
+      - Long Term Memory
+      summary: POST /v1/long-term-memory
+      x-source: https://redis.io/tutorials/context-engineering-workshop-java.md
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1LongTermMemoryRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: "curl -X POST http://localhost:8000/v1/long-term-memory/  -H \"Content-Type: application/json\"  -d '{\n    \"memories\": [\n\
+          \      {\n        \"id\": \"id-123456789\",\n        \"session_id\": \"user-2bfc7e6e-452f-40d6-b7e7-29855518B052\",\n        \"text\"\
+          : \"My favorite programming language is Java\",\n        \"namespace\": \"long-term-memory\",\n        \"memory_type\": \"semantic\"\
+          \n      }\n    ]\n  }'\n```"
+components:
+  schemas:
+    GetActuatorHealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+    GetApiDedupStatsResponse:
+      type: object
+      properties:
+        scope:
+          type: string
+        exactCount:
+          type: integer
+        bitsSet:
+          type: integer
+        bitSize:
+          type: integer
+        hashCount:
+          type: integer
+        estimatedFalsePositiveRate:
+          type: number
+    PostApiDedupDedupidRequest:
+      type: object
+      properties:
+        scope:
+          type: string
+        idempotencyKey:
+          type: string
+        payload:
+          type: object
+          properties:
+            orderId:
+              type: string
+            amount:
+              type: number
+        ttlSeconds:
+          type: integer
+    PostApiDedupDedupidResponse:
+      type: object
+      properties:
+        scope:
+          type: string
+        exactCount:
+          type: integer
+        bitsSet:
+          type: integer
+        bitSize:
+          type: integer
+        hashCount:
+          type: integer
+        estimatedFalsePositiveRate:
+          type: number
+    PostUsersRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        interests:
+          type: array
+          description: array of strings
+        expertises:
+          type: array
+          description: array of strings
+        location:
+          type: object
+          description: object with latitude and longitude
+      required:
+      - name
+      - interests
+      - expertises
+      - location
+    PostUsersResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: generated UUID of the created user
+    GetUsersUseridResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        interests:
+          type: array
+          description: array of strings
+        expertises:
+          type: array
+          description: array of strings
+        location:
+          type: object
+          description: object with latitude and longitude
+    GetUsersUseridMatchesResponse:
+      type: object
+      properties:
+        matches:
+          type: array
+          description: list of matching User objects
+    PostV1CachesCacheidEntriesSearchRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+      required:
+      - prompt
+    PostV1CachesCacheidIdRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        response:
+          type: string
+      required:
+      - prompt
+      - response
+    PostV1LongTermMemoryRequest:
+      type: object
+      properties:
+        memories:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              session_id:
+                type: string
+              text:
+                type: string
+              namespace:
+                type: string
+              memory_type:
+                type: string
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security:
+- bearer: []
+tags:
+- name: Actuator
+- name: Ai
+- name: Api
+- name: Bdbs
+- name: Caches
+- name: Gpg
+- name: Homebrew
+- name: Images
+- name: Long Term Memory
+- name: Redis Cli
+- name: Users

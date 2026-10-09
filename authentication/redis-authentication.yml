@@ -1,0 +1,18 @@
+generated: '2026-10-04'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://redis.io/solutions/authentication-token-storage/
+sources:
+- https://redis.io/solutions/authentication-token-storage/
+- https://redis.io/tutorials/authentication-token-storage-with-redis.md
+- https://redis.io/tutorials/howtos/solutions/mobile-banking/session-management.md
+- https://redis.io/docs/latest/commands/auth/index.html.md
+description: Authentication for Redis token‑based APIs
+schemes:
+- type: http-bearer
+  name: Bearer
+  evidence: 'The todo routes (`GET`, `POST`, `PATCH`, `DELETE` under `/api/todos`) all require a valid `Authorization: Bearer <token>` header.'
+  location: header
+  header: Authorization
+  how_to_obtain: Login endpoint (`POST /api/auth/login`) returns a bearer token in the JSON response.
+docs: https://redis.io/solutions/authentication-token-storage/

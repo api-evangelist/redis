@@ -1,0 +1,165 @@
+openapi: 3.2.0
+info:
+  title: Redis Caches API
+  version: '2026-10-04'
+  description: 'GENERATED FROM DOCUMENTATION by API Evangelist on 2026-10-04: 19 operation(s) read from 11 public documentation page(s) (each operation names its page in x-source). This is not the provider''s published contract; Redis has published no machine-readable contract that the pipeline could find. Engine: local.'
+  x-evidence-tiers:
+    code-example: 13
+    documentation: 6
+    pages-with-code: 9
+    pages-read: 11
+  x-generated-from: documentation
+  x-provenance: generated
+  x-authored-by: API Evangelist
+  x-generated: '2026-10-04'
+  x-generator: generate-contract-from-docs.py
+  x-engine: local
+  x-sources:
+  - https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+  - https://redis.io/tutorials/context-engineering-workshop-java.md
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+  - https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+  - https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+  - https://redis.io/tutorials/develop/rust.md
+  - https://redis.io/tutorials/howtos/socialnetwork.md
+  - https://redis.io/tutorials/create/azurefunctions.md
+  - https://redis.io/tutorials/howtos/frauddetection.md
+  - https://redis.io/tutorials/data-deduplication-with-redis.md
+servers:
+- url: https://packages.redis.io
+security:
+- bearer: []
+tags:
+- name: Caches
+paths:
+  /v1/caches/$CACHE_ID/entries/search:
+    get:
+      operationId: get_v1_caches_CACHE_ID_entries_search
+      tags:
+      - Caches
+      summary: GET /v1/caches/$CACHE_ID/entries/search
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries:
+    delete:
+      operationId: delete_v1_caches_cacheid_entries
+      tags:
+      - Caches
+      summary: DELETE /v1/caches/{cacheid}/entries
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries/search:
+    post:
+      operationId: post_v1_caches_cacheid_entries_search
+      tags:
+      - Caches
+      summary: Quick example
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1CachesCacheidEntriesSearchRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/entries/{entryid}:
+    delete:
+      operationId: delete_v1_caches_cacheid_entries_entryid
+      tags:
+      - Caches
+      summary: DELETE /v1/caches/{cacheid}/entries/{entryid}
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entryid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+  /v1/caches/{cacheid}/{id}:
+    post:
+      operationId: post_v1_caches_cacheid_id
+      tags:
+      - Caches
+      summary: Quick example
+      x-source: https://redis.io/docs/latest/develop/ai/context-engine/langcache
+      parameters:
+      - name: cacheid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostV1CachesCacheidIdRequest'
+      responses:
+        '201':
+          description: Success (status as documented)
+      x-evidence:
+        kind: documentation
+        collapsed_from: 2 example path(s) differing only at id
+components:
+  schemas:
+    PostV1CachesCacheidEntriesSearchRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+      required:
+      - prompt
+    PostV1CachesCacheidIdRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        response:
+          type: string
+      required:
+      - prompt
+      - response
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer

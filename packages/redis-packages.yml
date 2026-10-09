@@ -1,0 +1,48 @@
+generated: '2026-10-04'
+method: probed
+generator: harvest-packages.py
+source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
+ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (linkedin.com,
+  npmjs.com, pypi.org, redis.com, redis.io, security/redis-domain-security.yml, security/redis-trust-center.yml, security/redis-vulnerability-disclosure.yml,
+  twitter.com, youtube.com) or its accepted GitHub org.'
+packages:
+- name: redis
+  registry: npm
+  url: https://www.npmjs.com/package/redis
+  language: JavaScript
+  official: true
+  version: 6.3.0
+  published: '2026-09-30'
+  evidence: metadata names redis.com
+- name: redis
+  registry: pypi
+  url: https://pypi.org/project/redis/
+  language: Python
+  official: true
+  version: 8.1.0
+  published: '2026-07-30'
+  evidence: metadata names redis.com
+- name: redis
+  registry: rubygems
+  url: https://rubygems.org/gems/redis
+  language: Ruby
+  official: false
+  version: 6.0.0
+  published: '2026-07-31'
+  evidence: 'name match only: the metadata names neither the provider''s domain nor its GitHub org'
+- name: redis
+  registry: nuget
+  url: https://www.nuget.org/packages/redis
+  language: C#
+  official: false
+  version: 1.0.3
+  published: null
+  evidence: 'name match only: the metadata names neither the provider''s domain nor its GitHub org'
+- name: redis
+  registry: crates
+  url: https://crates.io/crates/redis
+  language: Rust
+  official: false
+  version: 1.7.1
+  published: '2026-09-25'
+  evidence: 'name match only: the metadata names neither the provider''s domain nor its GitHub org'

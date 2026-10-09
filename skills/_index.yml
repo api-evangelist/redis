@@ -1,0 +1,37 @@
+generated: '2026-10-04'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/redis-cloud-openapi.yml
+skills:
+- file: skills/redis-create-and-retrieve-pro-database.md
+  name: redis-create-and-retrieve-pro-database
+  api: openapi/redis-cloud-openapi.yml
+  operations:
+  - createDatabase
+  - getSubscriptionDatabaseByID
+- file: skills/redis-create-and-fetch-database.md
+  name: redis-create-and-fetch-database
+  api: openapi/redis-cloud-openapi.yml
+  operations:
+  - createFixedDatabase
+  - getSubscriptionDatabaseByID_1
+- file: skills/redis-generate-cost-report.md
+  name: redis-generate-cost-report
+  api: openapi/redis-cloud-openapi.yml
+  operations:
+  - createCostReport
+  - getCostReport
+- file: skills/redis-cloud-accounts-manage.md
+  name: redis-cloud-accounts-manage
+  api: openapi/redis-cloud-openapi.yml
+  operations:
+  - createCloudAccount
+  - getCloudAccountById
+  - updateCloudAccount
+  - deleteCloudAccount
+- file: skills/redis-data-integration-list-and-proxy.md
+  name: redis-data-integration-list-and-proxy
+  api: openapi/redis-cloud-openapi.yml
+  operations:
+  - getDataIntegrationWorkspaces
+  - proxyDataIntegrationWorkspace_7

@@ -1,0 +1,144 @@
+openapi: 3.2.0
+info:
+  title: Redis Dedup API
+  version: '2026-10-04'
+  description: 'GENERATED FROM DOCUMENTATION by API Evangelist on 2026-10-04: 19 operation(s) read from 11 public documentation page(s) (each operation names its page in x-source). This is not the provider''s published contract; Redis has published no machine-readable contract that the pipeline could find. Engine: local.'
+  x-evidence-tiers:
+    code-example: 13
+    documentation: 6
+    pages-with-code: 9
+    pages-read: 11
+  x-generated-from: documentation
+  x-provenance: generated
+  x-authored-by: API Evangelist
+  x-generated: '2026-10-04'
+  x-generator: generate-contract-from-docs.py
+  x-engine: local
+  x-sources:
+  - https://redis.io/docs/latest/operate/rs/references/rest-api/index.html.md
+  - https://redis.io/tutorials/context-engineering-workshop-java.md
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache
+  - https://redis.io/docs/latest/develop/ai/context-engine/langcache/api-examples
+  - https://redis.io/tutorials/what-is-agent-memory-example-using-langgraph-and-redis.md
+  - https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/install-redis-cli
+  - https://redis.io/tutorials/develop/rust.md
+  - https://redis.io/tutorials/howtos/socialnetwork.md
+  - https://redis.io/tutorials/create/azurefunctions.md
+  - https://redis.io/tutorials/howtos/frauddetection.md
+  - https://redis.io/tutorials/data-deduplication-with-redis.md
+servers:
+- url: https://packages.redis.io
+security:
+- bearer: []
+tags:
+- name: Dedup
+paths:
+  /api/dedup/stats:
+    get:
+      operationId: get_api_dedup_stats
+      tags:
+      - Dedup
+      summary: GET /api/dedup/stats
+      x-source: https://redis.io/tutorials/data-deduplication-with-redis.md
+      parameters:
+      - name: scope
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success (shape read from the example response on the page)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiDedupStatsResponse'
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: 'curl http://localhost:8080/api/dedup/stats?scope=webhooks
+
+          ```'
+  /api/dedup/{dedupid}:
+    post:
+      operationId: post_api_dedup_dedupid
+      tags:
+      - Dedup
+      summary: POST /api/dedup/events
+      x-source: https://redis.io/tutorials/data-deduplication-with-redis.md
+      parameters:
+      - name: dedupid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostApiDedupDedupidRequest'
+      responses:
+        '201':
+          description: Success (shape read from the example response on the page)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostApiDedupDedupidResponse'
+      x-evidence:
+        kind: code-example
+        language: curl
+        snippet: "curl -X POST http://localhost:8080/api/dedup/events  -H \"Content-Type: application/json\"  -d '{\n    \"scope\": \"webhooks\",\n    \"idempotencyKey\": \"evt-123\",\n    \"payload\": {\"orderId\": \"ord-123\", \"amount\": 49.95},\n    \"ttlSeconds\": 300\n  }'\n```"
+        collapsed_from: 2 example path(s) differing only at dedupId
+components:
+  schemas:
+    GetApiDedupStatsResponse:
+      type: object
+      properties:
+        scope:
+          type: string
+        exactCount:
+          type: integer
+        bitsSet:
+          type: integer
+        bitSize:
+          type: integer
+        hashCount:
+          type: integer
+        estimatedFalsePositiveRate:
+          type: number
+    PostApiDedupDedupidRequest:
+      type: object
+      properties:
+        scope:
+          type: string
+        idempotencyKey:
+          type: string
+        payload:
+          type: object
+          properties:
+            orderId:
+              type: string
+            amount:
+              type: number
+        ttlSeconds:
+          type: integer
+    PostApiDedupDedupidResponse:
+      type: object
+      properties:
+        scope:
+          type: string
+        exactCount:
+          type: integer
+        bitsSet:
+          type: integer
+        bitSize:
+          type: integer
+        hashCount:
+          type: integer
+        estimatedFalsePositiveRate:
+          type: number
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
