@@ -1,0 +1,34 @@
+# Front Door AI Index — redis — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: redis
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: redis.io
+  final_host: redis.io
+  ownership: own
+  owner: redis
+  shares_host_with:
+  - redis-streams
+  inherited_from: null
+  alias_of: null
+  verdict: scored
+  score: 16
+  band: 5
+  band_label: prominent
+  host_score: 16
+  density: 15.97
+  words: 1002
+  tiers:
+    agentic: 6
+    core: 10
+    model: 0
+  ambiguous: 13
+  top_terms:
+    agent: 13
+    AI: 5
+    ML: 4
+    vector database: 4
+    agentic: 2
+    LLMs: 1

@@ -123,3 +123,51 @@ plans:
       - name: On-prem
       - name: Active-active geo-distributed
       - name: Premium support
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  - subscription
+  units:
+  - compute
+  - data
+  - period
+  plans:
+  - name: Free
+    access: freemium
+    model: free
+    model_how: derived
+    units:
+    - data
+    periods:
+    - month
+  - name: Essentials
+    access: paid
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    - period
+    periods:
+    - month
+    - per-use
+  - name: Pro
+    access: paid
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    - period
+    periods:
+    - month
+    - per-use
+  - name: Enterprise (Self-Managed / Private)
+    access: enterprise
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - year
