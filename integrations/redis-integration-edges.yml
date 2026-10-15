@@ -1,6 +1,8 @@
 generated: '2026-10-14'
 method: searched
 checked:
+- https://github.com/langchain-ai/langchain/tree/master/libs/partners
+- https://github.com/run-llama/llama_index/tree/main/llama-index-integrations
 - https://marketplace.visualstudio.com/vscode
 marketplace_apps: []
 edges:
@@ -22,5 +24,43 @@ edges:
   - Verified domain
   detected_by: sweep-devtools.py
   detected: '2026-10-14'
+- partner_name: LlamaIndex
+  partner: llamaindex
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-redis
+  coverage_role:
+  - vector-store
+  framework_signals:
+    packages:
+    - llama-index-vector-stores-redis
+    roles:
+    - vector-store
+    vendor_domain: redis.io
+  matched_by: verified-domain-table
+  detected_by: sweep-rag-vector.py
+  first_seen: '2026-10-15'
+- partner_name: LangChain
+  partner: langchain
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/langchain-ai/langchain-redis
+  coverage_role:
+  - vector-store
+  framework_signals:
+    packages:
+    - langchain-redis
+    roles:
+    - vector-store
+    vendor_domain: redis.io
+  matched_by: verified-domain-table
+  detected_by: sweep-rag-vector.py
+  first_seen: '2026-10-15'
 source:
 - https://marketplace.visualstudio.com/vscode
