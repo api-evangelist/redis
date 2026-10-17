@@ -422,6 +422,444 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    AccountSessionLogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        time:
+          type: string
+          format: date-time
+        user:
+          type: string
+        userAgent:
+          type: string
+        ipAddress:
+          type: string
+        userRole:
+          type: string
+        type:
+          type: string
+        action:
+          type: string
+      description: Account session log entry
+    Region:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        provider:
+          type: string
+          enum:
+          - AWS
+          - GCP
+      description: RedisLabs region information
+    CostReportCreateRequest:
+      required:
+      - endDate
+      - startDate
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: Filter for usage starting on or after this date. Must be in format YYYY-MM-DD
+          format: YYYY-MM-DD
+          example: '2025-10-01'
+        endDate:
+          type: string
+          description: Filter for usage ending on or before this date. Must be in format YYYY-MM-DD and must be after start date
+          format: YYYY-MM-DD
+          example: '2025-11-06'
+        format:
+          type: string
+          description: Output format for the cost report
+          example: csv
+          default: csv
+          enum:
+          - json
+          - csv
+        subscriptionIds:
+          type: array
+          description: Array of subscriptionIDs to filter by
+          example:
+          - 123
+          - 456
+          items:
+            type: integer
+            description: Array of subscriptionIDs to filter by
+            format: int32
+        databaseIds:
+          type: array
+          description: Array of database IDs to filter by
+          example:
+          - 789
+          - 101112
+          items:
+            type: integer
+            description: Array of database IDs to filter by
+            format: int32
+        subscriptionType:
+          type: string
+          description: Filter by plan type
+          example: pro
+          enum:
+          - pro
+          - essentials
+        regions:
+          type: array
+          description: Array of regions to filter by
+          example:
+          - us-east-1
+          - eu-west-1
+          items:
+            type: string
+            description: Array of regions to filter by
+            example: '["us-east-1","eu-west-1"]'
+        tags:
+          type: array
+          description: Array of key-value pairs for tag filtering
+          items:
+            $ref: '#/components/schemas/Tag'
+        commandType:
+          type: string
+          readOnly: true
+      description: Cost report generation request
+    Regions:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Region'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        regions:
+        - id: 1
+          name: us-east-1
+          provider: AWS
+        - id: 2
+          name: us-west-1
+          provider: AWS
+        - id: 3
+          name: us-west-2
+          provider: AWS
+        - id: 4
+          name: eu-west-1
+          provider: AWS
+        - id: 29
+          name: eu-central-1
+          provider: AWS
+        - id: 7
+          name: sa-east-1
+          provider: AWS
+        - id: 63
+          name: ca-central-1
+          provider: AWS
+        - id: 62
+          name: eu-north-1
+          provider: AWS
+        - id: 61
+          name: eu-west-3
+          provider: AWS
+        - id: 60
+          name: eu-west-2
+          provider: AWS
+        - id: 59
+          name: us-east-2
+          provider: AWS
+        - id: 64
+          name: ap-east-1
+          provider: AWS
+        - id: 146
+          name: ap-southeast-5
+          provider: AWS
+        - id: 30
+          name: ap-south-1
+          provider: AWS
+        - id: 117
+          name: ap-northeast-3
+          provider: AWS
+        - id: 116
+          name: ap-northeast-2
+          provider: AWS
+        - id: 145
+          name: ap-southeast-7
+          provider: AWS
+        - id: 6
+          name: ap-northeast-1
+          provider: AWS
+        - id: 5
+          name: ap-southeast-1
+          provider: AWS
+        - id: 15
+          name: ap-southeast-2
+          provider: AWS
+        - id: 132
+          name: il-central-1
+          provider: AWS
+        - id: 144
+          name: mx-central-1
+          provider: AWS
+        - id: 32
+          name: asia-east1
+          provider: GCP
+        - id: 67
+          name: asia-east2
+          provider: GCP
+        - id: 33
+          name: asia-northeast1
+          provider: GCP
+        - id: 104
+          name: asia-northeast2
+          provider: GCP
+        - id: 69
+          name: asia-south1
+          provider: GCP
+        - id: 34
+          name: asia-southeast1
+          provider: GCP
+        - id: 71
+          name: australia-southeast1
+          provider: GCP
+        - id: 72
+          name: europe-north1
+          provider: GCP
+        - id: 35
+          name: europe-west1
+          provider: GCP
+        - id: 74
+          name: europe-west2
+          provider: GCP
+        - id: 128
+          name: asia-southeast2
+          provider: GCP
+        - id: 75
+          name: europe-west3
+          provider: GCP
+        - id: 36
+          name: europe-west4
+          provider: GCP
+        - id: 133
+          name: europe-west10
+          provider: GCP
+        - id: 130
+          name: europe-southwest1
+          provider: GCP
+        - id: 134
+          name: europe-west8
+          provider: GCP
+        - id: 113
+          name: europe-west6
+          provider: GCP
+        - id: 129
+          name: me-west1
+          provider: GCP
+        - id: 135
+          name: europe-west9
+          provider: GCP
+        - id: 77
+          name: northamerica-northeast1
+          provider: GCP
+        - id: 136
+          name: europe-west12
+          provider: GCP
+        - id: 137
+          name: europe-central2
+          provider: GCP
+        - id: 131
+          name: northamerica-northeast2
+          provider: GCP
+        - id: 138
+          name: me-central2
+          provider: GCP
+        - id: 139
+          name: me-central1
+          provider: GCP
+        - id: 140
+          name: us-east5
+          provider: GCP
+        - id: 141
+          name: us-south1
+          provider: GCP
+        - id: 27
+          name: us-central1
+          provider: GCP
+        - id: 38
+          name: us-east1
+          provider: GCP
+        - id: 39
+          name: us-east4
+          provider: GCP
+        - id: 40
+          name: us-west1
+          provider: GCP
+        - id: 82
+          name: us-west2
+          provider: GCP
+        - id: 142
+          name: southamerica-west1
+          provider: GCP
+        - id: 95
+          name: southamerica-east1
+          provider: GCP
+        - id: 143
+          name: africa-south1
+          provider: GCP
+    SearchScalingFactorsData:
+      type: object
+      properties:
+        queryPerformanceFactors:
+          type: array
+          items:
+            type: string
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    RootAccount:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        account:
+          id: 1001
+          name: Redis
+          createdTimestamp: '2018-12-23T15:15:31Z'
+          updatedTimestamp: '2022-10-12T10:54:10Z'
+          pocStatus: inactive
+          marketplaceStatus: active
+          key:
+            name: capi-api-key-name
+            accountId: 1001
+            accountName: Redis
+            allowedSourceIps:
+            - 0.0.0.0/0
+            createdTimestamp: '2022-05-11T12:05:47Z'
+            owner:
+              name: CAPI user
+              email: capi.user@redis.com
+            userAccountId: 1
+            httpSourceIp: 79.0.0.173
+    Tag:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          type: string
+          description: Tag key
+          example: environment
+        value:
+          type: string
+          description: Tag value
+          example: production
+      description: Tag filter for cost report
+    AccountSystemLogEntries:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountSystemLogEntry'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        entries:
+        - id: 2900349
+          time: '2022-10-12T10:54:31Z'
+          originator: example-value
+          type: Account
+          description: example-value (example.value@redis.com)'s user name was changed to Example Value
+        - id: 2900348
+          time: '2022-10-12T10:54:11Z'
+          originator: invalid-name
+          type: Account
+          description: Invited invalid-name (cab@fufu.com) to join team
+    ModulesData:
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Module'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      example:
+        modules:
+        - name: RedisBloom
+          capabilityName: Probabilistic
+          description: A set of probabilistic data structures to Redis, including Bloom filter, Cuckoo filter, Count-min sketch, Top-K, and t-digest
+          parameters: []
+        - name: RedisJSON
+          capabilityName: JSON
+          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
+          parameters: []
+        - name: RediSearch
+          capabilityName: Search and query
+          description: A comprehensive, expressive, flexible, fast and developer-friendly search and query engine for the diversity of data types in Redis with state-of-the-art scoring algorithms
+          parameters:
+          - name: number-of-documents
+            description: Expected number of documents the database module will be indexing
+            type: integer
+            defaultValue: 1000000
+            required: false
+        - name: RedisTimeSeries
+          capabilityName: Time series
+          description: Time-Series data structure for redis
+          parameters: []
     ProcessorResponse:
       type: object
       properties:
@@ -1067,215 +1505,16 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    PaymentMethods:
+    Module:
       type: object
       properties:
-        accountId:
-          type: integer
-          format: int32
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: RedisLabs Account payment methods
-      example:
-        accountId: 1001
-        paymentMethods:
-        - id: 2
-          type: Visa
-          creditCardEndsWith: '9349'
-          nameOnCard: CAPI User
-          expirationMonth: 2
-          expirationYear: 2026
-          links: []
-    Regions:
-      type: object
-      properties:
-        regions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Region'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        regions:
-        - id: 1
-          name: us-east-1
-          provider: AWS
-        - id: 2
-          name: us-west-1
-          provider: AWS
-        - id: 3
-          name: us-west-2
-          provider: AWS
-        - id: 4
-          name: eu-west-1
-          provider: AWS
-        - id: 29
-          name: eu-central-1
-          provider: AWS
-        - id: 7
-          name: sa-east-1
-          provider: AWS
-        - id: 63
-          name: ca-central-1
-          provider: AWS
-        - id: 62
-          name: eu-north-1
-          provider: AWS
-        - id: 61
-          name: eu-west-3
-          provider: AWS
-        - id: 60
-          name: eu-west-2
-          provider: AWS
-        - id: 59
-          name: us-east-2
-          provider: AWS
-        - id: 64
-          name: ap-east-1
-          provider: AWS
-        - id: 146
-          name: ap-southeast-5
-          provider: AWS
-        - id: 30
-          name: ap-south-1
-          provider: AWS
-        - id: 117
-          name: ap-northeast-3
-          provider: AWS
-        - id: 116
-          name: ap-northeast-2
-          provider: AWS
-        - id: 145
-          name: ap-southeast-7
-          provider: AWS
-        - id: 6
-          name: ap-northeast-1
-          provider: AWS
-        - id: 5
-          name: ap-southeast-1
-          provider: AWS
-        - id: 15
-          name: ap-southeast-2
-          provider: AWS
-        - id: 132
-          name: il-central-1
-          provider: AWS
-        - id: 144
-          name: mx-central-1
-          provider: AWS
-        - id: 32
-          name: asia-east1
-          provider: GCP
-        - id: 67
-          name: asia-east2
-          provider: GCP
-        - id: 33
-          name: asia-northeast1
-          provider: GCP
-        - id: 104
-          name: asia-northeast2
-          provider: GCP
-        - id: 69
-          name: asia-south1
-          provider: GCP
-        - id: 34
-          name: asia-southeast1
-          provider: GCP
-        - id: 71
-          name: australia-southeast1
-          provider: GCP
-        - id: 72
-          name: europe-north1
-          provider: GCP
-        - id: 35
-          name: europe-west1
-          provider: GCP
-        - id: 74
-          name: europe-west2
-          provider: GCP
-        - id: 128
-          name: asia-southeast2
-          provider: GCP
-        - id: 75
-          name: europe-west3
-          provider: GCP
-        - id: 36
-          name: europe-west4
-          provider: GCP
-        - id: 133
-          name: europe-west10
-          provider: GCP
-        - id: 130
-          name: europe-southwest1
-          provider: GCP
-        - id: 134
-          name: europe-west8
-          provider: GCP
-        - id: 113
-          name: europe-west6
-          provider: GCP
-        - id: 129
-          name: me-west1
-          provider: GCP
-        - id: 135
-          name: europe-west9
-          provider: GCP
-        - id: 77
-          name: northamerica-northeast1
-          provider: GCP
-        - id: 136
-          name: europe-west12
-          provider: GCP
-        - id: 137
-          name: europe-central2
-          provider: GCP
-        - id: 131
-          name: northamerica-northeast2
-          provider: GCP
-        - id: 138
-          name: me-central2
-          provider: GCP
-        - id: 139
-          name: me-central1
-          provider: GCP
-        - id: 140
-          name: us-east5
-          provider: GCP
-        - id: 141
-          name: us-south1
-          provider: GCP
-        - id: 27
-          name: us-central1
-          provider: GCP
-        - id: 38
-          name: us-east1
-          provider: GCP
-        - id: 39
-          name: us-east4
-          provider: GCP
-        - id: 40
-          name: us-west1
-          provider: GCP
-        - id: 82
-          name: us-west2
-          provider: GCP
-        - id: 142
-          name: southamerica-west1
-          provider: GCP
-        - id: 95
-          name: southamerica-east1
-          provider: GCP
-        - id: 143
-          name: africa-south1
-          provider: GCP
+        name:
+          type: string
+        capabilityName:
+          type: string
+        description:
+          type: string
+      description: RedisLabs database module information
     AccountSystemLogEntry:
       type: object
       properties:
@@ -1299,81 +1538,6 @@ components:
         description:
           type: string
       description: Account system log entry
-    ModulesData:
-      type: object
-      properties:
-        modules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Module'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        modules:
-        - name: RedisBloom
-          capabilityName: Probabilistic
-          description: A set of probabilistic data structures to Redis, including Bloom filter, Cuckoo filter, Count-min sketch, Top-K, and t-digest
-          parameters: []
-        - name: RedisJSON
-          capabilityName: JSON
-          description: Native JSON Data Type for Redis, allowing for atomic reads and writes of sub-elements
-          parameters: []
-        - name: RediSearch
-          capabilityName: Search and query
-          description: A comprehensive, expressive, flexible, fast and developer-friendly search and query engine for the diversity of data types in Redis with state-of-the-art scoring algorithms
-          parameters:
-          - name: number-of-documents
-            description: Expected number of documents the database module will be indexing
-            type: integer
-            defaultValue: 1000000
-            required: false
-        - name: RedisTimeSeries
-          capabilityName: Time series
-          description: Time-Series data structure for redis
-          parameters: []
-    Module:
-      type: object
-      properties:
-        name:
-          type: string
-        capabilityName:
-          type: string
-        description:
-          type: string
-      description: RedisLabs database module information
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
     AccountSessionLogEntries:
       type: object
       properties:
@@ -1387,193 +1551,29 @@ components:
             type: object
             additionalProperties:
               type: string
-    Region:
+    PaymentMethods:
       type: object
       properties:
-        id:
+        accountId:
           type: integer
           format: int32
-        name:
-          type: string
-        provider:
-          type: string
-          enum:
-          - AWS
-          - GCP
-      description: RedisLabs region information
-    RootAccount:
-      type: object
-      properties:
         links:
           type: array
           items:
             type: object
             additionalProperties:
               type: string
+      description: RedisLabs Account payment methods
       example:
-        account:
-          id: 1001
-          name: Redis
-          createdTimestamp: '2018-12-23T15:15:31Z'
-          updatedTimestamp: '2022-10-12T10:54:10Z'
-          pocStatus: inactive
-          marketplaceStatus: active
-          key:
-            name: capi-api-key-name
-            accountId: 1001
-            accountName: Redis
-            allowedSourceIps:
-            - 0.0.0.0/0
-            createdTimestamp: '2022-05-11T12:05:47Z'
-            owner:
-              name: CAPI user
-              email: capi.user@redis.com
-            userAccountId: 1
-            httpSourceIp: 79.0.0.173
-    AccountSystemLogEntries:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountSystemLogEntry'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      example:
-        entries:
-        - id: 2900349
-          time: '2022-10-12T10:54:31Z'
-          originator: example-value
-          type: Account
-          description: example-value (example.value@redis.com)'s user name was changed to Example Value
-        - id: 2900348
-          time: '2022-10-12T10:54:11Z'
-          originator: invalid-name
-          type: Account
-          description: Invited invalid-name (cab@fufu.com) to join team
-    SearchScalingFactorsData:
-      type: object
-      properties:
-        queryPerformanceFactors:
-          type: array
-          items:
-            type: string
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    CostReportCreateRequest:
-      required:
-      - endDate
-      - startDate
-      type: object
-      properties:
-        startDate:
-          type: string
-          description: Filter for usage starting on or after this date. Must be in format YYYY-MM-DD
-          format: YYYY-MM-DD
-          example: '2025-10-01'
-        endDate:
-          type: string
-          description: Filter for usage ending on or before this date. Must be in format YYYY-MM-DD and must be after start date
-          format: YYYY-MM-DD
-          example: '2025-11-06'
-        format:
-          type: string
-          description: Output format for the cost report
-          example: csv
-          default: csv
-          enum:
-          - json
-          - csv
-        subscriptionIds:
-          type: array
-          description: Array of subscriptionIDs to filter by
-          example:
-          - 123
-          - 456
-          items:
-            type: integer
-            description: Array of subscriptionIDs to filter by
-            format: int32
-        databaseIds:
-          type: array
-          description: Array of database IDs to filter by
-          example:
-          - 789
-          - 101112
-          items:
-            type: integer
-            description: Array of database IDs to filter by
-            format: int32
-        subscriptionType:
-          type: string
-          description: Filter by plan type
-          example: pro
-          enum:
-          - pro
-          - essentials
-        regions:
-          type: array
-          description: Array of regions to filter by
-          example:
-          - us-east-1
-          - eu-west-1
-          items:
-            type: string
-            description: Array of regions to filter by
-            example: '["us-east-1","eu-west-1"]'
-        tags:
-          type: array
-          description: Array of key-value pairs for tag filtering
-          items:
-            $ref: '#/components/schemas/Tag'
-        commandType:
-          type: string
-          readOnly: true
-      description: Cost report generation request
-    Tag:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          type: string
-          description: Tag key
-          example: environment
-        value:
-          type: string
-          description: Tag value
-          example: production
-      description: Tag filter for cost report
-    AccountSessionLogEntry:
-      type: object
-      properties:
-        id:
-          type: string
-        time:
-          type: string
-          format: date-time
-        user:
-          type: string
-        userAgent:
-          type: string
-        ipAddress:
-          type: string
-        userRole:
-          type: string
-        type:
-          type: string
-        action:
-          type: string
-      description: Account session log entry
+        accountId: 1001
+        paymentMethods:
+        - id: 2
+          type: Visa
+          creditCardEndsWith: '9349'
+          nameOnCard: CAPI User
+          expirationMonth: 2
+          expirationYear: 2026
+          links: []
     DataPersistenceEntry:
       type: object
       properties:

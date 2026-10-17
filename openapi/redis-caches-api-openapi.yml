@@ -142,13 +142,6 @@ paths:
         collapsed_from: 2 example path(s) differing only at id
 components:
   schemas:
-    PostV1CachesCacheidEntriesSearchRequest:
-      type: object
-      properties:
-        prompt:
-          type: string
-      required:
-      - prompt
     PostV1CachesCacheidIdRequest:
       type: object
       properties:
@@ -159,6 +152,13 @@ components:
       required:
       - prompt
       - response
+    PostV1CachesCacheidEntriesSearchRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+      required:
+      - prompt
   securitySchemes:
     bearer:
       type: http

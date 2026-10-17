@@ -220,6 +220,159 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    CloudAccountCreateRequest:
+      required:
+      - accessKeyId
+      - accessSecretKey
+      - consolePassword
+      - consoleUsername
+      - name
+      - signInLoginUrl
+      type: object
+      properties:
+        name:
+          type: string
+          description: Cloud account display name.
+          example: My new Cloud Account
+        provider:
+          type: string
+          description: 'Optional. Cloud provider. Default: ''AWS'''
+          example: AWS
+          enum:
+          - AWS
+          - GCP
+        accessKeyId:
+          type: string
+          description: Cloud provider access key.
+          example: '****'
+        accessSecretKey:
+          type: string
+          description: Cloud provider secret key.
+          example: '****'
+        consoleUsername:
+          type: string
+          description: Cloud provider management console username.
+          example: me@mycompany.com
+        consolePassword:
+          type: string
+          description: Cloud provider management console password.
+          example: '****'
+        signInLoginUrl:
+          type: string
+          description: Cloud provider management console login URL.
+          example: https://<aws-account-identifier>.signin.aws.amazon.com/console
+        commandType:
+          type: string
+          readOnly: true
+      description: Cloud Account definition
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    CloudAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: string
+        accessKeyId:
+          type: string
+        signInLoginUrl:
+          type: string
+        awsUserArn:
+          type: string
+        awsConsoleRoleArn:
+          type: string
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        provider:
+          type: string
+          enum:
+          - AWS
+          - GCP
+      description: RedisLabs Cloud Account information
+      example:
+        id: 1
+        name: Redis Internal Resources
+        provider: AWS
+        status: active
+        links:
+        - rel: self
+          href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts/1
+          type: GET
+    CloudAccountUpdateRequest:
+      required:
+      - accessKeyId
+      - accessSecretKey
+      - consolePassword
+      - consoleUsername
+      type: object
+      properties:
+        name:
+          type: string
+          description: name
+          example: My new Cloud Account
+        cloudAccountId:
+          type: integer
+          format: int32
+          readOnly: true
+        accessKeyId:
+          type: string
+          description: Cloud provider access key.
+          example: '****'
+        accessSecretKey:
+          type: string
+          description: Cloud provider secret key.
+          example: '****'
+        consoleUsername:
+          type: string
+          description: Cloud provider management console username.
+          example: me@mycompany.com
+        consolePassword:
+          type: string
+          description: Cloud provider management console password.
+          example: '****'
+        signInLoginUrl:
+          type: string
+          description: Optional. Cloud provider management console login URL.
+          example: https://<aws-account-identifier>.signin.aws.amazon.com/console
+        commandType:
+          type: string
+          readOnly: true
+      description: Cloud Account definition
     ProcessorResponse:
       type: object
       properties:
@@ -865,119 +1018,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-    CloudAccountCreateRequest:
-      required:
-      - accessKeyId
-      - accessSecretKey
-      - consolePassword
-      - consoleUsername
-      - name
-      - signInLoginUrl
-      type: object
-      properties:
-        name:
-          type: string
-          description: Cloud account display name.
-          example: My new Cloud Account
-        provider:
-          type: string
-          description: 'Optional. Cloud provider. Default: ''AWS'''
-          example: AWS
-          enum:
-          - AWS
-          - GCP
-        accessKeyId:
-          type: string
-          description: Cloud provider access key.
-          example: '****'
-        accessSecretKey:
-          type: string
-          description: Cloud provider secret key.
-          example: '****'
-        consoleUsername:
-          type: string
-          description: Cloud provider management console username.
-          example: me@mycompany.com
-        consolePassword:
-          type: string
-          description: Cloud provider management console password.
-          example: '****'
-        signInLoginUrl:
-          type: string
-          description: Cloud provider management console login URL.
-          example: https://<aws-account-identifier>.signin.aws.amazon.com/console
-        commandType:
-          type: string
-          readOnly: true
-      description: Cloud Account definition
-    CloudAccount:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        status:
-          type: string
-        accessKeyId:
-          type: string
-        signInLoginUrl:
-          type: string
-        awsUserArn:
-          type: string
-        awsConsoleRoleArn:
-          type: string
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-        provider:
-          type: string
-          enum:
-          - AWS
-          - GCP
-      description: RedisLabs Cloud Account information
-      example:
-        id: 1
-        name: Redis Internal Resources
-        provider: AWS
-        status: active
-        links:
-        - rel: self
-          href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts/1
-          type: GET
     CloudAccounts:
       type: object
       properties:
@@ -1015,46 +1055,6 @@ components:
         - rel: self
           href: https://api-cloudapi.qa.redislabs.com/v1/cloud-accounts
           type: GET
-    CloudAccountUpdateRequest:
-      required:
-      - accessKeyId
-      - accessSecretKey
-      - consolePassword
-      - consoleUsername
-      type: object
-      properties:
-        name:
-          type: string
-          description: name
-          example: My new Cloud Account
-        cloudAccountId:
-          type: integer
-          format: int32
-          readOnly: true
-        accessKeyId:
-          type: string
-          description: Cloud provider access key.
-          example: '****'
-        accessSecretKey:
-          type: string
-          description: Cloud provider secret key.
-          example: '****'
-        consoleUsername:
-          type: string
-          description: Cloud provider management console username.
-          example: me@mycompany.com
-        consolePassword:
-          type: string
-          description: Cloud provider management console password.
-          example: '****'
-        signInLoginUrl:
-          type: string
-          description: Optional. Cloud provider management console login URL.
-          example: https://<aws-account-identifier>.signin.aws.amazon.com/console
-        commandType:
-          type: string
-          readOnly: true
-      description: Cloud Account definition
   securitySchemes:
     x-api-key:
       type: apiKey

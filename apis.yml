@@ -57,100 +57,324 @@ created: '2024-01-01'
 modified: '2026-05-04'
 specificationVersion: '0.23'
 apis:
-  - aid: redis:redis-core
-    name: Redis Core
-    description: Core Redis commands and data structure operations. Redis supports strings, hashes, lists,
-      sets, sorted sets, streams, and more. The primary interface is the Redis Serialization Protocol
-      (RESP) over TCP, with client libraries for all major programming languages.
-    humanURL: https://redis.io/docs/latest/commands/
-    tags:
-      - Cache
-      - Commands
-      - Core
-      - Database
-      - Key-Value Store
-    tags_raw:
-      - Cache
-      - Commands
-      - Core
-      - Database
-      - Key-Value
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/commands/
-      - type: GettingStarted
-        url: https://redis.io/docs/latest/get-started/
-      - type: GitHub
-        url: https://github.com/redis/redis
-      - type: JSONSchema
-        url: json-schema/redis-key-value-schema.json
-      - type: JSONSchema
-        url: json-schema/redis-command-schema.json
-      - type: JSONSchema
-        url: json-schema/redis-server-info-schema.json
-      - type: JSONStructure
-        url: json-structure/redis-key-value-structure.json
-      - type: JSONStructure
-        url: json-structure/redis-server-info-structure.json
-      - type: JSONLD
-        url: json-ld/redis-context.jsonld
-      - type: Vocabulary
-        url: vocabulary/redis-vocabulary.yml
-  - aid: redis:redis-cloud-api
-    name: Redis Cloud API
-    description: The Redis Cloud REST API for managing subscriptions, databases, cloud accounts, access
-      control, and logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
-    humanURL: https://redis.io/docs/latest/operate/rc/api/
-    tags:
-      - Cloud
-      - Management
-      - REST
-      - Subscription
-    tags_raw:
-      - Cloud
-      - Management
-      - REST
-      - Subscriptions
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/operate/rc/api/
-      - type: Authentication
-        url: https://redis.io/docs/latest/operate/rc/api/get-started/
-      - type: Examples
-        url: https://redis.io/docs/latest/operate/rc/api/examples/
-  - aid: redis:redis-enterprise-api
-    name: Redis Enterprise API
-    description: REST API for managing Redis Enterprise Software clusters. Provides endpoints for cluster
-      configuration, database creation and management, user access control, and monitoring. Available
-      at the cluster's port 9443.
-    humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
-    tags:
-      - Cluster
-      - Enterprise
-      - Management
-      - REST
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/operate/rs/references/rest-api/
-      - type: APIReference
-        url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
-  - aid: redis:redis-insight
-    name: Redis Insight
-    description: Redis Insight is a free GUI management tool for Redis. Provides database browsing, query
-      execution, memory analysis, slow log inspection, and Redis Streams visualization. Available as a
-      desktop app and Docker image.
-    humanURL: https://redis.io/docs/latest/develop/tools/insight/
-    tags:
-      - Developer Tools
-      - Management
-      - Visualization
-    properties:
-      - type: Documentation
-        url: https://redis.io/docs/latest/develop/tools/insight/
-      - type: Download
-        url: https://redis.io/insight/
-      - type: Docker
-        url: https://hub.docker.com/r/redis/redisinsight
+- aid: redis:redis-core
+  name: Redis Core
+  description: >-
+    Core Redis commands and data structure operations. Redis supports strings, hashes, lists, sets, sorted
+    sets, streams, and more. The primary interface is the Redis Serialization Protocol (RESP) over TCP,
+    with client libraries for all major programming languages.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Cache
+  - Commands
+  - Core
+  - Database
+  - Key-Value Store
+  tags_raw:
+  - Cache
+  - Commands
+  - Core
+  - Database
+  - Key-Value
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/commands/
+  - type: GettingStarted
+    url: https://redis.io/docs/latest/get-started/
+  - type: GitHub
+    url: https://github.com/redis/redis
+  - type: JSONSchema
+    url: json-schema/redis-key-value-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-command-schema.json
+  - type: JSONSchema
+    url: json-schema/redis-server-info-schema.json
+  - type: JSONStructure
+    url: json-structure/redis-key-value-structure.json
+  - type: JSONStructure
+    url: json-structure/redis-server-info-structure.json
+  - type: JSONLD
+    url: json-ld/redis-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/redis-vocabulary.yml
+- aid: redis:redis-cloud-api
+  name: Redis Cloud API
+  description: >-
+    The Redis Cloud REST API for managing subscriptions, databases, cloud accounts, access control, and
+    logs on the Redis Cloud platform. Available at api.redislabs.com/v1 with API key authentication.
+  humanURL: https://redis.io/docs/latest/operate/rc/api/
+  tags:
+  - Cloud
+  - Management
+  - REST
+  - Subscription
+  tags_raw:
+  - Cloud
+  - Management
+  - REST
+  - Subscriptions
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rc/api/
+  - type: Authentication
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/
+  - type: Examples
+    url: https://redis.io/docs/latest/operate/rc/api/examples/
+- aid: redis:redis-enterprise-api
+  name: Redis Enterprise API
+  description: >-
+    REST API for managing Redis Enterprise Software clusters. Provides endpoints for cluster configuration,
+    database creation and management, user access control, and monitoring. Available at the cluster's
+    port 9443.
+  humanURL: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  tags:
+  - Cluster
+  - Enterprise
+  - Management
+  - REST
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/
+  - type: APIReference
+    url: https://redis.io/docs/latest/operate/rs/references/rest-api/requests/
+- aid: redis:redis-insight
+  name: Redis Insight
+  description: >-
+    Redis Insight is a free GUI management tool for Redis. Provides database browsing, query execution,
+    memory analysis, slow log inspection, and Redis Streams visualization. Available as a desktop app
+    and Docker image.
+  humanURL: https://redis.io/docs/latest/develop/tools/insight/
+  tags:
+  - Developer Tools
+  - Management
+  - Visualization
+  properties:
+  - type: Documentation
+    url: https://redis.io/docs/latest/develop/tools/insight/
+  - type: Download
+    url: https://redis.io/insight/
+  - type: Docker
+    url: https://hub.docker.com/r/redis/redisinsight
+- aid: redis:redis-account-api
+  name: Redis Account API
+  description: Current account details.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-account-api-openapi.yml
+- aid: redis:redis-actuator-api
+  name: Redis Actuator API
+  description: The Actuator API from Redis — 1 operation(s) for actuator.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Actuator
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-actuator-api-openapi.yml
+- aid: redis:redis-agent-memory-stores-api
+  name: Redis Agent Memory - Stores API
+  description: All operations related to Agent Memory store lifecycle
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Agent Memory - Stores
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-agent-memory-stores-api-openapi.yml
+- aid: redis:redis-ai-api
+  name: Redis AI API
+  description: The Ai API from Redis — 1 operation(s) for ai.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Ai
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-ai-api-openapi.yml
+- aid: redis:redis-bdbs-api
+  name: Redis Bdbs API
+  description: The Bdbs API from Redis — 1 operation(s) for bdbs.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Bdbs
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-bdbs-api-openapi.yml
+- aid: redis:redis-caches-api
+  name: Redis Caches API
+  description: The Caches API from Redis — 5 operation(s) for caches.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Caches
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-caches-api-openapi.yml
+- aid: redis:redis-cloud-accounts-api
+  name: Redis Cloud Accounts API
+  description: All operations related to cloud accounts (AWS only).
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Cloud Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-cloud-accounts-api-openapi.yml
+- aid: redis:redis-data-integration-api
+  name: Redis Data Integration API
+  description: The Data Integration API from Redis — 3 operation(s) for data integration.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Data Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-data-integration-api-openapi.yml
+- aid: redis:redis-databases-essentials-api
+  name: Redis Databases - Essentials API
+  description: All Essentials database operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Databases - Essentials
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-databases-essentials-api-openapi.yml
+- aid: redis:redis-databases-pro-api
+  name: Redis Databases - Pro API
+  description: All Pro database operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Databases - Pro
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-databases-pro-api-openapi.yml
+- aid: redis:redis-dedup-api
+  name: Redis Dedup API
+  description: The Dedup API from Redis — 2 operation(s) for dedup.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Dedup
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-dedup-api-openapi.yml
+- aid: redis:redis-endpoint-redirections-api
+  name: Redis Endpoint Redirections API
+  description: Dynamic endpoint redirection operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Endpoint Redirections
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-endpoint-redirections-api-openapi.yml
+- aid: redis:redis-gpg-api
+  name: Redis Gpg API
+  description: The Gpg API from Redis — 1 operation(s) for gpg.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Gpg
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-gpg-api-openapi.yml
+- aid: redis:redis-homebrew-api
+  name: Redis Homebrew API
+  description: The Homebrew API from Redis — 1 operation(s) for homebrew.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Homebrew
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-homebrew-api-openapi.yml
+- aid: redis:redis-images-api
+  name: Redis Images API
+  description: The Images API from Redis — 1 operation(s) for images.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-images-api-openapi.yml
+- aid: redis:redis-long-term-memory-api
+  name: Redis Long Term Memory API
+  description: The Long Term Memory API from Redis — 1 operation(s) for long term memory.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Long Term Memory
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-long-term-memory-api-openapi.yml
+- aid: redis:redis-redis-api-api
+  name: Redis Redis API
+  description: The Redis API API from Redis — 1 operation(s) for redis api.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Redis API
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-redis-api-api-openapi.yml
+- aid: redis:redis-redis-cli-api
+  name: Redis Redis Cli API
+  description: The Redis Cli API from Redis — 1 operation(s) for redis cli.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Redis Cli
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-redis-cli-api-openapi.yml
+- aid: redis:redis-role-based-access-control-rbac-api
+  name: Redis Role-based Access Control (RBAC) API
+  description: >-
+    All operations for [Role-based Access Control](https://redis.io/docs/latest/operate/rc/security/access-control/data-access-control/role-based-access-control/)
+    (RBAC).
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Role-based Access Control (RBAC)
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-role-based-access-control-rbac-api-openapi.yml
+- aid: redis:redis-subscriptions-essentials-api
+  name: Redis Subscriptions - Essentials API
+  description: All Essentials subscription operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Subscriptions - Essentials
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-essentials-api-openapi.yml
+- aid: redis:redis-subscriptions-pro-api
+  name: Redis Subscriptions - Pro API
+  description: All Pro subscription operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Subscriptions - Pro
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-pro-api-openapi.yml
+- aid: redis:redis-subscriptions-pro-connectivity-api
+  name: Redis Subscriptions - Pro - Connectivity API
+  description: All Pro subscription connectivity operations.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Subscriptions - Pro - Connectivity
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-subscriptions-pro-connectivity-api-openapi.yml
+- aid: redis:redis-tasks-api
+  name: Redis Tasks API
+  description: >-
+    Tracks asynchronous background operations. See [API request lifecycle](https://redis.io/docs/latest/operate/rc/api/get-started/process-lifecycle/)
+    for more information.
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-tasks-api-openapi.yml
+- aid: redis:redis-users-api
+  name: Redis Users API
+  description: Data and operations related to account's users
+  humanURL: https://redis.io/docs/latest/commands/
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/redis-users-api-openapi.yml
 common:
   - type: Plans
     url: plans/redis-plans-pricing.yml

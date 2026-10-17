@@ -377,6 +377,333 @@ paths:
           description: 'Service Unavailable - Server is temporarily unable to handle the request, please try again later. If this error persists, please contact customer support '
 components:
   schemas:
+    FixedSubscriptionsPlan:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        size:
+          type: number
+          format: double
+        datasetSize:
+          type: number
+          format: double
+        sizeMeasurementUnit:
+          type: string
+        provider:
+          type: string
+        region:
+          type: string
+        regionId:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+        priceCurrency:
+          type: string
+        pricePeriod:
+          type: string
+        maximumDatabases:
+          type: integer
+          format: int32
+        maximumThroughput:
+          type: integer
+          format: int32
+        maximumBandwidthGB:
+          type: integer
+          format: int32
+        availability:
+          type: string
+        connections:
+          type: string
+        cidrAllowRules:
+          type: integer
+          format: int32
+        supportDataPersistence:
+          type: boolean
+        redisFlex:
+          type: boolean
+        supportInstantAndDailyBackups:
+          type: boolean
+        supportReplication:
+          type: boolean
+        supportClustering:
+          type: boolean
+        supportSsl:
+          type: boolean
+        customerSupport:
+          type: string
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: Redis Essentials subscription plan information
+      example:
+        id: 98273
+        name: Cache 5GB
+        size: 5
+        sizeMeasurementUnit: GB
+        provider: AWS
+        region: eu-west-1
+        regionId: 4
+        price: 77
+        priceCurrency: USD
+        pricePeriod: Month
+        maximumDatabases: 1
+        availability: No replication
+        connections: unlimited
+        cidrAllowRules: 4
+        supportDataPersistence: true
+        supportInstantAndDailyBackups: true
+        supportReplication: false
+        supportClustering: true
+        supportSsl: false
+        supportedAlerts:
+        - throughput-higher-than
+        customerSupport: Standard
+        links:
+        - rel: self
+          href: http://localhost:8081/v1/fixed/plans/16583
+          type: GET
+    RedisVersions:
+      type: object
+      properties:
+        redisVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedisVersion'
+    TaskStateUpdate:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        commandType:
+          type: string
+        status:
+          type: string
+          enum:
+          - initialized
+          - received
+          - processing-in-progress
+          - processing-completed
+          - processing-error
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        response:
+          $ref: '#/components/schemas/ProcessorResponse'
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+    FixedSubscriptionUpdateRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          description: Optional. Updated subscription name.
+          example: My new subscription
+        planId:
+          type: integer
+          description: Optional. An Essentials plan ID. The plan describes the dataset size, cloud provider and region, and available database configuration options. Use GET /fixed/plans/subscriptions/{subscriptionId} to get a list of compatible options for the specified subscription.
+          format: int32
+        paymentMethod:
+          type: string
+          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
+          enum:
+          - credit-card
+          - marketplace
+        paymentMethodId:
+          type: integer
+          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get a list of payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
+          format: int32
+        commandType:
+          type: string
+          readOnly: true
+      description: Essentials subscription update request
+    FixedSubscriptionsPlans:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+      description: Redis list of Essentials subscriptions plans
+      example:
+        plans:
+        - id: 98183
+          name: Multi-AZ 5GB
+          size: 5
+          sizeMeasurementUnit: GB
+          provider: AWS
+          region: us-east-1
+          regionId: 1
+          price: 100
+          priceCurrency: USD
+          pricePeriod: Month
+          maximumDatabases: 1
+          availability: Multi-zone
+          connections: unlimited
+          cidrAllowRules: 16
+          supportDataPersistence: true
+          supportInstantAndDailyBackups: true
+          supportReplication: true
+          supportClustering: false
+          supportSsl: true
+          supportedAlerts:
+          - datasets-size
+          - latency
+          - throughput-lower-than
+          - throughput-higher-than
+          customerSupport: Standard
+          links: []
+        - id: 98181
+          name: Multi-AZ 1GB
+          size: 1
+          sizeMeasurementUnit: GB
+          provider: AWS
+          region: us-east-1
+          regionId: 1
+          price: 22
+          priceCurrency: USD
+          pricePeriod: Month
+          maximumDatabases: 1
+          availability: Multi-zone
+          connections: '1024'
+          cidrAllowRules: 8
+          supportDataPersistence: true
+          supportInstantAndDailyBackups: true
+          supportReplication: true
+          supportClustering: false
+          supportSsl: true
+          supportedAlerts:
+          - datasets-size
+          - throughput-higher-than
+          - throughput-lower-than
+          - latency
+          - connections-limit
+          customerSupport: Standard
+          links: []
+        links:
+        - rel: self
+          href: http://localhost:8081/v1/fixed/plans?cloud_provider=AWS
+          type: GET
+    FixedSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        status:
+          type: string
+        paymentMethodId:
+          type: integer
+          format: int32
+        paymentMethodType:
+          type: string
+        planId:
+          type: integer
+          format: int32
+        planName:
+          type: string
+        planType:
+          type: string
+        size:
+          type: number
+          format: double
+        sizeMeasurementUnit:
+          type: string
+        provider:
+          type: string
+        region:
+          type: string
+        price:
+          type: integer
+          format: int32
+        pricePeriod:
+          type: string
+        priceCurrency:
+          type: string
+        maximumDatabases:
+          type: integer
+          format: int32
+        availability:
+          type: string
+        connections:
+          type: string
+        cidrAllowRules:
+          type: integer
+          format: int32
+        supportDataPersistence:
+          type: boolean
+        supportInstantAndDailyBackups:
+          type: boolean
+        supportReplication:
+          type: boolean
+        supportClustering:
+          type: boolean
+        customerSupport:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        databaseStatus:
+          type: string
+      description: Redis Essentials Subscription information
+      example:
+        id: 151367
+        name: fixed-sub-2
+        status: active
+        paymentMethodId: 8241
+        paymentMethodType: credit-card
+        planId: 98276
+        planName: Standard 1GB
+        size: 1
+        sizeMeasurementUnit: GB
+        provider: AWS
+        region: us-west-1
+        price: 22
+        pricePeriod: Month
+        priceCurrency: USD
+        maximumDatabases: 1
+        availability: Single-zone
+        connections: '1024'
+        cidrAllowRules: 8
+        supportDataPersistence: true
+        supportInstantAndDailyBackups: true
+        supportReplication: true
+        customerSupport: Standard
+        creationDate: '2022-11-21T20:02:21+02:00'
+        supportClustering: false
+        links:
+        - rel: self
+          href: http://localhost:8081/v1/fixed/subscriptions/151367
+          type: GET
     ProcessorResponse:
       type: object
       properties:
@@ -1022,47 +1349,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    RedisVersion:
-      type: object
-      properties:
-        version:
-          type: string
-        eolDate:
-          type: string
-          format: date
-        isPreview:
-          type: boolean
-        isDefault:
-          type: boolean
-    TaskStateUpdate:
-      type: object
-      properties:
-        taskId:
-          type: string
-          format: uuid
-        commandType:
-          type: string
-        status:
-          type: string
-          enum:
-          - initialized
-          - received
-          - processing-in-progress
-          - processing-completed
-          - processing-error
-        description:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        response:
-          $ref: '#/components/schemas/ProcessorResponse'
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
     FixedSubscriptionCreateRequest:
       required:
       - name
@@ -1091,268 +1377,6 @@ components:
           type: string
           readOnly: true
       description: Essentials subscription create request
-    FixedSubscriptionsPlan:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        size:
-          type: number
-          format: double
-        datasetSize:
-          type: number
-          format: double
-        sizeMeasurementUnit:
-          type: string
-        provider:
-          type: string
-        region:
-          type: string
-        regionId:
-          type: integer
-          format: int32
-        price:
-          type: integer
-          format: int32
-        priceCurrency:
-          type: string
-        pricePeriod:
-          type: string
-        maximumDatabases:
-          type: integer
-          format: int32
-        maximumThroughput:
-          type: integer
-          format: int32
-        maximumBandwidthGB:
-          type: integer
-          format: int32
-        availability:
-          type: string
-        connections:
-          type: string
-        cidrAllowRules:
-          type: integer
-          format: int32
-        supportDataPersistence:
-          type: boolean
-        redisFlex:
-          type: boolean
-        supportInstantAndDailyBackups:
-          type: boolean
-        supportReplication:
-          type: boolean
-        supportClustering:
-          type: boolean
-        supportSsl:
-          type: boolean
-        customerSupport:
-          type: string
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: Redis Essentials subscription plan information
-      example:
-        id: 98273
-        name: Cache 5GB
-        size: 5
-        sizeMeasurementUnit: GB
-        provider: AWS
-        region: eu-west-1
-        regionId: 4
-        price: 77
-        priceCurrency: USD
-        pricePeriod: Month
-        maximumDatabases: 1
-        availability: No replication
-        connections: unlimited
-        cidrAllowRules: 4
-        supportDataPersistence: true
-        supportInstantAndDailyBackups: true
-        supportReplication: false
-        supportClustering: true
-        supportSsl: false
-        supportedAlerts:
-        - throughput-higher-than
-        customerSupport: Standard
-        links:
-        - rel: self
-          href: http://localhost:8081/v1/fixed/plans/16583
-          type: GET
-    FixedSubscriptionsPlans:
-      type: object
-      properties:
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-      description: Redis list of Essentials subscriptions plans
-      example:
-        plans:
-        - id: 98183
-          name: Multi-AZ 5GB
-          size: 5
-          sizeMeasurementUnit: GB
-          provider: AWS
-          region: us-east-1
-          regionId: 1
-          price: 100
-          priceCurrency: USD
-          pricePeriod: Month
-          maximumDatabases: 1
-          availability: Multi-zone
-          connections: unlimited
-          cidrAllowRules: 16
-          supportDataPersistence: true
-          supportInstantAndDailyBackups: true
-          supportReplication: true
-          supportClustering: false
-          supportSsl: true
-          supportedAlerts:
-          - datasets-size
-          - latency
-          - throughput-lower-than
-          - throughput-higher-than
-          customerSupport: Standard
-          links: []
-        - id: 98181
-          name: Multi-AZ 1GB
-          size: 1
-          sizeMeasurementUnit: GB
-          provider: AWS
-          region: us-east-1
-          regionId: 1
-          price: 22
-          priceCurrency: USD
-          pricePeriod: Month
-          maximumDatabases: 1
-          availability: Multi-zone
-          connections: '1024'
-          cidrAllowRules: 8
-          supportDataPersistence: true
-          supportInstantAndDailyBackups: true
-          supportReplication: true
-          supportClustering: false
-          supportSsl: true
-          supportedAlerts:
-          - datasets-size
-          - throughput-higher-than
-          - throughput-lower-than
-          - latency
-          - connections-limit
-          customerSupport: Standard
-          links: []
-        links:
-        - rel: self
-          href: http://localhost:8081/v1/fixed/plans?cloud_provider=AWS
-          type: GET
-    FixedSubscription:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        status:
-          type: string
-        paymentMethodId:
-          type: integer
-          format: int32
-        paymentMethodType:
-          type: string
-        planId:
-          type: integer
-          format: int32
-        planName:
-          type: string
-        planType:
-          type: string
-        size:
-          type: number
-          format: double
-        sizeMeasurementUnit:
-          type: string
-        provider:
-          type: string
-        region:
-          type: string
-        price:
-          type: integer
-          format: int32
-        pricePeriod:
-          type: string
-        priceCurrency:
-          type: string
-        maximumDatabases:
-          type: integer
-          format: int32
-        availability:
-          type: string
-        connections:
-          type: string
-        cidrAllowRules:
-          type: integer
-          format: int32
-        supportDataPersistence:
-          type: boolean
-        supportInstantAndDailyBackups:
-          type: boolean
-        supportReplication:
-          type: boolean
-        supportClustering:
-          type: boolean
-        customerSupport:
-          type: string
-        creationDate:
-          type: string
-          format: date-time
-        links:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-        databaseStatus:
-          type: string
-      description: Redis Essentials Subscription information
-      example:
-        id: 151367
-        name: fixed-sub-2
-        status: active
-        paymentMethodId: 8241
-        paymentMethodType: credit-card
-        planId: 98276
-        planName: Standard 1GB
-        size: 1
-        sizeMeasurementUnit: GB
-        provider: AWS
-        region: us-west-1
-        price: 22
-        pricePeriod: Month
-        priceCurrency: USD
-        maximumDatabases: 1
-        availability: Single-zone
-        connections: '1024'
-        cidrAllowRules: 8
-        supportDataPersistence: true
-        supportInstantAndDailyBackups: true
-        supportReplication: true
-        customerSupport: Standard
-        creationDate: '2022-11-21T20:02:21+02:00'
-        supportClustering: false
-        links:
-        - rel: self
-          href: http://localhost:8081/v1/fixed/subscriptions/151367
-          type: GET
     FixedSubscriptions:
       type: object
       properties:
@@ -1424,42 +1448,18 @@ components:
         - rel: self
           href: http://localhost:8081/v1/fixed/subscriptions
           type: GET
-    FixedSubscriptionUpdateRequest:
+    RedisVersion:
       type: object
       properties:
-        subscriptionId:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
+        version:
           type: string
-          description: Optional. Updated subscription name.
-          example: My new subscription
-        planId:
-          type: integer
-          description: Optional. An Essentials plan ID. The plan describes the dataset size, cloud provider and region, and available database configuration options. Use GET /fixed/plans/subscriptions/{subscriptionId} to get a list of compatible options for the specified subscription.
-          format: int32
-        paymentMethod:
+        eolDate:
           type: string
-          description: Optional. The payment method for the subscription. If set to ‘credit-card’ , ‘paymentMethodId’ must be defined.
-          enum:
-          - credit-card
-          - marketplace
-        paymentMethodId:
-          type: integer
-          description: Optional. The payment method ID you'd like to use for this subscription. Must be a valid payment method ID for this account. Use GET /payment-methods to get a list of payment methods for your account. This value is optional if ‘paymentMethod’ is ‘marketplace’, but required if 'paymentMethod' is 'credit-card'.
-          format: int32
-        commandType:
-          type: string
-          readOnly: true
-      description: Essentials subscription update request
-    RedisVersions:
-      type: object
-      properties:
-        redisVersions:
-          type: array
-          items:
-            $ref: '#/components/schemas/RedisVersion'
+          format: date
+        isPreview:
+          type: boolean
+        isDefault:
+          type: boolean
   securitySchemes:
     x-api-key:
       type: apiKey

@@ -44,7 +44,7 @@
     "redis-openapi-generated.yml: declared missing tag: Dedup",
     "redis-openapi-generated.yml: declared missing tag: Redis API",
     "tag 'Users' spans 2 source specs (redis-cloud-openapi.yml, redis-openapi-generated.yml): per-path servers applied",
-    "apis.yml register: already-registered"
+    "apis.yml register: written (+24 apis, 28 total)"
   ],
   "skipped": [
     "redis-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",

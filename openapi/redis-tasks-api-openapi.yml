@@ -732,13 +732,6 @@ components:
           - AGENT_MEMORY_STORE_DEPENDENCY_FAILED
         additionalInfo:
           type: string
-    TasksStateUpdate:
-      type: object
-      properties:
-        tasks:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskStateUpdate'
     TaskStateUpdate:
       type: object
       properties:
@@ -768,6 +761,13 @@ components:
             type: object
             additionalProperties:
               type: string
+    TasksStateUpdate:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskStateUpdate'
   securitySchemes:
     x-api-key:
       type: apiKey
