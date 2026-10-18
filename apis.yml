@@ -169,6 +169,8 @@ apis:
   description: The Actuator API from Redis — 1 operation(s) for actuator.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - Actuators
+  tags_raw:
   - Actuator
   properties:
   - type: OpenAPI
@@ -187,6 +189,8 @@ apis:
   description: The Ai API from Redis — 1 operation(s) for ai.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - Artificial Intelligence
+  tags_raw:
   - Ai
   properties:
   - type: OpenAPI
@@ -268,6 +272,8 @@ apis:
   description: The Gpg API from Redis — 1 operation(s) for gpg.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - GPG
+  tags_raw:
   - Gpg
   properties:
   - type: OpenAPI
@@ -286,6 +292,8 @@ apis:
   description: The Images API from Redis — 1 operation(s) for images.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - Image
+  tags_raw:
   - Images
   properties:
   - type: OpenAPI
@@ -295,6 +303,8 @@ apis:
   description: The Long Term Memory API from Redis — 1 operation(s) for long term memory.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - Long-Term Memory
+  tags_raw:
   - Long Term Memory
   properties:
   - type: OpenAPI
@@ -362,6 +372,8 @@ apis:
     for more information.
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -371,6 +383,8 @@ apis:
   description: Data and operations related to account's users
   humanURL: https://redis.io/docs/latest/commands/
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
