@@ -1,0 +1,261 @@
+{
+  "endpoint": "https://redis.io/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "redis-docs-mcp",
+    "version": "bca0264b6fddd9a7ddc1934431766d510947188a"
+  },
+  "result": {
+    "tools": [
+      {
+        "name": "search",
+        "description": "Search the Redis documentation by free-text query. Returns up to 8 matching pages, each with a text snippet and that page's stable `id`.\n\nThis is the default tool for a Redis question. Search first, then `fetch` any `id` whose full text you need — one search plus a fetch or two answers most questions.",
+        "inputSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "query": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object"
+        },
+        "outputSchema": {
+          "properties": {
+            "results": {
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "text",
+                  "url"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "results"
+          ],
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "_meta": {
+          "fastmcp": {
+            "tags": []
+          }
+        }
+      },
+      {
+        "name": "fetch",
+        "description": "Return the full text and metadata for one Redis documentation page: title, canonical URL, body text, and topic/version/section metadata.\n\nTakes an `id` from a `search` result or from an `ask` result's `sources`. Use it when a snippet is not enough to answer confidently, or to quote the documentation exactly.",
+        "inputSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "type": "object"
+        },
+        "outputSchema": {
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "metadata": {
+              "properties": {
+                "topic": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "version": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "section": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "topic",
+                "version",
+                "section"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "url",
+            "text",
+            "metadata"
+          ],
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "_meta": {
+          "fastmcp": {
+            "tags": []
+          }
+        }
+      },
+      {
+        "name": "ask",
+        "description": "Ask a natural-language question about Redis. Returns a prose answer plus the source documents behind it — any `sources[].id` can be passed to `fetch`. If the documentation does not cover the question, the answer says so.\n\nReserve `ask` for a question spanning several areas of the documentation, where no single page answers and the parts interact — or when a `search` has come back empty or off-target. `ask` takes several seconds, so use `search` and `fetch` for anything narrower.",
+        "inputSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "question": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "question"
+          ],
+          "type": "object"
+        },
+        "outputSchema": {
+          "properties": {
+            "answer": {
+              "type": "string"
+            },
+            "sources": {
+              "items": {
+                "description": "One document behind an `ask` answer, as returned on the public surface.\n\n`id` is a fetch-verified `doc_id` (a page path like `commands/xadd` or a\nsection chunk like `page#sec:anchor`); passing it to `fetch` is guaranteed\nto resolve. `snippet` is a bounded excerpt from exactly the chunk `id`\npoints to, so a caller can confirm a claim without a second `fetch`.\n\n`snippet` is absent when the chunk holds nothing that could support a claim —\nan empty body, or unparsed front matter (see `_build_snippet`). The source is\nstill returned: `id`, `title` and `url` carry it, and the id stays fetchable.",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "url": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "section": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "snippet": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "url",
+                  "section",
+                  "snippet"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "answer",
+            "sources"
+          ],
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "_meta": {
+          "fastmcp": {
+            "tags": []
+          }
+        }
+      }
+    ]
+  }
+}
