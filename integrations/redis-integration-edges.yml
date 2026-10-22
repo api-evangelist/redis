@@ -8,6 +8,8 @@ checked:
 - https://github.com/run-llama/llama_index/tree/main/llama-index-integrations
 - https://marketplace.visualstudio.com/vscode
 - docker-hub/integrations/docker-hub-integration-edges.yml
+- netlify/integrations/netlify-integration-edges.yml
+- vercel/integrations/vercel-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Visual Studio Code Marketplace
@@ -156,5 +158,42 @@ edges:
   category: Docker Verified Publisher
   badges:
   - Docker Verified Publisher
+- partner_name: Netlify (own)
+  partner: netlify
+  partner_match: mirror
+  mirror_match: domain+verified
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.netlify.com/integrations/redis/
+  mirror_of: netlify/integrations/netlify-integration-edges.yml
+  apps:
+  - Redis
+  - Redis Setup Guide
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Database
+  partner_tier: listing
+- partner_name: Vercel (own)
+  partner: vercel
+  partner_match: mirror
+  mirror_match: domain+name-among-holders
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://vercel.com/marketplace/redis
+  mirror_of: vercel/integrations/vercel-integration-edges.yml
+  apps:
+  - Redis
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Storage
+  partner_tier: native
 source:
 - https://marketplace.visualstudio.com/vscode
