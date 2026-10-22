@@ -16,6 +16,7 @@ checked:
 - https://catalog.redhat.com/api/containers/v1/repositories?page_size=100
 - https://catalog.redhat.com/api/containers/v1/vendors/label/
 - https://catalog.redhat.com/software/partners
+- artifact-hub/integrations/artifact-hub-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Visual Studio Code Marketplace
@@ -132,75 +133,6 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
-- partner_name: Docker Hub (docker-verified-publisher)
-  partner: docker-hub
-  partner_match: mirror
-  mirror_match: domain+name-among-holders
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: docker-verified-publisher
-  evidence: https://hub.docker.com/u/redis
-  mirror_of: docker-hub/integrations/docker-hub-integration-edges.yml
-  apps:
-  - redis/redis-stack-server
-  - redis/redis-stack
-  - redis/redisinsight
-  - redis/rdi-flink-processor
-  - redis/rdi-flink-collector
-  - redis/rdi-collector-api
-  - redis/rdi-operator
-  - redis/rdi-monitor
-  - redis/rdi-api
-  - redis/rdi-cosmos-lease-sidecar
-  - redis/rdi-processor
-  - redis/rdi-metrics-aggregator
-  - redis/rdi-collector-initializer
-  - redis/rdi-fluentd
-  listing_count: 1
-  detected: '2026-10-20'
-  detected_by: mirror-platform-listings.py
-  category: Docker Verified Publisher
-  badges:
-  - Docker Verified Publisher
-- partner_name: Netlify (own)
-  partner: netlify
-  partner_match: mirror
-  mirror_match: domain+verified
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.netlify.com/integrations/redis/
-  mirror_of: netlify/integrations/netlify-integration-edges.yml
-  apps:
-  - Redis
-  - Redis Setup Guide
-  listing_count: 1
-  detected: '2026-10-22'
-  detected_by: mirror-platform-listings.py
-  category: Database
-  partner_tier: listing
-- partner_name: Vercel (own)
-  partner: vercel
-  partner_match: mirror
-  mirror_match: domain+name-among-holders
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://vercel.com/marketplace/redis
-  mirror_of: vercel/integrations/vercel-integration-edges.yml
-  apps:
-  - Redis
-  listing_count: 1
-  detected: '2026-10-22'
-  detected_by: mirror-platform-listings.py
-  category: Storage
-  partner_tier: native
 - partner_name: Raycast
   partner: raycast
   partner_match: domain
@@ -297,5 +229,93 @@ edges:
     detected: '2026-10-22'
   detected_by: sweep-red-hat-certified-ecosystem.py
   first_seen: '2026-10-22'
+- partner_name: Docker Hub (docker-verified-publisher)
+  partner: docker-hub
+  partner_match: mirror
+  mirror_match: domain+name-among-holders
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: docker-verified-publisher
+  evidence: https://hub.docker.com/u/redis
+  mirror_of: docker-hub/integrations/docker-hub-integration-edges.yml
+  apps:
+  - redis/redis-stack-server
+  - redis/redis-stack
+  - redis/redisinsight
+  - redis/rdi-flink-processor
+  - redis/rdi-flink-collector
+  - redis/rdi-collector-api
+  - redis/rdi-operator
+  - redis/rdi-monitor
+  - redis/rdi-api
+  - redis/rdi-cosmos-lease-sidecar
+  - redis/rdi-processor
+  - redis/rdi-metrics-aggregator
+  - redis/rdi-collector-initializer
+  - redis/rdi-fluentd
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: Docker Verified Publisher
+  badges:
+  - Docker Verified Publisher
+- partner_name: Netlify (own)
+  partner: netlify
+  partner_match: mirror
+  mirror_match: domain+verified
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.netlify.com/integrations/redis/
+  mirror_of: netlify/integrations/netlify-integration-edges.yml
+  apps:
+  - Redis
+  - Redis Setup Guide
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Database
+  partner_tier: listing
+- partner_name: Vercel (own)
+  partner: vercel
+  partner_match: mirror
+  mirror_match: domain+name-among-holders
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://vercel.com/marketplace/redis
+  mirror_of: vercel/integrations/vercel-integration-edges.yml
+  apps:
+  - Redis
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Storage
+  partner_tier: native
+- partner_name: Artifact Hub (artifact-hub)
+  partner: artifact-hub
+  partner_match: mirror
+  mirror_match: domain+name-among-holders
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: artifact-hub
+  evidence: https://artifacthub.io/packages/search?repo=redis-enterprise-operator-official
+  mirror_of: artifact-hub/integrations/artifact-hub-integration-edges.yml
+  apps:
+  - redis-enterprise-operator
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Artifact Hub listing (Helm chart)
+  badges:
+  - 'Verified publisher (Artifact Hub verified publisher: repository ownership proven)'
 source:
 - https://marketplace.visualstudio.com/vscode
